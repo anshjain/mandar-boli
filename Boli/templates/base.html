@@ -58,10 +58,10 @@
 
 <script>
 function myMap() {
-  myCenter=new google.maps.LatLng(41.878114, -87.629798);
+  myCenter=new google.maps.LatLng(18.557024, 73.75092);
   var mapOptions= {
     center:myCenter,
-    zoom:12, scrollwheel: false, draggable: false,
+    zoom:14, scrollwheel: false, draggable: false,
     mapTypeId:google.maps.MapTypeId.ROADMAP
   };
   var map=new google.maps.Map(document.getElementById("googleMap"),mapOptions);
@@ -123,6 +123,15 @@ function search() {
     var url = '/search/?phone_number='+x+'#record'
     window.open(url, "_self");
 }
+
+
+var pNumber = document.getElementById("pNumber");
+pNumber.addEventListener("keyup", function(event) {
+  event.preventDefault();
+  if (event.keyCode === 13) {
+    document.getElementById("searchbtn").click();
+  }
+});
 
 </script>
 
