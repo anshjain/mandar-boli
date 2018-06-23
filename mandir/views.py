@@ -21,6 +21,8 @@ class RecordListView(ListView):
         # Just include the form
         context = super(RecordListView, self).get_context_data(*args, **kwargs)
         context['form'] = self.form_class()
+        # Mandir object into the context
+        context['mandir'] = Mandir.objects.all()[0]
         return context
 
     def get_queryset(self):

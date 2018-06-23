@@ -25,7 +25,7 @@ SECRET_KEY = 's-cl_(s$*lcg7$8sv$ivfg1$%mcnbexouu+gqt15wt-bj(v_)v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["mandir-boli.herokuapp.com"]
+ALLOWED_HOSTS = ["mandir-boli.herokuapp.com", '127.0.0.1']
 
 
 # Application definition
@@ -119,12 +119,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
-
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
