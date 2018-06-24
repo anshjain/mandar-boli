@@ -22,7 +22,7 @@ class RecordListView(ListView):
         context = super(RecordListView, self).get_context_data(*args, **kwargs)
         context['form'] = self.form_class()
         # Mandir object into the context
-        context['mandir'] = Mandir.objects.all()[0]
+        context['mandir'] = Mandir.objects.all().first()
         return context
 
     def get_queryset(self):
@@ -37,6 +37,13 @@ class EntryCreateView(FormView):
     model = Record
     template_name = 'entry.html'
     success_url = '/'
+
+    def get_context_data(self, *args, **kwargs):
+        # Just include the form
+        context = super(EntryCreateView, self).get_context_data(*args, **kwargs)
+        # Mandir object into the context
+        context['mandir'] = Mandir.objects.all().first()
+        return context
 
     def form_valid(self, form):
         # check account present with phone number or not.
