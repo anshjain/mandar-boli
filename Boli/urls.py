@@ -28,8 +28,3 @@ urlpatterns = [
     url(r'^add/$', EntryCreateView.as_view(), name='add-record'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-
-if not settings.DEBUG:
-    urlpatterns += urlpatterns('',
-        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
-    )
