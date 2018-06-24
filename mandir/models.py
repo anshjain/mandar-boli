@@ -87,7 +87,7 @@ class Record(models.Model):
         verbose_name_plural = _("Records")
 
     def __unicode__(self):
-        return self.title
+        return self.title.name
 
     def get_title(self):
         """

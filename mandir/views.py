@@ -2,6 +2,10 @@
 from __future__ import unicode_literals
 
 from datetime import datetime
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
 
@@ -31,8 +35,8 @@ class RecordListView(ListView):
             return self.model.objects.filter(account__phone_number__icontains=form.cleaned_data['phone_number'])
         return self.model.objects.filter(created__date=datetime.today())
 
-
-class EntryCreateView(FormView):
+@method_decorator(login_required, name='dispatch')
+class EntryCreateView(LoginRequiredMixin, FormView):
     form_class = EntryForm
     model = Record
     template_name = 'entry.html'

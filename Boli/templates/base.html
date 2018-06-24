@@ -34,14 +34,16 @@
     <!-- The Band Section -->
     {% block main %}{% endblock %}
 
-    <!-- The Contact Section -->
-    {% include 'contact.html' %}
+    {% if request.user.is_authenticated %}
+        <!-- The Contact Section -->
+        {% include 'contact.html' %}
+
+        <!-- Add Google Maps -->
+        <div id="googleMap" style="height:400px;" class="w3-grayscale-max"></div>
+    {% endif %}
 
 <!-- End Page Content -->
 </div>
-
-<!-- Add Google Maps -->
-<div id="googleMap" style="height:400px;" class="w3-grayscale-max"></div>
 
 <script>
 function myMap() {

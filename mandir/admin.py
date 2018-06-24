@@ -10,16 +10,37 @@ class MandirAdmin(admin.ModelAdmin):
 
 
 class RecordAdmin(admin.ModelAdmin):
-    list_display = ('mandir', 'account', 'title', 'amount', 'boli_date', 'payment_date', 'transaction_id', 'paid')
+    list_display = ('get_mandir_name', 'get_account_no', 'get_title', 'amount', 'boli_date',
+                    'payment_date', 'transaction_id', 'paid')
     readonly_fields = ('account', 'mandir')
+
+    def get_mandir_name(self, obj):
+        return obj.mandir.name
+    get_mandir_name.short_description = 'Mandir Name'
+
+    def get_account_no(self, obj):
+        return obj.account.phone_number
+    get_account_no.short_description = 'Phone Number'
+
+    def get_title(self, obj):
+        return obj.title.name
+    get_title.short_description = 'Title'
+
+    #Filtering on side - for some reason, this works
+    list_filter = ['title', 'paid', 'account__phone_number']
 
 
 class MandirImageAdmin(admin.ModelAdmin):
-    list_display = ('mandir',)
+    list_display = ('get_mandir_name',)
+
+    def get_mandir_name(self, obj):
+        return obj.mandir.name
+    get_mandir_name.short_description = 'Mandir Name'
 
 
 class BoliChoiceAdmin(admin.ModelAdmin):
     list_display = ('name',)
+
 
 admin.site.register(Mandir, MandirAdmin)
 admin.site.register(Record, RecordAdmin)
