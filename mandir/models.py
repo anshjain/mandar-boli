@@ -55,7 +55,7 @@ class MandirImage(models.Model):
     Mandir Images
     """
     mandir = models.ForeignKey(Mandir, verbose_name=_('mandir'), related_name='mandir_image')
-    image = models.ImageField(verbose_name=_('image'), upload_to='pics/')
+    image = models.ImageField(verbose_name=_('image'), upload_to='images/')
     title = models.TextField(verbose_name=_("title"), blank=True, null=True)
     description = models.TextField(verbose_name=_("description"), blank=True, null=True)
 
