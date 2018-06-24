@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -25,8 +26,9 @@ class Mandir(models.Model):
     """
     Mandir records
     """
+    user = models.OneToOneField(User, blank=True, null=True)
     name = models.CharField(max_length=255, verbose_name=_("mandir name"))
-    contract_number = models.CharField(max_length=10, verbose_name=_("contact number"), blank=True, null= True, unique= True)
+    contract_number = models.CharField(max_length=10, verbose_name=_("contact number"), blank=True, null=True, unique=True)
     email = models.EmailField(max_length=70, blank=True, null= True, unique= True)
     address = models.CharField(max_length=255, verbose_name=_("mandir location"))
     city = models.CharField(max_length=20, verbose_name=_("city"), default='Pune')

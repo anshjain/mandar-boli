@@ -16,7 +16,8 @@ class SearchForm(forms.Form):
 
 
 class EntryForm(forms.Form):
-    title = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'w3-input w3-border'}),
+    title = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'w3-input w3-border',
+                                                              'style': 'height: 40px;'}),
                                    queryset=BoliChoice.objects.all(),
                                    required=True)
     phone_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Phone Number',

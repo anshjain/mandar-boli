@@ -21,19 +21,27 @@ class RecordListView(ListView):
     context_object_name = 'records'
     template_name = 'records.html'
 
+    def get_mandir_info(self):
+        """
+        Get the mandir info.
+        """
+        user = self.request.user
+        return user.mandir if hasattr(user, 'mandir') else None
+
     def get_context_data(self, *args, **kwargs):
-        # Just include the form
         context = super(RecordListView, self).get_context_data(*args, **kwargs)
-        context['form'] = self.form_class()
-        # Mandir object into the context
-        context['mandir'] = Mandir.objects.all().first()
+        context.update({'form': self.form_class(), 'mandir': self.get_mandir_info()})
         return context
 
     def get_queryset(self):
         form = self.form_class(self.request.GET)
         if form.is_valid():
-            return self.model.objects.filter(account__phone_number__icontains=form.cleaned_data['phone_number'])
+            # check for temple id and include it in search.
+            phone_number = form.cleaned_data['phone_number']
+            mandir_id = form.cleaned_data['mandir'] or self.get_mandir_info()
+            return self.model.objects.filter(account__phone_number__icontains=phone_number, mandir=mandir_id)
         return self.model.objects.filter(created__date=datetime.today())
+
 
 @method_decorator(login_required, name='dispatch')
 class EntryCreateView(LoginRequiredMixin, FormView):
@@ -43,10 +51,10 @@ class EntryCreateView(LoginRequiredMixin, FormView):
     success_url = '/'
 
     def get_context_data(self, *args, **kwargs):
-        # Just include the form
         context = super(EntryCreateView, self).get_context_data(*args, **kwargs)
+
         # Mandir object into the context
-        context['mandir'] = Mandir.objects.all().first()
+        context['mandir'] = self.request.user.mandir
         return context
 
     def form_valid(self, form):
