@@ -1,0 +1,30 @@
+[
+{
+    "model": "mandir.bolichoice",
+    "pk": 1,
+    "fields": {
+        "name": "Shanti Dhara"
+    }
+},
+{
+    "model": "mandir.bolichoice",
+    "pk": 2,
+    "fields": {
+        "name": "Abhishek"
+    }
+},
+{
+    "model": "mandir.bolichoice",
+    "pk": 3,
+    "fields": {
+        "name": "Chatra"
+    }
+},
+{
+    "model": "mandir.bolichoice",
+    "pk": 4,
+    "fields": {
+        "name": "Miscellaneous"
+    }
+}
+]

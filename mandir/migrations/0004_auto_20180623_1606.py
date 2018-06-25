@@ -58,7 +58,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='mandir',
             name='state',
-            field=models.CharField(default='maharashtra', max_length=10, verbose_name='state'),
+            field=models.CharField(default='maharashtr', max_length=10, verbose_name='state'),
         ),
         migrations.AlterField(
             model_name='record',

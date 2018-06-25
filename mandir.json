@@ -1,0 +1,19 @@
+[
+{
+    "model": "mandir.mandir",
+    "pk": 1,
+    "fields": {
+        "user": 2,
+        "name": "1008 Parasnath Digamber Jain Mandir",
+        "contract_number": "9999888821",
+        "email": "test@gmail.com",
+        "address": "Davbindu, Gyanoday Digambar Jain Society, Sus gaon, 411021",
+        "city": "Pune",
+        "state": "maharashtra",
+        "pin_code": "411021",
+        "lat": "18.557024",
+        "long": "73.750920",
+        "created": "2018-06-16T14:01:08.831Z"
+    }
+}
+]
