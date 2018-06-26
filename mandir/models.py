@@ -21,6 +21,9 @@ class BoliChoice(models.Model):
     def __unicode__(self):
         return self.name
 
+    def __str__(self):
+        return self.name
+
 
 class Mandir(models.Model):
     """
@@ -51,6 +54,9 @@ class Mandir(models.Model):
     def __unicode__(self):
         return self.name
 
+    def __str__(self):
+        return self.name
+
 
 class MandirImage(models.Model):
     """
@@ -68,6 +74,8 @@ class MandirImage(models.Model):
     def __unicode__(self):
         return self.mandir.name
 
+    def __str__(self):
+        return self.mandir.name
 
 class Record(models.Model):
     """
