@@ -23,7 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 's-cl_(s$*lcg7$8sv$ivfg1$%mcnbexouu+gqt15wt-bj(v_)v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+HOBBY_DEV = True
 
 ALLOWED_HOSTS = ["mandir-boli.herokuapp.com", '127.0.0.1']
 
@@ -80,6 +81,18 @@ if DEBUG:
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+
+elif HOBBY_DEV:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'd807732vvlh6me',
+            'USER': 'cpogntjwdysumf',
+            'PASSWORD': '43d13010c364f24327846391ff72e32a0edb1df80dd2336d6e0a91c3ed84c6a2',
+            'PORT':5432,
+            'HOST': 'localhost',
         }
     }
 else:
