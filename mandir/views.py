@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -35,12 +35,17 @@ class RecordListView(ListView):
 
     def get_queryset(self):
         form = self.form_class(self.request.GET)
+
         if form.is_valid():
             # check for temple id and include it in search.
             phone_number = form.cleaned_data['phone_number']
             mandir_id = form.cleaned_data['mandir'] or self.get_mandir_info()
             return self.model.objects.filter(account__phone_number__icontains=phone_number, mandir=mandir_id)
-        return self.model.objects.filter(created__date=datetime.today())
+
+        # Default data will be displayed for two hours only after creation.
+        mandir = self.get_mandir_info()
+        time_threshold = datetime.now() - timedelta(hours=2)
+        return self.model.objects.filter(created__date=datetime.today(), created__gt=time_threshold, mandir=mandir)
 
 
 @method_decorator(login_required, name='dispatch')
