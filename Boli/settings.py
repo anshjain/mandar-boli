@@ -92,7 +92,7 @@ elif HOBBY_DEV:
             'USER': 'cpogntjwdysumf',
             'PASSWORD': '43d13010c364f24327846391ff72e32a0edb1df80dd2336d6e0a91c3ed84c6a2',
             'PORT':5432,
-            'HOST': '0.0.0.0',
+            'HOST': 'ec2-23-21-238-28.compute-1.amazonaws.com',
         }
     }
 else:
@@ -102,7 +102,7 @@ else:
             'NAME': 'mandir_boli',
             'USER': 'mandir_user',
             'PASSWORD': '$ankuL090517',
-            'HOST': '0.0.0.0',
+            'HOST': 'localhost',
         }
     }
 
