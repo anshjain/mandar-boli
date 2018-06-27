@@ -8,11 +8,6 @@ from mandir.models import BoliChoice, Mandir
 
 class SearchForm(forms.Form):
     phone_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Phone Number', 'autocomplete': 'off'}))
-    mandir = forms.ModelChoiceField(widget=forms.Select(
-        attrs={
-            'class': 'w3-input w3-border',
-            'style': 'width: 20%; float: right; margin: 3px; height: 38px;'
-        }), queryset=Mandir.objects.all(), required=True)
 
 
 class EntryForm(forms.Form):

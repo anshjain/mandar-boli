@@ -37,10 +37,8 @@ class RecordListView(ListView):
         form = self.form_class(self.request.GET)
 
         if form.is_valid():
-            # check for temple id and include it in search.
             phone_number = form.cleaned_data['phone_number']
-            mandir_id = form.cleaned_data['mandir'] or self.get_mandir_info()
-            return self.model.objects.filter(account__phone_number__icontains=phone_number, mandir=mandir_id)
+            return self.model.objects.filter(account__phone_number__icontains=phone_number)
 
         # Default data will be displayed for two hours only after creation.
         mandir = self.get_mandir_info()

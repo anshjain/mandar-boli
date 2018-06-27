@@ -30,8 +30,8 @@
                 <th>{% trans 'Description' %}</th>
                 <th>{% trans 'Boli Date' %}</th>
                 <th>{% trans 'Amount' %}</th>
-                <th>{% trans 'Phone Number' %}</th>
-                <th>{% trans 'Status' %}</th>
+                <!--<th>{% trans 'Phone Number' %}</th>-->
+                <!--<th>{% trans 'Status' %}</th>-->
             </tr>
             {% for record in records %}
                 <tr>
@@ -39,8 +39,8 @@
                     <td>{{record.account.description}}</td>
                     <td>{{record.boli_date}}</td>
                     <td>{{record.amount}}</td>
-                    <td>{{record.account.phone_number}}</td>
-                    <td>{{record.is_paid}}</td>
+                    <!--<td>{{record.account.phone_number}}</td>-->
+                    <!--<td>{{record.is_paid}}</td>-->
                 </tr>
             {% endfor %}
         </table>

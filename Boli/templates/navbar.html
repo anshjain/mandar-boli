@@ -11,7 +11,6 @@
             <a href="{% url 'logout' %}#login" class="w3-bar-item w3-button w3-hover-red w3-padding-large w3-hide-small w3-right">LOGOUT</a>
         {% else %}
             <a href="{% url 'login' %}#login" class="w3-bar-item w3-button w3-hover-red w3-padding-large w3-hide-small w3-right">LOGIN</a>
-            {{ form.mandir }}
         {% endif %}
         <input class="w3-input w3-right w3-half" style="max-width:20%; margin:3px;" placeholder="Phone Number" required id="pNumber" name="phone_number">
     </div>

@@ -1,7 +1,7 @@
 {% load staticfiles i18n static %}
 <!DOCTYPE html>
 <html>
-    <title>{% block title %}{% endblock %} | {% trans "Jain Temple" %}</title>
+    <title>{% block title %}Home{% endblock %} | {% trans "Jain Temple" %}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -62,13 +62,13 @@
     {% if request.user.is_authenticated %}
         <!-- The Contact Section -->
         {% include 'contact.html' %}
-
-        <!-- Add Google Maps -->
-        <div id="googleMap" style="height:400px;" class="w3-grayscale-max"></div>
     {% endif %}
 
 <!-- End Page Content -->
 </div>
+
+<!-- Add Google Maps -->
+<div id="googleMap" style="height:400px;" class="w3-grayscale-max"></div>
 
 <script>
 function myMap() {
@@ -152,6 +152,26 @@ pNumber.addEventListener("keyup", function(event) {
     search();
   }
 });
+
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+
+phone_number = getUrlParameter('phone_number');
+if (phone_number) {
+    document.getElementById("pNumber").value = phone_number;
+    }
 
 </script>
 
