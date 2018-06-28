@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -16,3 +17,17 @@ class Account(models.Model):
 
     def __unicode__(self):
         return self.phone_number
+
+
+class UserProfile(models.Model):
+    """
+    User profile which will associate with temple (Mandir)
+    """
+    user = models.OneToOneField(User, blank=True, null=True)
+    mandir = models.ForeignKey('mandir.Mandir', verbose_name=_('mandir'), related_name='user_mandir')
+
+    def __unicode__(self):
+        return self.user.username
+
+    def __str__(self):
+        return self.user.username

@@ -26,7 +26,9 @@ class RecordListView(ListView):
         Get the mandir info.
         """
         user = self.request.user
-        return user.mandir if hasattr(user, 'mandir') else None
+        if hasattr(user, 'userprofile'):
+            profile = user.userprofile
+            return profile.mandir if hasattr(profile, 'mandir') else None
 
     def get_context_data(self, *args, **kwargs):
         context = super(RecordListView, self).get_context_data(*args, **kwargs)
@@ -57,7 +59,7 @@ class EntryCreateView(LoginRequiredMixin, FormView):
         context = super(EntryCreateView, self).get_context_data(*args, **kwargs)
 
         # Mandir object into the context
-        context['mandir'] = self.request.user.mandir
+        context['mandir'] = self.request.user.userprofile.mandir
         return context
 
     def form_valid(self, form):
@@ -69,7 +71,7 @@ class EntryCreateView(LoginRequiredMixin, FormView):
             account.description = form.cleaned_data['description']
             account.save()
         # hard code as of now
-        mandir = Mandir.objects.all().first()
+        mandir = self.request.user.userprofile.mandir
 
         self.model(
             mandir=mandir,
