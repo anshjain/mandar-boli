@@ -43,11 +43,6 @@
             <!-- The Band Section -->
             {% block main %}{% endblock %}
 
-            {% if not 'login' in request.path %}
-                <!-- The Contact Section -->
-                {% include 'contact.html' %}
-            {% endif %}
-
         <!-- End Page Content -->
         </div>
 

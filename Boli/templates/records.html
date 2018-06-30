@@ -33,16 +33,22 @@
                 <!--<th>{% trans 'Phone Number' %}</th>-->
                 <!--<th>{% trans 'Status' %}</th>-->
             </tr>
-            {% for record in records %}
-                <tr>
-                    <td>{{record.get_title}}</td>
-                    <td>{{record.account.description}}</td>
-                    <td>{{record.boli_date}}</td>
-                    <td>{{record.amount}}</td>
-                    <!--<td>{{record.account.phone_number}}</td>-->
-                    <!--<td>{{record.is_paid}}</td>-->
-                </tr>
-            {% endfor %}
+            {% if records %}
+                {% for record in records %}
+                    <tr>
+                        <td>{{record.get_title}}</td>
+                        <td>{{record.account.description}}</td>
+                        <td>{{record.boli_date}}</td>
+                        <td>{{record.amount}}</td>
+                        <!--<td>{{record.account.phone_number}}</td>-->
+                        <!--<td>{{record.is_paid}}</td>-->
+                    </tr>
+                {% endfor %}
+            {% else %}
+               <tr>
+                   <td colspan="4"><center>No record found !</center></td>
+               </tr>
+            {% endif %}
         </table>
     </div>
 {% endblock %}

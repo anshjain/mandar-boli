@@ -1,3 +1,12 @@
+{% extends "base.html" %}
+
+{% load staticfiles i18n %}
+
+{% block title %}{% trans "About Us" %}{% endblock %}
+
+{% block main %}
+
+<!-- The about us Section -->
   <div class="w3-container w3-content w3-padding-64" style="max-width:800px" id="contact">
     <h2 class="w3-wide w3-center">CONTACT</h2>
     <p class="w3-opacity w3-center"><i>Fan? Drop a note!</i></p>
@@ -29,3 +38,4 @@
       </div>
     </div>
   </div>
+{% endblock %}
