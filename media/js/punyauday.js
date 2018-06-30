@@ -64,9 +64,9 @@ function get_description() {
     };
 
     if (phone_number.length >= 10){
+        $('#id_description').focus();
         $.get('/get/description/', data, function(data){
                $('#id_description').val(data.description);
-               $('#id_description').focus();
         }, 'json');
     }
 }
