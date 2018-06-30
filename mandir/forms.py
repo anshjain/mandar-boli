@@ -16,7 +16,7 @@ class EntryForm(forms.Form):
                                    queryset=BoliChoice.objects.all(),
                                    required=True)
     phone_number = forms.RegexField(regex=r'^\?1?\d{9,15}$', max_length=10,
-                                    widget=forms.TextInput(
+                                    widget=forms.NumberInput(
                                         attrs={'error_message': ("Phone number must be entered in the format: "
                                                                  "'9999999999'.Up to 15 digits allowed."),
                                                'placeholder': 'Phone Number',
