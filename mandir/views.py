@@ -47,12 +47,13 @@ class RecordListView(ListView):
 
         if form.is_valid():
             phone_number = form.cleaned_data['phone_number']
-            return self.model.objects.filter(account__phone_number__icontains=phone_number)
+            return self.model.objects.filter(account__phone_number__icontains=phone_number, paid=False)
 
         # Default data will be displayed for two hours only after creation.
         mandir = self.get_mandir_info()
         time_threshold = datetime.now() - timedelta(hours=2)
-        return self.model.objects.filter(created__date=datetime.today(), created__gt=time_threshold, mandir=mandir)
+        return self.model.objects.filter(created__date=datetime.today(), created__gt=time_threshold,
+                                         mandir=mandir, paid=False)
 
 
 @method_decorator(login_required, name='dispatch')
