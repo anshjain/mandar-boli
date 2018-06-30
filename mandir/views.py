@@ -2,8 +2,10 @@
 from __future__ import unicode_literals
 
 from datetime import datetime, timedelta
+from twilio.rest import Client
 import simplejson as json
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -75,21 +77,37 @@ class EntryCreateView(LoginRequiredMixin, FormView):
         if created:
             account.description = form.cleaned_data['description']
             account.save()
+
         # hard code as of now
         mandir = self.request.user.userprofile.mandir
+        amount = form.cleaned_data['amount']
 
         _, record_created = self.model.objects.get_or_create(
             mandir=mandir,
             account=account,
             title=form.cleaned_data['title'],
             description=form.cleaned_data['description'],
-            amount=form.cleaned_data['amount'],
+            amount=amount,
             boli_date=datetime.now()
         )
         if record_created:
+            send_sms(account.phone_number, amount)
             messages.success(self.request, "Record added successfully !!")
 
         return super(EntryCreateView, self).form_valid(form)
+
+
+def send_sms(phone_number, amount):
+    """
+        Will send an sms to end user.
+    """
+    client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
+    sms_mgs = """Thanks to donate {} \n Mandir Committee is very thankful to you."""
+    message = client.messages.create(
+        body=sms_mgs.format(amount),
+        from_=settings.TWILIO_USER,
+        to='+91{}'.format(phone_number)
+    )
 
 
 def ajax_single_account(request):
