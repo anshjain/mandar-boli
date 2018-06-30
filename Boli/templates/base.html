@@ -9,176 +9,87 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style>
     body {font-family: "Lato", sans-serif}
     .mySlides {display: none}
     </style>
 
     <link rel='shortcut icon' type='image/x-icon' href="{% static 'images/favicon.ico' %}" />
-<body>
+    <body>
 
-{% include 'navbar.html' %}
+        {% include 'navbar.html' %}
 
-<!-- Page content -->
-<div class="w3-content" style="max-width:2000px;margin-top:46px">
+        <!-- Page content -->
+        <div class="w3-content" style="max-width:2000px;margin-top:46px">
 
-    <!-- Automatic Slideshow Images -->
-    <div>
-        {% if mandir.get_images%}
-            {% for img_obj in mandir.get_images %}
-                <div class="mySlides w3-display-container w3-center">
-                    <img src="{% static img_obj.image %}" style="width:100%; height:600px;">
-                    <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
-                      <h3>{{img_obj.title}}</h3>
-                      <p><b>{{img_obj.description}}</b></p>
-                    </div>
-                </div>
-            {%endfor%}
-        {% else %}
-            <div class="mySlides w3-display-container w3-center">
-                 <img src="{% static 'images/Gomateshva.jpg' %}" style="width:100%; height:600px;">
-                 <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
-                    <h3>‎Shravanabelagola Gomatesh</h3>
-                    <p><b>We had the best time to worship at ‎Shravanabelagola</b></p>
-                 </div>
-             </div>
-            <div class="mySlides w3-display-container w3-center">
-                 <img src="{% static 'images/Gomateshva-1.jpg' %}" style="width:100%; height:600px;">
-                 <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
-                    <h3>Bahubali Gomatesh</h3>
-                    <p><b>Gomatesh Gomatesh jai jai Gomatesh</b></p>
-                 </div>
-             </div>
-            <div class="mySlides w3-display-container w3-center">
-                <img src="{% static 'images/Gomateshva-2.jpg' %}" style="width:100%; height:600px;">
-                <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
-                    <h3>Mahamastak Abhisheka</h3>
-                    <p><b>Testing testing !!!</b></p>
-                </div>
+            <!-- Automatic Slideshow Images -->
+            <div>
+                {% if mandir.get_images%}
+                    {% for img_obj in mandir.get_images %}
+                        <div class="mySlides w3-display-container w3-center">
+                            <img src="{% static img_obj.image %}" style="width:100%; height:600px;">
+                            <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
+                              <h3>{{img_obj.title}}</h3>
+                              <p><b>{{img_obj.description}}</b></p>
+                            </div>
+                        </div>
+                    {%endfor%}
+                {% else %}
+                    {% include 'banner_data.html' %}
+                {% endif %}
             </div>
-        {% endif %}
 
-    </div>
+            <!-- The Band Section -->
+            {% block main %}{% endblock %}
 
-    <!-- The Band Section -->
-    {% block main %}{% endblock %}
+            <!-- The Contact Section -->
+            {% include 'contact.html' %}
 
-    {% if request.user.is_authenticated %}
-        <!-- The Contact Section -->
-        {% include 'contact.html' %}
-    {% endif %}
+        <!-- End Page Content -->
+        </div>
 
-<!-- End Page Content -->
-</div>
+        <!-- Add Google Maps -->
+        <div id="googleMap" style="height:400px;" class="w3-grayscale-max"></div>
 
-<!-- Add Google Maps -->
-<div id="googleMap" style="height:400px;" class="w3-grayscale-max"></div>
+        <script src="{% static 'js/punyauday.js' %}"></script>
 
-<script>
-function myMap() {
+        <script>
+        carousel();
+        function myMap() {
 
-  {% if mandir.lat %}
-    myCenter=new google.maps.LatLng({{mandir.lat}}, {{mandir.long}});
-  {% else %}
-    myCenter=new google.maps.LatLng(18.557024, 73.75092)
-  {% endif %}
+          {% if mandir.lat %}
+            myCenter=new google.maps.LatLng({{mandir.lat}}, {{mandir.long}});
+          {% else %}
+            myCenter=new google.maps.LatLng(18.557024, 73.75092)
+          {% endif %}
 
-  var mapOptions= {
-    center:myCenter,
-    zoom:14, scrollwheel: false, draggable: false,
-    mapTypeId:google.maps.MapTypeId.ROADMAP
-  };
-  var map=new google.maps.Map(document.getElementById("googleMap"),mapOptions);
+          var mapOptions= {
+            center:myCenter,
+            zoom:14, scrollwheel: false, draggable: false,
+            mapTypeId:google.maps.MapTypeId.ROADMAP
+          };
+          var map=new google.maps.Map(document.getElementById("googleMap"),mapOptions);
 
-  var marker = new google.maps.Marker({
-    position: myCenter,
-  });
-  marker.setMap(map);
-}
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDb82Qph6YtEFs9VRyfQk3BgDib5YaGsfk&callback=myMap"></script>
-<!--
-To use this code on your website, get a free API key from Google.
-Read more at: https://www.w3schools.com/graphics/google_maps_basic.asp
--->
-
-<!-- Footer -->
-<footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
-{% include 'footer.html' %}
-</footer>
-
-<script>
-// Automatic Slideshow - change image every 4 seconds
-var myIndex = 0;
-carousel();
-
-function carousel() {
-    var i;
-    var x = document.getElementsByClassName("mySlides");
-    for (i = 0; i < x.length; i++) {
-       x[i].style.display = "none";
-    }
-    myIndex++;
-    if (myIndex > x.length) {myIndex = 1}
-    x[myIndex-1].style.display = "block";
-    setTimeout(carousel, 4000);
-}
-
-// Used to toggle the menu on small screens when clicking on the menu button
-function myFunction() {
-    var x = document.getElementById("navDemo");
-    if (x.className.indexOf("w3-show") == -1) {
-        x.className += " w3-show";
-    } else {
-        x.className = x.className.replace(" w3-show", "");
-    }
-}
-
-// When the user clicks anywhere outside of the modal, close it
-var modal = document.getElementById('ticketModal');
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-function search() {
-    var x = document.getElementById("pNumber").value;
-    var url = '/search/?phone_number='+x+'#record'
-    window.open(url, "_self");
-}
-
-
-var pNumber = document.getElementById("pNumber");
-pNumber.addEventListener("keyup", function(event) {
-  event.preventDefault();
-  if (event.keyCode === 13) {
-    search();
-  }
-});
-
-var getUrlParameter = function getUrlParameter(sParam) {
-    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-        sURLVariables = sPageURL.split('&'),
-        sParameterName,
-        i;
-
-    for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
-
-        if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : sParameterName[1];
+          var marker = new google.maps.Marker({
+            position: myCenter,
+          });
+          marker.setMap(map);
         }
-    }
-};
 
-phone_number = getUrlParameter('phone_number');
-if (phone_number) {
-    document.getElementById("pNumber").value = phone_number;
-    }
+        phone_number = getUrlParameter('phone_number');
+        if (phone_number) {
+            document.getElementById("pNumber").value = phone_number;
+        }
+        </script>
 
-</script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDb82Qph6YtEFs9VRyfQk3BgDib5YaGsfk&callback=myMap"></script>
 
-</body>
+        <!-- Footer -->
+        <footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
+            {% include 'footer.html' %}
+        </footer>
+
+    </body>
 </html>
 

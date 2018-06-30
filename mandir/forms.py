@@ -13,19 +13,18 @@ class SearchForm(forms.Form):
 class EntryForm(forms.Form):
     title = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'w3-input w3-border',
                                                               'style': 'height: 40px;'}),
-                                   queryset=BoliChoice.objects.all(),
-                                   required=True)
-    phone_number = forms.RegexField(regex=r'^\?1?\d{9,15}$', max_length=10,
+                                   queryset=BoliChoice.objects.all(), required=True)
+    phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', max_length=10,
                                     widget=forms.NumberInput(
-                                        attrs={'error_message': ("Phone number must be entered in the format: "
-                                                                 "'9999999999'.Up to 15 digits allowed."),
-                                               'placeholder': 'Phone Number',
-                                               'autocomplete': 'off', 'class': 'w3-input w3-border'}
-                                    )
-    )
+                                        attrs={'placeholder': 'Phone Number',
+                                               'autocomplete': 'off', 'class': 'w3-input w3-border',
+                                               'onkeyup': "javascript:get_description();"}),
+                                    error_messages={
+                                        'required': "Phone number must be entered in the format: '9999999999'"
+                                    })
 
-    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'description', 'autocomplete': 'off',
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Description', 'autocomplete': 'off',
                                                                'class': 'w3-input w3-border', 'rows': '4'}))
-    amount = forms.CharField(widget=forms.NumberInput(attrs={'placeholder': 'amount', 'autocomplete': 'off',
+    amount = forms.CharField(widget=forms.NumberInput(attrs={'placeholder': 'Amount', 'autocomplete': 'off',
                                                              'class': 'w3-input w3-border',
                                                              'style': 'margin: 18px 6px 0px 6px'}))

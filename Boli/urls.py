@@ -20,7 +20,7 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 
 
-from mandir.views import RecordListView, EntryCreateView
+from mandir.views import RecordListView, EntryCreateView, ajax_single_account
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^$', RecordListView.as_view(), name='home'),
     url(r'^search/$', RecordListView.as_view(), name='record-list'),
     url(r'^add/$', EntryCreateView.as_view(), name='add-record'),
+    url(r'^get/description/$', ajax_single_account, name='des-search'),
 ] + static.static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + \
               static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -2,16 +2,21 @@
 from __future__ import unicode_literals
 
 from datetime import datetime, timedelta
+import simplejson as json
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import HttpResponse
+
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
 
 from account.models import Account
 
-from mandir.models import Record, Mandir
+from mandir.models import Record
 from mandir.forms import SearchForm, EntryForm
 
 
@@ -53,7 +58,7 @@ class EntryCreateView(LoginRequiredMixin, FormView):
     form_class = EntryForm
     model = Record
     template_name = 'entry.html'
-    success_url = '/'
+    success_url = '/add/#entry'
 
     def get_context_data(self, *args, **kwargs):
         context = super(EntryCreateView, self).get_context_data(*args, **kwargs)
@@ -73,12 +78,32 @@ class EntryCreateView(LoginRequiredMixin, FormView):
         # hard code as of now
         mandir = self.request.user.userprofile.mandir
 
-        self.model(
+        _, record_created = self.model.objects.get_or_create(
             mandir=mandir,
             account=account,
             title=form.cleaned_data['title'],
             description=form.cleaned_data['description'],
             amount=form.cleaned_data['amount'],
             boli_date=datetime.now()
-        ).save()
+        )
+        if record_created:
+            messages.success(self.request, "Record added successfully !!")
+
         return super(EntryCreateView, self).form_valid(form)
+
+
+def ajax_single_account(request):
+    '''gets single item'''
+    if not request.is_ajax():
+        return HttpResponse(json.dumps({'result': False}))
+
+    # get slug from data
+    phone_number = request.GET.get('phone_number', None)
+
+    # get item from slug
+    account = get_object_or_404(Account, phone_number=phone_number)
+    return HttpResponse(json.dumps(
+        {
+            'result': True,
+            'description': account.description,
+        }))
