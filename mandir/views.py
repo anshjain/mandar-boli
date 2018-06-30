@@ -102,7 +102,7 @@ def send_sms(phone_number, amount):
         Will send an sms to end user.
     """
     client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
-    sms_mgs = """Thanks to donate {} \n Mandir Committee is very thankful to you."""
+    sms_mgs = """Thanks to donate {}/- \n Mandir Committee is very thankful to you."""
     message = client.messages.create(
         body=sms_mgs.format(amount),
         from_=settings.TWILIO_USER,
