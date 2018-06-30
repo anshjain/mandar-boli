@@ -8,6 +8,11 @@
     <div class="w3-container w3-content w3-padding-64" style="max-width:800px" id="login">
         <h2 class="w3-wide w3-center">LOGIN</h2>
         <p class="w3-opacity w3-center"><i> Jai Jinendra </i></p>
+        {% if form.errors %}
+            <p class="w3-opacity w3-center" style="color:red;"><i>
+                Please enter a correct username and password. Note that both fields may be case-sensitive
+            </i></p>
+        {% endif %}
         <div class="w3-row w3-padding-32">
             <div class="w3-col m6 w3-large w3-margin-bottom">
                 <i class="fa fa-map-marker" style="width:30px"></i> Pune, India<br>
@@ -15,16 +20,16 @@
                 <i class="fa fa-envelope" style="width:30px"> </i> Email: jain.scs@gmail.com<br>
             </div>
             <div class="w3-col m6">
-                <form method="post" action="{% url 'login' %}">
+                <form method="post" action="{% url 'login' %}#login">
                     {% csrf_token %}
                     <div class="w3-row-padding" style="margin:0 -16px 8px -16px">
                         <div class="w3-half">
-                            {{ form.username.errors }}
                             <input placeholder="Username" name="username" required id="id_username" class="w3-input w3-border">
+                            {{ form.username.errors }}
                         </div>
                         <div class="w3-half">
-                            {{ form.password.errors }}
                             <input placeholder="password" type="password" name="password" required id="id_password" class="w3-input w3-border">
+                            {{ form.password.errors }}
                         </div>
                     </div>
                     <button class="w3-button w3-black w3-section w3-right" type="submit">LOGIN</button>
