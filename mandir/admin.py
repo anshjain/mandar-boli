@@ -32,6 +32,7 @@ class RecordResource(resources.ModelResource):
     account = Field()
     title = Field()
     paid = Field()
+    names = Field()
 
     def dehydrate_mandir(self, record):
         return record.mandir.name
@@ -55,14 +56,11 @@ class RecordResource(resources.ModelResource):
 
 
 class RecordAdmin(ImportExportModelAdmin):
-    list_display = ('get_mandir_name', 'get_names', 'get_account_no', 'get_title', 'amount', 'boli_date',
+    list_display = ('get_title', 'get_names', 'get_account_no', 'amount', 'boli_date',
                     'payment_date', 'transaction_id', 'paid')
     readonly_fields = ('account', 'mandir')
+    search_fields = ('account__description', 'account__phone_number',)
     resource_class = RecordResource
-
-    def get_mandir_name(self, obj):
-        return obj.mandir.name
-    get_mandir_name.short_description = 'Mandir Name'
 
     def get_names(self, obj):
         return obj.account.description

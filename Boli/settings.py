@@ -24,7 +24,6 @@ SECRET_KEY = 's-cl_(s$*lcg7$8sv$ivfg1$%mcnbexouu+gqt15wt-bj(v_)v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-HOBBY_DEV = True
 
 ALLOWED_HOSTS = ["mandir-boli.herokuapp.com", '127.0.0.1']
 
@@ -32,6 +31,7 @@ ALLOWED_HOSTS = ["mandir-boli.herokuapp.com", '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'flat_responsive',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -80,12 +80,14 @@ WSGI_APPLICATION = 'Boli.wsgi.application'
 if DEBUG:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'mandir_boli',
+            'USER': 'mandir_user',
+            'PASSWORD': '$ankuL090517',
+            'HOST': 'localhost',
         }
     }
-
-elif HOBBY_DEV:
+else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -94,16 +96,6 @@ elif HOBBY_DEV:
             'PASSWORD': '43d13010c364f24327846391ff72e32a0edb1df80dd2336d6e0a91c3ed84c6a2',
             'PORT':5432,
             'HOST': 'ec2-23-21-238-28.compute-1.amazonaws.com',
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'mandir_boli',
-            'USER': 'mandir_user',
-            'PASSWORD': '$ankuL090517',
-            'HOST': 'localhost',
         }
     }
 
@@ -157,7 +149,7 @@ STATICFILES_DIRS = [
     MEDIA_ROOT
 ]
 
-if HOBBY_DEV:
+if DEBUG:
     ACCOUNT_SID = 'AC1a819246445c925908fbebfa8768fa61'
     AUTH_TOKEN = '73585e628e70e606eb7ccf3e4b567b24'
     TWILIO_USER = '+13158732236'

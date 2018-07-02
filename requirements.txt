@@ -19,9 +19,8 @@ six==1.11.0
 traitlets==4.3.2
 wcwidth==0.1.7
 Pillow==5.1.0
-whitenoise==3.3.1
 psycopg2==2.7.5
 django-import-export==1.0.1
-nexmo==2.1.0
 twilio==6.14.6
 simplejson==3.16.0
+flat_responsive
