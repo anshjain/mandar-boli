@@ -18,6 +18,9 @@ class Account(models.Model):
     def __unicode__(self):
         return self.phone_number
 
+    def __str__(self):
+        return self.phone_number
+
 
 class UserProfile(models.Model):
     """

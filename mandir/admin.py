@@ -36,6 +36,9 @@ class RecordResource(resources.ModelResource):
     def dehydrate_mandir(self, record):
         return record.mandir.name
 
+    def dehydrate_names(self, record):
+        return record.account.description
+
     def dehydrate_account(self, record):
         return record.account.phone_number
 
@@ -47,12 +50,12 @@ class RecordResource(resources.ModelResource):
 
     class Meta:
         model = Record
-        export_order = ('mandir', 'account', 'title', 'amount', 'boli_date', 'paid', 'description')
+        export_order = ('mandir', 'names', 'account', 'title', 'amount', 'boli_date', 'paid', 'description')
         exclude = ('created', 'transaction_id', 'payment_date', 'id')
 
 
 class RecordAdmin(ImportExportModelAdmin):
-    list_display = ('get_mandir_name', 'get_account_no', 'get_title', 'amount', 'boli_date',
+    list_display = ('get_mandir_name', 'get_names', 'get_account_no', 'get_title', 'amount', 'boli_date',
                     'payment_date', 'transaction_id', 'paid')
     readonly_fields = ('account', 'mandir')
     resource_class = RecordResource
@@ -60,6 +63,10 @@ class RecordAdmin(ImportExportModelAdmin):
     def get_mandir_name(self, obj):
         return obj.mandir.name
     get_mandir_name.short_description = 'Mandir Name'
+
+    def get_names(self, obj):
+        return obj.account.description
+    get_names.short_description = 'Name'
 
     def get_account_no(self, obj):
         return obj.account.phone_number

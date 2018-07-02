@@ -52,7 +52,7 @@ class RecordListView(ListView):
         # Default data will be displayed for two hours only after creation.
         mandir = self.get_mandir_info()
         time_threshold = datetime.now() - timedelta(hours=2)
-        return self.model.objects.filter(created__date=datetime.today(), created__gt=time_threshold,
+        return self.model.objects.filter(boli_date__date=datetime.today(), boli_date__gt=time_threshold,
                                          mandir=mandir, paid=False)
 
 
