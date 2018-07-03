@@ -19,7 +19,8 @@
             <a href="{% url 'about' %}#about-us" class="w3-bar-item w3-button w3-padding-large w3-hide-small">ABOUT US</a>
             <a href="{% url 'login' %}#login" class="w3-bar-item w3-button w3-hover-red w3-padding-large w3-hide-small w3-right">LOGIN</a>
         {% endif %}
-        <input class="w3-input w3-right w3-half" style="max-width:30%; margin:3px;" placeholder="Phone Number" required id="pNumber" name="phone_number">
+        <input type="tel" class="w3-input w3-right w3-half" style="max-width:30%; margin:3px;" value="{{phone_number}}"
+               placeholder="Phone Number" maxlength="10" required id="pNumber" name="phone_number">
     </div>
 </div>
 
@@ -30,7 +31,7 @@
     <a href="{% url 'contact-us' %}#contact" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">CONTACT</a>
     <a href="{% url 'about' %}#about-us" class="w3-bar-item w3-button w3-padding-large">ABOUT US</a>
     {% if request.user.is_staff and not request.user.is_superuser %}
-        <a href="{% url 'admin:index' %}" class="w3-bar-item w3-button w3-padding-large" target="_blank">ADMIN</a>
+        <a href="{% url 'admin:index' %}" class="w3-bar-item w3-button w3-padding-large">ADMIN</a>
     {% endif %}
     <a href="{% url 'logout' %}#login" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">LOGOUT</a>
   {% else %}

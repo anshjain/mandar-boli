@@ -39,7 +39,13 @@ class RecordListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(RecordListView, self).get_context_data(*args, **kwargs)
+
+        phone_number = self.request.GET.get('phone_number')
+        if phone_number:
+            context.update({'phone_number': phone_number})
+
         context.update({'form': self.form_class(), 'mandir': self.get_mandir_info()})
+
         return context
 
     def get_queryset(self):

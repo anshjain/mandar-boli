@@ -23,6 +23,9 @@ from django.views.generic import TemplateView
 
 from mandir.views import RecordListView, EntryCreateView, ajax_single_account
 
+admin.site.site_header = 'PunyaUday Fund'
+admin.site.site_title = 'PunyaUday Fund admin'
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/login/$', LoginView.as_view(template_name='login.html'), name="login"),

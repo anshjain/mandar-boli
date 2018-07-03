@@ -25,10 +25,15 @@
         </style>
         <h2 class="w3-wide w3-center">RECORDS</h2>
         <p class="w3-opacity"><i>Jai Jinendra</i></p>
+        {% if records and not request.user.is_authenticated %} <p>Name : {{ records.0.description }} </p>{% endif %}
         <table style="width:100%">
             <tr>
                 <th>{% trans 'Title' %}</th>
-                <th>{% trans 'Description' %}</th>
+                {% if request.user.is_authenticated %}
+                    <th>{% trans 'Description' %}</th>
+                {% else %}
+                    <th>{% trans 'Mandir Name' %}</th>
+                {% endif %}
                 <th>{% trans 'Boli Date' %}</th>
                 <th>{% trans 'Amount' %}</th>
                 <!--<th>{% trans 'Phone Number' %}</th>-->
@@ -38,7 +43,11 @@
                 {% for record in records %}
                     <tr>
                         <td>{{record.get_title}}</td>
-                        <td>{{record.account.description}}</td>
+                        {% if request.user.is_authenticated %}
+                            <td>{{record.account.description}}</td>
+                        {% else %}
+                            <td>{{ record.mandir.name }}</td>
+                        {% endif %}
                         <td>{{record.boli_date|date}}</td>
                         <td>{{record.amount}}.00 /-</td>
                         <!--<td>{{record.account.phone_number}}</td>-->
@@ -46,9 +55,14 @@
                     </tr>
                 {% endfor %}
             {% else %}
-               <tr>
-                   <td colspan="4"><center>No record found !</center></td>
-               </tr>
+                <tr><td colspan="4"><center>
+                    {% if phone_number %}
+                        <span style="font-weight:bold; color:blueviolet;">Thanks for the donations</span> <br>
+                    There is not record in <b>not paid</b> status for {{phone_number}}
+                    {% else %}
+                       No record found !
+                    {% endif %}
+                </center></td></tr>
             {% endif %}
         </table>
     </div>

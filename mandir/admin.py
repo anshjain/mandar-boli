@@ -75,7 +75,27 @@ class RecordAdmin(ImportExportModelAdmin):
     get_title.short_description = 'Title'
 
     #Filtering on side - for some reason, this works
-    list_filter = ['title', 'paid']
+    # list_filter = ['title', 'paid']
+
+    def get_list_filter(self, request):
+        """
+        Update list filter and display list based on logged in admin users.
+        """
+        if request.user.is_superuser:
+            return 'paid', 'title', 'mandir'
+        else:
+            return 'paid', 'title'
+
+    def get_list_display(self, request):
+        """
+        Update list filter and display list based on logged in admin users.
+        """
+        list_display = ['get_title', 'get_names', 'get_account_no', 'amount', 'boli_date',
+                        'payment_date', 'transaction_id', 'paid']
+        if request.user.is_superuser:
+            return ['mandir'] + list_display
+        else:
+            return list_display
 
     def get_queryset(self, request):
         """Limit records to those that belong to the user temple."""
