@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from datetime import datetime
+
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
@@ -61,6 +63,18 @@ class RecordAdmin(ImportExportModelAdmin):
     readonly_fields = ('account', 'mandir')
     search_fields = ('account__description', 'account__phone_number',)
     resource_class = RecordResource
+    list_per_page = 15
+    actions = ['make_paid']
+
+    def make_paid(self, request, queryset):
+        rows_updated = queryset.update(paid=True, payment_date=datetime.now(),
+                                       description='Admin user {} update this record and marked it paid'.format(request.user.username))
+        if rows_updated == 1:
+            message_bit = "1 record was"
+        else:
+            message_bit = "%s records were" % rows_updated
+        self.message_user(request, "%s successfully marked as paid." % message_bit)
+    make_paid.short_description = "Mark selected records as paid"
 
     def get_names(self, obj):
         return obj.account.description
@@ -73,9 +87,6 @@ class RecordAdmin(ImportExportModelAdmin):
     def get_title(self, obj):
         return obj.title.name
     get_title.short_description = 'Title'
-
-    #Filtering on side - for some reason, this works
-    # list_filter = ['title', 'paid']
 
     def get_list_filter(self, request):
         """
