@@ -149,6 +149,19 @@ STATICFILES_DIRS = [
     MEDIA_ROOT
 ]
 
+ADMIN_EMAILS = ('jain.scs@gmail.com', )
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'testing@example.com'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+
+EMAIL_HOST_USER = 'ansh92jaincs@gmail.com'
+EMAIL_HOST_PASSWORD = 'aN!$&&92qoar'
+
+
+
 if DEBUG:
     ACCOUNT_SID = 'AC1a819246445c925908fbebfa8768fa61'
     AUTH_TOKEN = '73585e628e70e606eb7ccf3e4b567b24'

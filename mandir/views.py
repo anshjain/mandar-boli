@@ -9,9 +9,10 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.mail import EmailMessage
 from django.http import HttpResponse
-
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import get_template
 from django.utils.decorators import method_decorator
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
@@ -19,7 +20,7 @@ from django.views.generic.edit import FormView
 from account.models import Account
 
 from mandir.models import Record
-from mandir.forms import SearchForm, EntryForm
+from mandir.forms import SearchForm, EntryForm, ContactForm
 
 
 class RecordListView(ListView):
@@ -119,6 +120,46 @@ def send_sms(phone_number, amount):
             )
         except Exception:
             pass
+
+
+def contact(request):
+    form_class = ContactForm
+
+    # new logic!
+    if request.method == 'POST':
+        form = form_class(data=request.POST)
+
+        if form.is_valid():
+            contact_name = request.POST.get('contact_name', '')
+            contact_email = request.POST.get('contact_email', '')
+            form_content = request.POST.get('message', '')
+
+            # Email the profile with the
+            # contact information
+            template = get_template('contact_template.txt')
+
+            context = {
+                'contact_name': contact_name,
+                'contact_email': contact_email,
+                'form_content': form_content,
+            }
+
+            content = template.render(context)
+
+            email = EmailMessage(
+                "Feedback submitted on Punya Unday Funds", content,
+                "Punya Unday Funds", ['jain.scs@gmail.com'],
+                headers={'Reply-To': contact_email}
+            )
+
+            email.send()
+            messages.success(request, "Thank you for contacting us !!")
+            return redirect('contact-us')
+        else:
+            form_class = form
+            messages.success(request, "Please provide correct email address !!")
+
+    return render(request, 'contact.html', {'form': form_class})
 
 
 def ajax_single_account(request):

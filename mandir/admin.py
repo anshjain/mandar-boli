@@ -58,8 +58,7 @@ class RecordResource(resources.ModelResource):
 
 
 class RecordAdmin(ImportExportModelAdmin):
-    list_display = ('get_title', 'get_names', 'get_account_no', 'amount', 'boli_date',
-                    'payment_date', 'transaction_id', 'paid')
+    list_display_links = ('get_title',)
     readonly_fields = ('account', 'mandir')
     search_fields = ('account__description', 'account__phone_number',)
     resource_class = RecordResource
@@ -101,8 +100,8 @@ class RecordAdmin(ImportExportModelAdmin):
         """
         Update list filter and display list based on logged in admin users.
         """
-        list_display = ['get_title', 'get_names', 'get_account_no', 'amount', 'boli_date',
-                        'payment_date', 'transaction_id', 'paid']
+        list_display = ['paid', 'get_title', 'get_names', 'get_account_no', 'amount', 'boli_date',
+                        'payment_date', 'transaction_id']
         if request.user.is_superuser:
             return ['mandir'] + list_display
         else:
