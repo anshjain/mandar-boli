@@ -23,12 +23,20 @@ function myFunction() {
 }
 
 // When the user clicks anywhere outside of the modal, close it
-var modal = document.getElementById('ticketModal');
+var modal = document.getElementById('EmailModal');
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
 }
+
+function display_model(record_id, amount){
+    document.getElementById("record_id").value = record_id;
+    document.getElementById('EmailModal').style.display='block';
+    document.getElementById("amount_val").innerHTML = amount;
+    document.getElementById("phone_number").value = document.getElementById("pNumber").value;
+}
+
 
 var pNumber = document.getElementById("pNumber");
 pNumber.addEventListener("keyup", function(event) {

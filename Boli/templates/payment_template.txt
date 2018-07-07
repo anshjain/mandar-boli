@@ -1,0 +1,15 @@
+Hi {{name}},
+
+Thanks for the payment.
+
+Payment Details:-
+
+Amount :- {{ amount }}.00/-
+
+Mandir Name :- {{ mandir_name }}
+
+Mode of payment :- {{mod_pay}}
+
+
+Regards,
+Punya Uday Fund

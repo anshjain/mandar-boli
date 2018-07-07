@@ -21,7 +21,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 
 
-from mandir.views import RecordListView, EntryCreateView, ajax_single_account, contact, AboutView
+from mandir.views import RecordListView, EntryCreateView, ajax_single_account, contact, AboutView, payment_complete
 
 admin.site.site_header = 'PunyaUday Fund'
 admin.site.site_title = 'PunyaUday Fund admin'
@@ -36,6 +36,7 @@ urlpatterns = [
     url(r'^get/description/$', ajax_single_account, name='des-search'),
     url(r'^about-us/$', AboutView.as_view(), name='about'),
     url(r'^contact-us/$', contact, name='contact-us'),
+    url(r'^payment/done/$', payment_complete, name='payment-done'),
 ] + static.static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + \
               static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

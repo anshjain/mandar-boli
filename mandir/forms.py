@@ -36,8 +36,8 @@ class ContactForm(forms.Form):
         attrs={'placeholder': 'Name', 'autocomplete': 'off', 'class': 'w3-input w3-border'}
     ))
 
-    contact_email = forms.EmailField(required=True, widget=forms.TextInput(
-        attrs={'placeholder': 'Email', 'autocomplete': 'off', 'class': 'w3-input w3-border', 'type': 'email'}
+    contact_email = forms.EmailField(required=True, widget=forms.EmailInput(
+        attrs={'placeholder': 'Email', 'autocomplete': 'off', 'class': 'w3-input w3-border'}
     ))
 
     message = forms.CharField(
@@ -47,3 +47,13 @@ class ContactForm(forms.Form):
             'class': 'w3-input w3-border', 'rows': '2'
         })
     )
+
+
+class PaymentForm(forms.Form):
+    payment_mode = forms.CharField(required=True, widget=forms.TextInput(
+        attrs={'placeholder': 'Paid as online or cash', 'autocomplete': 'off', 'class': 'w3-input w3-border'}
+    ))
+
+    send_to = forms.EmailField(required=True, widget=forms.EmailInput(
+        attrs={'placeholder': 'Enter email address', 'autocomplete': 'off', 'class': 'w3-input w3-border'}
+    ))

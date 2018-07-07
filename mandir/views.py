@@ -10,8 +10,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import EmailMessage
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
@@ -21,7 +21,7 @@ from django.views.generic.edit import FormView
 from account.models import Account
 
 from mandir.models import Record
-from mandir.forms import SearchForm, EntryForm, ContactForm
+from mandir.forms import SearchForm, EntryForm, ContactForm, PaymentForm
 
 
 class RecordListView(ListView):
@@ -46,7 +46,7 @@ class RecordListView(ListView):
         if phone_number:
             context.update({'phone_number': phone_number})
 
-        context.update({'form': self.form_class(), 'mandir': self.get_mandir_info()})
+        context.update({'form': self.form_class(), 'mandir': self.get_mandir_info(), 'payment_form': PaymentForm()})
 
         return context
 
@@ -164,6 +164,56 @@ def contact(request):
     return render(request, 'contact.html', {'form': form_class, 'mandir': mandir})
 
 
+def payment_complete(request):
+    form_class = PaymentForm
+
+    # new logic!
+    if request.method == 'POST':
+        form = form_class(data=request.POST)
+
+        if form.is_valid():
+            mod_pay = request.POST.get('payment_mode', '')
+            send_to = [request.POST.get('send_to', '')]
+            record_id = request.POST.get('record_id')
+            phone_number = request.POST.get('phone_number')
+
+            # get record info
+            record = Record.objects.get(id=record_id)
+
+            # Email the profile with the
+            # contact information
+            template = get_template('payment_template.txt')
+
+            name = record.account.description.split(',')[0]
+            send_to.append(record.mandir.email)
+
+            context = {
+                'name': name,
+                'mod_pay': mod_pay,
+                'amount': record.amount,
+                'mandir_name': record.mandir.name,
+            }
+
+            content = template.render(context)
+            send_to.extend(settings.ADMIN_EMAILS)
+
+            # update record mark it as paid and store send email copy in description.
+            record.description = content
+            record.paid = True
+            record.save()
+
+            email = EmailMessage(
+                "Thanks for the Payment", content,
+                "Punya Unday Funds", send_to
+            )
+
+            email.send()
+            messages.success(request, "Thank you for contacting us !!")
+
+    url = reverse('record-list') + "?phone_number={}#record".format(phone_number)
+    return HttpResponseRedirect(url)
+
+
 class AboutView(TemplateView):
     template_name = 'about_us.html'
 
@@ -175,7 +225,6 @@ class AboutView(TemplateView):
             context['mandir'] = self.request.user.userprofile.mandir
 
         return context
-
 
 
 def ajax_single_account(request):

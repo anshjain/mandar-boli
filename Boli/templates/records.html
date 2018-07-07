@@ -6,38 +6,20 @@
 
 {% block main %}
     <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="record">
-        <style>
-            table {
-                font-family: arial, sans-serif;
-                border-collapse: collapse;
-                width: 100%;
-            }
-
-            td, th {
-                border: 1px solid #dddddd;
-                text-align: left;
-                padding: 8px;
-            }
-
-            tr:nth-child(even) {
-                background-color: #dddddd;
-            }
-        </style>
         <h2 class="w3-wide w3-center">RECORDS</h2>
         <p class="w3-opacity"><i>Jai Jinendra</i></p>
         {% if records and not request.user.is_authenticated %} <p>Name : {{ records.0.description }} </p>{% endif %}
-        <table style="width:100%">
+        <table class="w3-table w3-bordered w3-table-all w3-centered">
             <tr>
-                <th>{% trans 'Title' %}</th>
+                <th>{% trans 'TITLE' %}</th>
                 {% if request.user.is_authenticated %}
-                    <th>{% trans 'Description' %}</th>
+                    <th>{% trans 'NAMES' %}</th>
                 {% else %}
-                    <th>{% trans 'Mandir Name' %}</th>
+                    <th>{% trans 'MANDIR NAME' %}</th>
                 {% endif %}
-                <th>{% trans 'Boli Date' %}</th>
-                <th>{% trans 'Amount' %}</th>
-                <!--<th>{% trans 'Phone Number' %}</th>-->
-                <!--<th>{% trans 'Status' %}</th>-->
+                <th>{% trans 'BOLI DATE' %}</th>
+                <th>{% trans 'AMOUNT' %}</th>
+                <th>{% trans 'ACTION' %}</th>
             </tr>
             {% if records %}
                 {% for record in records %}
@@ -50,15 +32,19 @@
                         {% endif %}
                         <td>{{record.boli_date|date}}</td>
                         <td>{{record.amount}}.00 /-</td>
-                        <!--<td>{{record.account.phone_number}}</td>-->
-                        <!--<td>{{record.is_paid}}</td>-->
+                        <td>
+                            <button class="w3-button w3-black w3-margin-bottom w3-tooltip" title="Send an email"
+                                    onclick="display_model('{{record.id}}', '{{record.amount}}')">
+                                {% trans 'PAY' %}
+                            </button>
+                        </td>
                     </tr>
                 {% endfor %}
             {% else %}
-                <tr><td colspan="4"><center>
+                <tr><td colspan="5"><center>
                     {% if phone_number %}
                         <span style="font-weight:bold; color:blueviolet;">Thanks for the donations</span> <br>
-                    There is not record in <b>not paid</b> status for {{phone_number}}
+                    There is no record in <b>not paid</b> status for {{phone_number}}
                     {% else %}
                        No record found !
                     {% endif %}
@@ -66,4 +52,5 @@
             {% endif %}
         </table>
     </div>
+    {% include 'update-form.html' %}
 {% endblock %}
