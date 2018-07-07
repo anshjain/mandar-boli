@@ -14,6 +14,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
+from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
 
@@ -159,7 +160,22 @@ def contact(request):
             form_class = form
             messages.success(request, "Please provide correct email address !!")
 
-    return render(request, 'contact.html', {'form': form_class})
+    mandir = request.user.userprofile.mandir if request.user.is_authenticated() else None
+    return render(request, 'contact.html', {'form': form_class, 'mandir': mandir})
+
+
+class AboutView(TemplateView):
+    template_name = 'about_us.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AboutView, self).get_context_data(**kwargs)
+
+        # Mandir object into the context
+        if self.request.user.is_authenticated():
+            context['mandir'] = self.request.user.userprofile.mandir
+
+        return context
+
 
 
 def ajax_single_account(request):
