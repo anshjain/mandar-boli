@@ -158,7 +158,7 @@ def contact(request):
             return redirect('contact-us')
         else:
             form_class = form
-            messages.success(request, "Please provide correct email address !!")
+            messages.error(request, "Please provide correct email address !!")
 
     mandir = request.user.userprofile.mandir if request.user.is_authenticated() else None
     return render(request, 'contact.html', {'form': form_class, 'mandir': mandir})

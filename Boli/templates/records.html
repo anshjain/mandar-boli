@@ -8,8 +8,12 @@
     <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="record">
         <h2 class="w3-wide w3-center">RECORDS</h2>
         <p class="w3-opacity"><i>Jai Jinendra</i></p>
-        {% if records and not request.user.is_authenticated %} <p>Name : {{ records.0.description }} </p>{% endif %}
-        <table class="w3-table w3-bordered w3-table-all w3-centered" style="overflow: auto;">
+
+        {% if records and not request.user.is_authenticated %}
+            <p>{{ records.0.account.description }} </p>
+        {% endif %}
+
+        <table class="w3-table w3-bordered w3-table-all w3-centered" style="overflow: scroll;">
             <tr>
                 <th>{% trans 'TITLE' %}</th>
                 {% if request.user.is_authenticated %}
@@ -35,7 +39,7 @@
                         <td>
                             <button class="w3-button w3-black w3-margin-bottom w3-tooltip" title="Send an email"
                                     onclick="display_model('{{record.id}}', '{{record.amount}}')">
-                                {% trans 'PAY' %}
+                                {% trans 'PAID' %}
                             </button>
                         </td>
                     </tr>
@@ -52,5 +56,5 @@
             {% endif %}
         </table>
     </div>
-    {% include 'update-form.html' %}
+    {% include 'update_form.html' %}
 {% endblock %}
