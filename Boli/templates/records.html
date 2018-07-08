@@ -9,7 +9,7 @@
         <h2 class="w3-wide w3-center">RECORDS</h2>
         <p class="w3-opacity"><i>Jai Jinendra</i></p>
         {% if records and not request.user.is_authenticated %} <p>Name : {{ records.0.description }} </p>{% endif %}
-        <table class="w3-table w3-bordered w3-table-all w3-centered">
+        <table class="w3-table w3-bordered w3-table-all w3-centered" style="overflow: auto;">
             <tr>
                 <th>{% trans 'TITLE' %}</th>
                 {% if request.user.is_authenticated %}

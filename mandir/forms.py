@@ -2,10 +2,15 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.core.validators import validate_email
 
 from mandir.models import BoliChoice
 
+
+PAYMENT_MODES = (
+    ('Online', 'Online'),
+    ('Check', 'Check'),
+    ('Cash', 'Cash'),
+)
 
 class SearchForm(forms.Form):
     phone_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Phone Number', 'autocomplete': 'off'}))
@@ -50,8 +55,12 @@ class ContactForm(forms.Form):
 
 
 class PaymentForm(forms.Form):
-    payment_mode = forms.CharField(required=True, widget=forms.TextInput(
-        attrs={'placeholder': 'Paid as online or cash', 'autocomplete': 'off', 'class': 'w3-input w3-border'}
+    payment_mode = forms.ChoiceField(required=True, choices=PAYMENT_MODES, widget=forms.Select(
+        attrs={'class': 'w3-input w3-border', 'style': "height: 40px;", "onchange": "payment_md();"}
+    ))
+
+    id_details = forms.CharField(required=False, widget=forms.TextInput(
+        attrs={'placeholder': 'Transaction Id / Check Number', 'autocomplete': 'off', 'class': 'w3-input w3-border'}
     ))
 
     send_to = forms.EmailField(required=True, widget=forms.EmailInput(

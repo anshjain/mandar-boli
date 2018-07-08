@@ -38,6 +38,18 @@ function display_model(record_id, amount){
 }
 
 
+function payment_md(){
+    var mode = document.getElementById("id_payment_mode").value;
+    if (mode === 'Cash'){
+        document.getElementById('id_id_details').style.display='none';
+        document.getElementById("id_id_details").required = false;
+    } else {
+        document.getElementById('id_id_details').style.display='block';
+        document.getElementById("id_id_details").required = true;
+    }
+}
+
+
 var pNumber = document.getElementById("pNumber");
 pNumber.addEventListener("keyup", function(event) {
   event.preventDefault();

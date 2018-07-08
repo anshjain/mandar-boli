@@ -174,6 +174,7 @@ def payment_complete(request):
         if form.is_valid():
             mod_pay = request.POST.get('payment_mode', '')
             send_to = [request.POST.get('send_to', '')]
+            id_details = request.POST.get('id_details', '')
             record_id = request.POST.get('record_id')
             phone_number = request.POST.get('phone_number')
 
@@ -190,6 +191,7 @@ def payment_complete(request):
             context = {
                 'name': name,
                 'mod_pay': mod_pay,
+                'id_details': id_details,
                 'amount': record.amount,
                 'mandir_name': record.mandir.name,
             }
@@ -200,6 +202,8 @@ def payment_complete(request):
             # update record mark it as paid and store send email copy in description.
             record.description = content
             record.paid = True
+            record.transaction_id = id_details if id_details else 'Cash'
+            record.payment_date = datetime.now()
             record.save()
 
             email = EmailMessage(

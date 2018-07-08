@@ -10,6 +10,13 @@ Mandir Name :- {{ mandir_name }}
 
 Mode of payment :- {{mod_pay}}
 
+{% if mod_pay == 'Online' %}
+Transaction Id :- {{ id_details }}
+{% endif %}
+
+{% if mod_pay == 'Check' %}
+Check Number :- {{ id_details }}
+{% endif %}
 
 Regards,
 Punya Uday Fund
