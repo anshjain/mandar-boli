@@ -2,21 +2,20 @@ Hi {{name}},
 
 Thanks for the payment.
 
-Payment Details:-
+Payment Details are :-
 
-Amount :- {{ amount }}.00/-
+Amount paid :- {{ amount }}.00/-
 
-Mandir Name :- {{ mandir_name }}
+Payment Mode :- {{mod_pay}}
 
-Mode of payment :- {{mod_pay}}
+{{ payment_detail }}
 
-{% if mod_pay == 'Online' %}
-Transaction Id :- {{ id_details }}
-{% endif %}
 
-{% if mod_pay == 'Check' %}
-Check Number :- {{ id_details }}
-{% endif %}
+Note:-
+In case of any issue please contact us on below mentioned details.
 
 Regards,
 Punya Uday Fund
+{{ mandir_name }}
+Ph: {{mandir_phone_number}}
+Email: {{mandir_email}}

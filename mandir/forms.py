@@ -55,7 +55,7 @@ class ContactForm(forms.Form):
 
 
 class PaymentForm(forms.Form):
-    payment_mode = forms.ChoiceField(required=True, choices=PAYMENT_MODES, widget=forms.Select(
+    payment_mode = forms.ChoiceField(choices=PAYMENT_MODES, widget=forms.Select(
         attrs={'class': 'w3-input w3-border', 'style': "height: 40px;", "onchange": "payment_md();"}
     ))
 
@@ -63,6 +63,14 @@ class PaymentForm(forms.Form):
         attrs={'placeholder': 'Transaction Id / Check Number', 'autocomplete': 'off', 'class': 'w3-input w3-border'}
     ))
 
-    send_to = forms.EmailField(required=True, widget=forms.EmailInput(
+    send_to = forms.EmailField(widget=forms.EmailInput(
         attrs={'placeholder': 'Enter email address', 'autocomplete': 'off', 'class': 'w3-input w3-border'}
     ))
+
+    remark = forms.CharField(
+        required=False, max_length="200",
+        widget=forms.Textarea(attrs={
+            'placeholder': 'Remake', 'autocomplete': 'off',
+            'class': 'w3-input w3-border', 'rows': '1'
+        })
+    )

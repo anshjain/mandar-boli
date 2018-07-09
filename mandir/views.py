@@ -172,47 +172,59 @@ def payment_complete(request):
         form = form_class(data=request.POST)
 
         if form.is_valid():
-            mod_pay = request.POST.get('payment_mode', '')
-            send_to = [request.POST.get('send_to', '')]
-            id_details = request.POST.get('id_details', '')
-            record_id = request.POST.get('record_id')
+            mod_pay = form.cleaned_data.get('payment_mode', '')
+            send_to = [form.cleaned_data.get('send_to', '')]
+            id_details = form.cleaned_data.get('id_details', '')
             phone_number = request.POST.get('phone_number')
 
-            # get record info
-            record = Record.objects.get(id=record_id)
+            try:
+                # get record info
+                record = get_object_or_404(Record, id=request.POST.get('record_id'), paid=False)
+                name = record.account.description.split(',')[0]
+                mandir_email = record.mandir.email
 
-            # Email the profile with the
-            # contact information
-            template = get_template('payment_template.txt')
 
-            name = record.account.description.split(',')[0]
-            send_to.append(record.mandir.email)
+                # Email the profile with the
+                # contact information
+                template = get_template('payment_template.txt')
 
-            context = {
-                'name': name,
-                'mod_pay': mod_pay,
-                'id_details': id_details,
-                'amount': record.amount,
-                'mandir_name': record.mandir.name,
-            }
+                payment_detail = ''
+                if mod_pay == 'Online':
+                    payment_detail = 'Transaction Id: {}'.format(id_details)
+                elif mod_pay == 'Check':
+                    payment_detail = 'Check Number: {}'.format(id_details)
 
-            content = template.render(context)
-            send_to.extend(settings.ADMIN_EMAILS)
+                context = {
+                    'name': name,
+                    'mod_pay': mod_pay,
+                    'payment_detail': payment_detail,
+                    'amount': record.amount,
+                    'mandir_name': record.mandir.name,
+                    'mandir_email': mandir_email,
+                    'mandir_phone_number': record.mandir.contract_number,
+                    'remark': form.cleaned_data.get('remark')
+                }
 
-            # update record mark it as paid and store send email copy in description.
-            record.description = content
-            record.paid = True
-            record.transaction_id = id_details if id_details else 'Cash'
-            record.payment_date = datetime.now()
-            record.save()
+                content = template.render(context)
 
-            email = EmailMessage(
-                "Thanks for the Payment", content,
-                "Punya Unday Funds", send_to
-            )
+                send_to.append(mandir_email)
+                send_to.extend(settings.ADMIN_EMAILS)
 
-            email.send()
-            messages.success(request, "Thank you for contacting us !!")
+                # update record mark it as paid and store email content as copy in description.
+                record.description = content
+                record.paid = True
+                record.transaction_id = id_details if id_details else 'Cash'
+                record.payment_date = datetime.now()
+                record.save()
+
+                email = EmailMessage(
+                    "Thanks for the Payment", content,
+                    "Punya Unday Funds", send_to
+                )
+                email.send()
+
+            except Exception:
+                messages.error(request, "There is some error in updating the record, Please contact admin !!")
 
     url = reverse('record-list') + "?phone_number={}#record".format(phone_number)
     return HttpResponseRedirect(url)
