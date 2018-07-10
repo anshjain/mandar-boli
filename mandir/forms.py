@@ -12,6 +12,7 @@ PAYMENT_MODES = (
     ('Cash', 'Cash'),
 )
 
+
 class SearchForm(forms.Form):
     phone_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Phone Number', 'autocomplete': 'off'}))
 
