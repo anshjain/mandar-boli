@@ -5,17 +5,14 @@ Thanks for the payment.
 Payment Details are :-
 
 Amount paid :- {{ amount }}.00/-
-
 Payment Mode :- {{mod_pay}}
-
 {{ payment_detail }}
-
-
+{{ remark }}
 Note:-
 In case of any issue please contact us on below mentioned details.
 
 Regards,
-Punya Uday Fund
+Punya Uday Fund,
 {{ mandir_name }}
 Ph: {{mandir_phone_number}}
 Email: {{mandir_email}}

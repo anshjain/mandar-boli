@@ -23,24 +23,22 @@
                 {% endif %}
                 <th>{% trans 'BOLI DATE' %}</th>
                 <th>{% trans 'AMOUNT' %}</th>
-                <th>{% trans 'ACTION' %}</th>
             </tr>
             {% if records %}
                 {% for record in records %}
                     <tr>
-                        <td>{{record.get_title}}</td>
-                        {% if request.user.is_authenticated %}
-                            <td>{{record.account.description}}</td>
-                        {% else %}
-                            <td>{{ record.mandir.name }}</td>
-                        {% endif %}
-                        <td>{{record.boli_date|date}}</td>
-                        <td>{{record.amount}}.00 /-</td>
-                        <td>
-                            <button class="w3-button w3-black w3-margin-bottom w3-tooltip" title="Send an email"
-                                    onclick="display_model('{{record.id}}', '{{record.amount}}')">
-                                {% trans 'PAID' %}
-                            </button>
+                        <td style="vertical-align:middle !important">{{record.get_title}}</td>
+                        <td style="vertical-align:middle !important">
+                            {% if request.user.is_authenticated %}
+                                {{record.account.description}}
+                            {% else %}
+                                {{ record.mandir.name }}
+                            {% endif %}
+                        </td>
+                        <td style="vertical-align:middle !important">{{record.boli_date|date}}</td>
+                        <td class="w3-small">
+                            <button class="w3-button w3-black w3-tooltip" title="Send an email"
+                                    onclick="display_model('{{record.id}}', '{{record.amount}}')"><b>{{record.amount}}/-</b> <br>{% trans 'PAID' %}</button>
                         </td>
                     </tr>
                 {% endfor %}
