@@ -36,7 +36,7 @@
                             {% endif %}
                         </td>
                         <td style="vertical-align:middle !important">{{record.boli_date|date}}</td>
-                        <td class="w3-small">
+                        <td style="vertical-align:middle !important" class="w3-small">
                             <button class="w3-button w3-black w3-tooltip" title="Send an email"
                                     onclick="display_model('{{record.id}}', '{{record.amount}}')"><b>{{record.amount}}/-</b> <br>{% trans 'PAID' %}</button>
                         </td>
