@@ -92,9 +92,9 @@ class RecordAdmin(ImportExportModelAdmin):
         Update list filter and display list based on logged in admin users.
         """
         if request.user.is_superuser:
-            return 'paid', 'title', 'mandir'
+            return 'paid', 'boli_date', 'mandir'
         else:
-            return 'paid', 'title'
+            return 'paid', 'boli_date'
 
     def get_list_display(self, request):
         """
