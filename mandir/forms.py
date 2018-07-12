@@ -7,9 +7,9 @@ from mandir.models import BoliChoice
 
 
 PAYMENT_MODES = (
+    ('Cash', 'Cash'),
     ('Online', 'Online'),
     ('Check', 'Check'),
-    ('Cash', 'Cash'),
 )
 
 
@@ -61,7 +61,8 @@ class PaymentForm(forms.Form):
     ))
 
     id_details = forms.CharField(required=False, widget=forms.TextInput(
-        attrs={'placeholder': 'Transaction Id / Check Number', 'autocomplete': 'off', 'class': 'w3-input w3-border'}
+        attrs={'placeholder': 'Transaction Id / Check Number', 'autocomplete': 'off', 'class': 'w3-input w3-border',
+               'style': 'display:none'}
     ))
 
     send_to = forms.EmailField(widget=forms.EmailInput(

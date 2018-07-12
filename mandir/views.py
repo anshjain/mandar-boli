@@ -55,13 +55,13 @@ class RecordListView(ListView):
 
         if form.is_valid():
             phone_number = form.cleaned_data['phone_number']
-            return self.model.objects.filter(account__phone_number__icontains=phone_number, paid=False)
+            return self.model.objects.filter(account__phone_number__icontains=phone_number, paid=False).order_by('-boli_date')
 
         # Default data will be displayed for two hours only after creation.
         mandir = self.get_mandir_info()
         time_threshold = datetime.now() - timedelta(hours=2)
         return self.model.objects.filter(boli_date__date=datetime.today(), boli_date__gt=time_threshold,
-                                         mandir=mandir, paid=False)
+                                         mandir=mandir, paid=False).order_by('-boli_date')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -170,12 +170,12 @@ def payment_complete(request):
     # new logic!
     if request.method == 'POST':
         form = form_class(data=request.POST)
+        phone_number = request.POST.get('phone_number')
 
         if form.is_valid():
             mod_pay = form.cleaned_data.get('payment_mode', '')
             send_to = [form.cleaned_data.get('send_to', '')]
             id_details = form.cleaned_data.get('id_details', '')
-            phone_number = request.POST.get('phone_number')
 
             try:
                 # get record info
@@ -225,6 +225,8 @@ def payment_complete(request):
 
             except Exception:
                 messages.error(request, "There is some error in updating the record, Please contact admin !!")
+        else:
+            messages.error(request, "There is something wrong, {}". format(form.errors))
 
     url = reverse('record-list') + "?phone_number={}#record".format(phone_number)
     return HttpResponseRedirect(url)

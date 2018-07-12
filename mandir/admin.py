@@ -63,7 +63,7 @@ class RecordAdmin(ImportExportModelAdmin):
     search_fields = ('account__description', 'account__phone_number',)
     resource_class = RecordResource
     list_per_page = 15
-    actions = ['make_paid']
+    actions = ['make_paid', 'make_as_unpaid']
 
     def make_paid(self, request, queryset):
         rows_updated = queryset.update(paid=True, payment_date=datetime.now(),
@@ -74,6 +74,16 @@ class RecordAdmin(ImportExportModelAdmin):
             message_bit = "%s records were" % rows_updated
         self.message_user(request, "%s successfully marked as paid." % message_bit)
     make_paid.short_description = "Mark selected records as paid"
+
+    def make_as_unpaid(self, request, queryset):
+        rows_updated = queryset.update(paid=False, payment_date=datetime.now(),
+                                       description='Admin user {} update this record and marked it as unpaid'.format(request.user.username))
+        if rows_updated == 1:
+            message_bit = "1 record was"
+        else:
+            message_bit = "%s records were" % rows_updated
+        self.message_user(request, "%s successfully marked as unpaid." % message_bit)
+    make_as_unpaid.short_description = "Mark selected records as unpaid"
 
     def get_names(self, obj):
         return obj.account.description
