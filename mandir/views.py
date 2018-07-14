@@ -42,7 +42,7 @@ class HomeView(ListView):
         """
         Return 3 random mandir records registered.
         """
-        return self.model.objects.filter(status=False).order_by('?')[:1]
+        return self.model.objects.filter(status=True).order_by('?')[:1]
 
 
 class RecordListView(ListView):
