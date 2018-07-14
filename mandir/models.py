@@ -30,14 +30,16 @@ class Mandir(models.Model):
     """
     name = models.CharField(max_length=255, verbose_name=_("mandir name"))
     contract_number = models.CharField(max_length=10, verbose_name=_("contact number"), blank=True, null=True, unique=True)
-    email = models.EmailField(max_length=70, blank=True, null= True, unique= True)
-    address = models.CharField(max_length=255, verbose_name=_("mandir location"))
+    email = models.EmailField(max_length=70, blank=True, null=True, unique=True)
+    description = models.CharField(max_length=255, verbose_name=_("Mandir Description"), blank=True, null=True, unique=True)
+    committee_name = models.CharField(max_length=255, blank=True, null=True, unique=True, verbose_name=_("Committee name"))
     city = models.CharField(max_length=20, verbose_name=_("city"), default='Pune')
     state = models.CharField(max_length=20, verbose_name=_("state"), default='maharashtra')
     pin_code = models.CharField(max_length=6, verbose_name=_("pin code"), default='411021')
     lat = models.DecimalField(max_digits=9, decimal_places=6, default=18.557024, verbose_name=_("latitude"))
     long = models.DecimalField(max_digits=9, decimal_places=6, default=73.75092, verbose_name=_("longitude"))
     created = models.DateTimeField(auto_now_add=True, verbose_name=_("created"))
+    status = models.BooleanField(default=True)
 
     def get_images(self):
         """

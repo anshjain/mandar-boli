@@ -13,7 +13,7 @@ from mandir.models import Mandir, Record, MandirImage, BoliChoice
 
 
 class MandirAdmin(admin.ModelAdmin):
-    list_display = ('name', 'address', 'contract_number', 'email')
+    list_display = ('name', 'description', 'contract_number', 'email')
 
     def get_queryset(self, request):
         """Limit records to those that belong to the user temple."""

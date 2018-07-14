@@ -20,8 +20,29 @@ from django.views.generic.edit import FormView
 
 from account.models import Account
 
-from mandir.models import Record
+from mandir.models import Record, Mandir
 from mandir.forms import SearchForm, EntryForm, ContactForm, PaymentForm
+
+
+class HomeView(ListView):
+    model = Mandir
+    context_object_name = 'mandirs'
+    template_name = 'temple_info.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeView, self).get_context_data(**kwargs)
+
+        # Mandir object into the context
+        if self.request.user.is_authenticated() and False:
+            context['mandir'] = self.request.user.userprofile.mandir
+
+        return context
+
+    def get_queryset(self):
+        """
+        Return 3 random mandir records registered.
+        """
+        return self.model.objects.filter(status=False).order_by('?')[:1]
 
 
 class RecordListView(ListView):
@@ -199,10 +220,8 @@ def payment_complete(request):
                     'mod_pay': mod_pay,
                     'payment_detail': payment_detail,
                     'amount': record.amount,
-                    'mandir_name': record.mandir.name,
-                    'mandir_email': mandir_email,
-                    'mandir_phone_number': record.mandir.contract_number,
-                    'remark': form.cleaned_data.get('remark')
+                    'mandir': record.mandir,
+                    'remark': form.cleaned_data.get('remark'),
                 }
 
                 content = template.render(context)
