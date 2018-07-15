@@ -131,7 +131,7 @@ class RecordAdmin(ImportExportModelAdmin):
 
 
 class MandirImageAdmin(admin.ModelAdmin):
-    list_display = ('get_mandir_name',)
+    list_display = ('title', 'get_mandir_name', 'event_url', )
 
     def get_mandir_name(self, obj):
         return obj.mandir.name

@@ -66,6 +66,7 @@ class MandirImage(models.Model):
     image = models.ImageField(verbose_name=_('image'), upload_to='images/')
     title = models.TextField(verbose_name=_("title"), blank=True, null=True)
     description = models.TextField(verbose_name=_("description"), blank=True, null=True)
+    event_url = models.URLField(null=True, blank=True, default='')
 
     class Meta:
         verbose_name = _("Mandir Image")

@@ -20,6 +20,7 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 
 
+from events.views import EventListView
 from mandir.views import (RecordListView, EntryCreateView, ajax_single_account, contact,
                           AboutView, payment_complete, HomeView)
 
@@ -38,6 +39,7 @@ urlpatterns = [
     url(r'^about-us/$', AboutView.as_view(), name='about'),
     url(r'^contact-us/$', contact, name='contact-us'),
     url(r'^payment/done/$', payment_complete, name='payment-done'),
+    url(r'^events/(?P<event_id>\d+)/$', EventListView.as_view(), name='event'),
 ] + static.static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + \
               static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
