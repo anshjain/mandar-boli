@@ -33,16 +33,25 @@ class HomeView(ListView):
         context = super(HomeView, self).get_context_data(**kwargs)
 
         # Mandir object into the context
-        if self.request.user.is_authenticated() and False:
+        if self.request.user.is_authenticated():
             context['mandir'] = self.request.user.userprofile.mandir
 
         return context
 
     def get_queryset(self):
         """
-        Return 3 random mandir records registered.
+        Return 1 random mandir records registered.
         """
         return self.model.objects.filter(status=True).order_by('?')[:1]
+
+    def render_to_response(self, context):
+        """
+        Override based on login user
+        """
+        if self.request.user.is_authenticated():
+            return redirect('record-list')
+
+        return super(HomeView, self).render_to_response(context)
 
 
 class RecordListView(ListView):
