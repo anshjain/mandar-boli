@@ -59,7 +59,6 @@ class RecordResource(resources.ModelResource):
 
 class RecordAdmin(ImportExportModelAdmin):
     list_display_links = ('get_title',)
-    readonly_fields = ('account', 'mandir')
     search_fields = ('account__description', 'account__phone_number',)
     resource_class = RecordResource
     list_per_page = 15
@@ -86,7 +85,12 @@ class RecordAdmin(ImportExportModelAdmin):
     make_as_unpaid.short_description = "Mark selected records as unpaid"
 
     def get_names(self, obj):
-        return obj.account.description
+        if obj.account.description:
+            return obj.account.description
+        else:
+            name = obj.description.split('\n')[0]
+            return name
+
     get_names.short_description = 'Name'
 
     def get_account_no(self, obj):
@@ -96,6 +100,14 @@ class RecordAdmin(ImportExportModelAdmin):
     def get_title(self, obj):
         return obj.title.name
     get_title.short_description = 'Title'
+
+    def get_readonly_fields(self, request, obj=None):
+        """
+        Admin can update the account details where as sub admin can't.
+        """
+        if not request.user.is_superuser:
+            return ('account', 'mandir')
+        return []
 
     def get_list_filter(self, request):
         """
