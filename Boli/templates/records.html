@@ -10,7 +10,13 @@
         <p class="w3-opacity"><i>Jai Jinendra</i></p>
 
         {% if records and not request.user.is_authenticated %}
-            <p>{{ records.0.account.description }} </p>
+            <p>{% if records.0.account.description %}
+                    {{ records.0.account.description }}
+                {% else %}
+                    <p class="w3-opacity" style="color:blue;"><i>Entry corresponding to default number</i></p>
+                    {{ records.0.get_default_description }}
+                {% endif %}
+            </p>
         {% endif %}
 
         <table class="w3-table w3-bordered w3-table-all w3-centered" style="overflow: scroll;">
@@ -30,7 +36,12 @@
                         <td style="vertical-align:middle !important">{{record.get_title}}</td>
                         <td style="vertical-align:middle !important">
                             {% if request.user.is_authenticated %}
-                                {{record.account.description}}
+                                {% if record.account.description%}
+                                    {{record.account.description}}
+                                {% else %}
+                                    <i style="color:blue;">Entry corresponding to default number</i><br>
+                                    {{ record.get_default_description }}
+                                {% endif %}
                             {% else %}
                                 {{ record.mandir.name }}
                             {% endif %}

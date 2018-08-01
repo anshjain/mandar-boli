@@ -101,6 +101,12 @@ class Record(models.Model):
     def __unicode__(self):
         return self.title.name
 
+    def get_default_description(self):
+        """"
+        Display description for corresponding to default mobile number.
+        """
+        return self.description.split('\n')[0]
+
     def get_title(self):
         """
         Return human readable data
