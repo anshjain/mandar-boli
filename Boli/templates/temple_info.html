@@ -17,8 +17,6 @@
             <!-- Add Google Maps -->
             <div id="map_{{mandir.id}}" class="w3-round-large w3-greyscale" style="width:100%;height:300px;"></div>
         </div>
-        <p>{% if mandir.committee_name %}{{mandir.committee_name}}{% else %}{{mandir.name}}{% endif %}</p>
-        <p>{{ mandir.description }}</p>
         <div class="w3-col m8 w3-panel">
             <div class="w3-large w3-margin-bottom">
                 <i class="fa fa-map-marker fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> {{mandir.city}}, India<br>
@@ -26,6 +24,8 @@
                 <i class="fa fa-envelope fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Email: {{mandir.email}}<br>
             </div>
         </div>
+        <p>{% if mandir.committee_name %}{{mandir.committee_name}}{% else %}{{mandir.name}}{% endif %}</p>
+        <p>{{ mandir.description }}</p>
     {% endfor %}
     </div>
 </div>
