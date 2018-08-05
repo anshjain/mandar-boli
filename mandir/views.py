@@ -75,10 +75,25 @@ class RecordListView(ListView):
         phone_number = self.request.GET.get('phone_number')
         if phone_number:
             context.update({'phone_number': phone_number})
-
-        context.update({'form': self.form_class(), 'mandir': self.get_mandir_info(), 'payment_form': PaymentForm()})
+        mandir = self.get_mandir_info()
+        today = datetime.today()
+        last_month = today.month - 1
+        last_month_count = self.get_total_counts(mandir, today.year, last_month)
+        last_month_paid_count = self.get_total_counts(mandir, today.year, last_month, paid=True)
+        context.update({'form': self.form_class(), 'mandir': mandir, 'payment_form': PaymentForm(),
+                        'last_month_count': last_month_count, 'last_month_paid_count': last_month_paid_count})
 
         return context
+
+    def get_total_counts(self, mandir, year, month, paid=False):
+        """
+        Will return total count of records based on year, month and paid flag values.
+        """
+        query = self.model.objects.filter(mandir=mandir, boli_date__year=year, boli_date__month=month)
+        if paid:
+            query = query.filter(paid=paid)
+
+        return query.count()
 
     def get_queryset(self):
         form = self.form_class(self.request.GET)

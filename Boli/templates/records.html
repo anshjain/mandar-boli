@@ -9,6 +9,8 @@
         <h2 class="w3-wide w3-center">RECORDS</h2>
         <p class="w3-opacity"><i>Jai Jinendra</i></p>
 
+
+
         {% if records and not request.user.is_authenticated %}
             <p>{% if records.0.account.description %}
                     {{ records.0.account.description }}
@@ -17,6 +19,10 @@
                     {{ records.0.get_default_description }}
                 {% endif %}
             </p>
+        {% else %}
+            {% if request.user.is_authenticated %}
+                <div id="piechart_3d" style="width: 100%; min-height: 450px;"></div>
+            {% endif%}
         {% endif %}
 
         <table class="w3-table w3-bordered w3-table-all w3-centered" style="overflow: scroll;">
@@ -66,4 +72,32 @@
         </table>
     </div>
     {% include 'update_form.html' %}
+{% endblock %}
+
+{% block extra_js %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Event', 'Counts'],
+          ['Paid',     {{last_month_paid_count}}],
+          ['Not Paid',      {{last_month_count}} - {{last_month_paid_count}}]
+        ]);
+
+        var options = {
+          title: 'Last Month details total boil count is {{last_month_count}}',
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+      $(window).resize(function(){
+        drawChart();
+      });
+    </script>
+
 {% endblock %}
