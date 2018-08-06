@@ -135,11 +135,11 @@ class RecordAdmin(ImportExportModelAdmin):
         qs = super(RecordAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             # It is mine, all mine. Just return everything.
-            return qs
+            return qs.order_by('-boli_date')
         # Now we just add an extra filter on the queryset and
         # we're done. Assumption: Page.owner is a foreignkey
         # to a User.
-        return qs.filter(mandir=request.user.userprofile.mandir)
+        return qs.filter(mandir=request.user.userprofile.mandir).order_by('-boli_date')
 
 
 class MandirImageAdmin(admin.ModelAdmin):

@@ -7,7 +7,8 @@ from account.models import Account, UserProfile
 
 class AccountAdmin(admin.ModelAdmin):
     list_display = ('phone_number', 'description')
-    # readonly_fields = ('user', 'phone_number', 'description')
+    search_fields = ('description',)
+    list_per_page = 15
 
 
 class UserProfileAdmin(admin.ModelAdmin):
