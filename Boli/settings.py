@@ -25,7 +25,7 @@ SECRET_KEY = 's-cl_(s$*lcg7$8sv$ivfg1$%mcnbexouu+gqt15wt-bj(v_)v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["mandir-boli.herokuapp.com", '127.0.0.1']
+ALLOWED_HOSTS = ["punyaudayfund.herokuapp.com", '127.0.0.1']
 
 
 # Application definition
