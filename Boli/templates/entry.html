@@ -4,6 +4,10 @@
 
 {% block title %}{% trans "Add Record" %}{% endblock %}
 
+{% block extra_css %}
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+{% endblock %}
+
 {% block main %}
     <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px;" id="entry">
         <h2 class="w3-wide w3-center">ENTRY</h2>
@@ -18,15 +22,12 @@
             {% csrf_token %}
             <div class="w3-row w3-padding-32">
                 <div class="w3-col m6 w3-large w3-margin-bottom">
-                    {{ form.description }}
-                    <span style="color:red; margin:5px;">
-                        {{ form.description.errors.as_text }}
-                    </span>
-                </div>
-                <div class="w3-col m6">
-                    <div class="w3-row-padding" style="margin:0 -16px 8px -10px">
+                    <div class="w3-row-padding" style="margin:0px -12px 0px -15px">
                         <div class="w3-half">
-                            {{ form.title }}
+                            {{ form.boli_date }}
+                            <span style="color:red; margin:5px;">
+                                {{ form.boli_date.errors.as_text }}
+                            </span>
                         </div>
                         <div class="w3-half">
                             {{ form.phone_number }}
@@ -35,6 +36,13 @@
                             </span>
                         </div>
                     </div>
+                    {{ form.description }}
+                    <span style="color:red; margin:5px;">
+                        {{ form.description.errors.as_text }}
+                    </span>
+                </div>
+                <div class="w3-col m6">
+                    {{ form.title }}
                     {{ form.amount }}
                     <p style="color:red;">{{ form.amount.errors }}</p>
                     <button class="w3-button w3-black w3-section w3-right" type="submit">SAVE</button>
@@ -42,4 +50,15 @@
             </div>
         </form>
     </div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+      <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+      <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd', maxDate: new Date() });
+        });
+    </script>
 {% endblock %}

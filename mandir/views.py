@@ -33,7 +33,7 @@ class HomeView(ListView):
         context = super(HomeView, self).get_context_data(**kwargs)
 
         # Mandir object into the context
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated() and not self.request.user.is_superuser:
             context['mandir'] = self.request.user.userprofile.mandir
 
         return context
@@ -48,7 +48,9 @@ class HomeView(ListView):
         """
         Override based on login user
         """
-        if self.request.user.is_authenticated():
+        if self.request.user.is_superuser:
+            return redirect('admin:index')
+        elif self.request.user.is_authenticated():
             return redirect('record-list')
 
         return super(HomeView, self).render_to_response(context)
@@ -105,7 +107,7 @@ class RecordListView(ListView):
         # Default data will be displayed for two hours only after creation.
         mandir = self.get_mandir_info()
         time_threshold = datetime.now() - timedelta(hours=2)
-        return self.model.objects.filter(boli_date__date=datetime.today(), boli_date__gt=time_threshold,
+        return self.model.objects.filter(boli_date__date=datetime.today(), created__gt=time_threshold,
                                          mandir=mandir, paid=False).order_by('-boli_date')
 
 
@@ -135,6 +137,7 @@ class EntryCreateView(LoginRequiredMixin, FormView):
         # hard code as of now
         mandir = self.request.user.userprofile.mandir
         amount = form.cleaned_data['amount']
+        boil_date = form.cleaned_data['boli_date']
 
         _, record_created = self.model.objects.get_or_create(
             mandir=mandir,
@@ -142,7 +145,7 @@ class EntryCreateView(LoginRequiredMixin, FormView):
             title=form.cleaned_data['title'],
             description=form.cleaned_data['description'],
             amount=amount,
-            boli_date=datetime.now()
+            boli_date=boil_date
         )
         if record_created:
             send_sms(account.phone_number, amount)

@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django import forms
-
+from datetime import datetime
 from mandir.models import BoliChoice
 
 
@@ -14,12 +14,12 @@ PAYMENT_MODES = (
 
 
 class SearchForm(forms.Form):
-    phone_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Phone Number', 'autocomplete': 'off'}))
+    phone_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'SEARCH', 'autocomplete': 'off'}))
 
 
 class EntryForm(forms.Form):
     title = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'w3-input w3-border',
-                                                              'style': 'height: 40px;'}),
+                                                              'style': 'height: 45px; margin-left:6px; width:98%'}),
                                    queryset=BoliChoice.objects.all(), required=True)
     phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', max_length=10,
                                     widget=forms.NumberInput(
@@ -31,10 +31,14 @@ class EntryForm(forms.Form):
                                     })
 
     description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Description', 'autocomplete': 'off',
-                                                               'class': 'w3-input w3-border', 'rows': '4'}))
+                                                               'class': 'w3-input w3-border', 'rows': '3'}))
     amount = forms.CharField(widget=forms.NumberInput(attrs={'placeholder': 'Amount', 'autocomplete': 'off',
                                                              'class': 'w3-input w3-border',
-                                                             'style': 'margin: 18px 6px 0px 6px'}))
+                                                             'style': 'margin: 27px 8px 0px 7px; width:98%'}))
+    boli_date = forms.DateField(initial=datetime.today().date(),
+                                widget=forms.DateInput(attrs={'autocomplete': 'off',
+                                                              'class': 'w3-input w3-border datepicker'})
+    )
 
 
 class ContactForm(forms.Form):
