@@ -41,6 +41,13 @@ class Mandir(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name=_("created"))
     status = models.BooleanField(default=True)
 
+    # bank details
+    account_name = models.CharField(max_length=255, verbose_name=_("Account Name"), blank=True, null=True, unique=True)
+    bank_name = models.CharField(max_length=255, verbose_name=_("Bank Name"), blank=True, null=True, unique=True)
+    account_number = models.CharField(max_length=20, verbose_name=_("Account Number"), blank=True, null=True, unique=True)
+    ifsc_code = models.CharField(max_length=11, verbose_name=_("IFSC Code"), blank=True, null=True, unique=True)
+    branch = models.CharField(max_length=255, verbose_name=_("Branch"), blank=True, null=True, unique=True)
+
     def get_images(self):
         """
         return list of images associated with mandir object
