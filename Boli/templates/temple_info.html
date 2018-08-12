@@ -17,8 +17,17 @@
             <!-- Add Google Maps -->
             <div id="map_{{mandir.id}}" class="w3-round-large w3-greyscale" style="width:100%;height:300px;"></div>
         </div>
-        <div class="w3-col m8 w3-panel">
+        <div class="w3-col m8 w3-panel" style="margin-top: 0px !important;">
             <div class="w3-large w3-margin-bottom">
+                {% if mandir.bank_name %}
+                    <span class="w3-opacity w3-text-green"><i>Bank Details:-</i></span><br>
+                    <i class="fa fa-bank fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> {{mandir.bank_name}}<br>
+                    <i class="fa fa-user fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Holder Name: {{mandir.account_name}}<br>
+                    <i class="fa fa-address-card fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Transfer To: {{mandir.account_number}}<br>
+                    <i class="fa fa-barcode fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> IFSC Code: {{mandir.ifsc_code}}<br>
+                    <i class="fa fa-map-marker fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Branch: {{mandir.branch}}<br>
+                {% endif %}
+                <span class="w3-opacity w3-text-green"><i>Contact Details:-</i></span><br>
                 <i class="fa fa-map-marker fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> {{mandir.city}}, India<br>
                 <i class="fa fa-phone fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Phone: +91 - {{mandir.contract_number}}<br>
                 <i class="fa fa-envelope fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Email: {{mandir.email}}<br>
