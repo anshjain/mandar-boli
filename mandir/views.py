@@ -75,7 +75,7 @@ class RecordListView(ListView):
         context = super(RecordListView, self).get_context_data(*args, **kwargs)
 
         phone_number = self.request.GET.get('phone_number')
-        if phone_number:
+        if phone_number and len(phone_number) == 10:
             context.update({'phone_number': phone_number})
         mandir = self.get_mandir_info()
         today = datetime.today()
@@ -102,7 +102,9 @@ class RecordListView(ListView):
 
         if form.is_valid():
             phone_number = form.cleaned_data['phone_number']
-            return self.model.objects.filter(account__phone_number__icontains=phone_number, paid=False).order_by('-boli_date')
+            if len(phone_number) == 10:
+                return self.model.objects.filter(account__phone_number__icontains=phone_number,
+                                                 paid=False).order_by('-boli_date')
 
         # Default data will be displayed for two hours only after creation.
         mandir = self.get_mandir_info()

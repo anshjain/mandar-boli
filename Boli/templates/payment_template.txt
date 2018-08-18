@@ -13,7 +13,8 @@ In case of any issue please contact us on below mentioned details.
 
 Regards,
 Punya Uday Fund,
-{{mandir.committee_name}}
+
 {{ mandir.name }}
-Ph: {{mandir.phone_number}}
+Ph: {{mandir.contract_number}}
 Email: {{mandir.email}}
+{{mandir.committee_name}}
