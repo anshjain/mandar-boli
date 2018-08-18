@@ -70,13 +70,13 @@ class PaymentForm(forms.Form):
     ))
 
     send_to = forms.EmailField(widget=forms.EmailInput(
-        attrs={'placeholder': 'Enter email address', 'autocomplete': 'off', 'class': 'w3-input w3-border'}
+        attrs={'placeholder': 'Enter your email address', 'autocomplete': 'off', 'class': 'w3-input w3-border'}
     ))
 
     remark = forms.CharField(
         required=False, max_length="200",
         widget=forms.Textarea(attrs={
-            'placeholder': 'Remake', 'autocomplete': 'off',
+            'placeholder': 'Remark', 'autocomplete': 'off',
             'class': 'w3-input w3-border', 'rows': '1'
         })
     )
