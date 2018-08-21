@@ -2,15 +2,15 @@
   <div id="EmailModal" class="w3-modal">
     <div class="w3-modal-content w3-animate-top w3-card-4">
       <header class="w3-container w3-teal w3-center w3-padding-16">
-        <span onclick="document.getElementById('EmailModal').style.display='none'"
-       class="w3-button w3-teal w3-xlarge w3-display-topright">×</span>
+        <span onclick="close_update()" class="w3-button w3-teal w3-xlarge w3-display-topright">×</span>
         <h2 class="w3-wide"><i class="fa fa-suitcase w3-margin-right"></i>Payment Details</h2>
       </header>
       <form action="{% url 'payment-done' %}" method="post" name="paymentComplete">
           {% csrf_token %}
           <div class="w3-container">
             <p><label><i class="fa fa-shopping-cart"></i>
-                Amount paid: <span id="amount_val">0</span>.00/-
+                Amount paid: <span id="amount_val">0</span>.00/- <br>
+                <i class="fa fa-calendar"></i> Boli Date: <span id="boli_date">0</span>
             </label></p>
             <input type="hidden" id="record_id" name="record_id">
             <input type="hidden" id="phone_number" name="phone_number">
@@ -28,7 +28,7 @@
                 SEND EMAIL <i class="fa fa-check"></i>
             </button>
 
-            <button class="w3-button w3-red w3-section" onclick="document.getElementById('EmailModal').style.display='none'">
+            <button class="w3-button w3-red w3-section" onclick="close_update()">
                 Close <i class="fa fa-remove"></i>
             </button>
           </div>

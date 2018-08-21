@@ -30,13 +30,23 @@ window.onclick = function(event) {
   }
 }
 
-function display_model(record_id, amount){
+function display_model(record_id, amount, date){
     document.getElementById("record_id").value = record_id;
     document.getElementById('EmailModal').style.display='block';
     document.getElementById("amount_val").innerHTML = amount;
+    document.getElementById("boli_date").innerHTML = date;
     document.getElementById("phone_number").value = document.getElementById("pNumber").value;
 }
 
+function close_update(){
+    document.getElementById('EmailModal').style.display='none';
+    var checkboxes = document.getElementsByTagName('input');
+    for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].type == 'checkbox') {
+            checkboxes[i].checked = false;
+        }
+    }
+};
 
 function payment_md(){
     var mode = document.getElementById("id_payment_mode").value;
