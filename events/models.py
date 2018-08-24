@@ -12,7 +12,7 @@ class Events(models.Model):
     Manage event information.
     """
     name = models.CharField(max_length=255, verbose_name=_("Event Name"))
-    description = models.TextField(max_length=1200, verbose_name=_("Event Description"))
+    description = models.TextField(max_length=1500, verbose_name=_("Event Description"))
     mandir = models.ForeignKey(Mandir, verbose_name=_('mandir'), related_name='mandir_event')
     start_date = models.DateTimeField(verbose_name=_("start date"))
     end_date = models.DateTimeField(verbose_name=_("end date"), blank=True, null=True, unique=True)

@@ -90,13 +90,12 @@
         ]);
 
         var options = {
-          title: 'Last Month details total boil count is {{last_month_count}}',
+          title: 'Total Boli Count of last month :- {{last_month_count}}',
           is3D: true,
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-        chart.draw(data, options);
-      }
+        chart.draw(data, options);     }
       $(window).resize(function(){
         drawChart();
       });

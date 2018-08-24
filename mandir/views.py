@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import sys
 from datetime import datetime, timedelta
-from twilio.rest import Client
 import simplejson as json
 
 from django.conf import settings
@@ -22,6 +22,7 @@ from account.models import Account
 
 from mandir.models import Record, Mandir
 from mandir.forms import SearchForm, EntryForm, ContactForm, PaymentForm
+from punyaUday.run import PunyaUdayStack
 
 
 class HomeView(ListView):
@@ -160,17 +161,13 @@ def send_sms(phone_number, amount):
     """
         Will send an sms to end user.
     """
-    if settings.ACCOUNT_SID:
-        try:
-            client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
-            sms_mgs = """Thanks to donate {}/- \n Mandir Committee is very thankful to you."""
-            message = client.messages.create(
-                body=sms_mgs.format(amount),
-                from_=settings.TWILIO_USER,
-                to='+91{}'.format(phone_number)
-            )
-        except Exception:
-            pass
+    try:
+        sms_mgs = """ Thats a dummy message !!\nThanks to donate {}/- \n Mandir Committee is very thankful to you.""".format(amount)
+        messages = [("91"+phone_number, sms_mgs)]
+        stack = PunyaUdayStack(messages)
+        stack.start()
+    except Exception:
+        pass
 
 
 def contact(request):
