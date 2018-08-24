@@ -22,7 +22,7 @@ from account.models import Account
 
 from mandir.models import Record, Mandir
 from mandir.forms import SearchForm, EntryForm, ContactForm, PaymentForm
-from punyaUday.run import PunyaUdayStack
+# from punyaUday.run import PunyaUdayStack
 
 
 class HomeView(ListView):
@@ -151,23 +151,23 @@ class EntryCreateView(LoginRequiredMixin, FormView):
             boli_date=boil_date
         )
         if record_created:
-            send_sms(account.phone_number, amount)
+            #send_sms(account.phone_number, amount)
             messages.success(self.request, "Record added successfully !!")
 
         return super(EntryCreateView, self).form_valid(form)
 
 
-def send_sms(phone_number, amount):
-    """
-        Will send an sms to end user.
-    """
-    try:
-        sms_mgs = """ Thats a dummy message !!\nThanks to donate {}/- \n Mandir Committee is very thankful to you.""".format(amount)
-        messages = [("91"+phone_number, sms_mgs)]
-        stack = PunyaUdayStack(messages)
-        stack.start()
-    except Exception:
-        pass
+# def send_sms(phone_number, amount):
+#     """
+#         Will send an sms to end user.
+#     """
+#     try:
+#         sms_mgs = """ Thats a dummy message !!\nThanks to donate {}/- \n Mandir Committee is very thankful to you.""".format(amount)
+#         messages = [("91"+phone_number, sms_mgs)]
+#         stack = PunyaUdayStack(messages)
+#         stack.start()
+#     except Exception:
+#         pass
 
 
 def contact(request):
