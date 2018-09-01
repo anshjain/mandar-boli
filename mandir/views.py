@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import sys
 from datetime import datetime, timedelta
+from itertools import groupby
+
 import simplejson as json
 
 from django.conf import settings
@@ -23,6 +24,9 @@ from account.models import Account
 from mandir.models import Record, Mandir
 from mandir.forms import SearchForm, EntryForm, ContactForm, PaymentForm
 # from punyaUday.run import PunyaUdayStack
+
+Month_dict = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: "Jun",
+              7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
 
 
 class HomeView(ListView):
@@ -78,25 +82,31 @@ class RecordListView(ListView):
         phone_number = self.request.GET.get('phone_number')
         if phone_number and len(phone_number) == 10:
             context.update({'phone_number': phone_number})
+
         mandir = self.get_mandir_info()
-        today = datetime.today()
-        last_month = today.month - 1
-        last_month_count = self.get_total_counts(mandir, today.year, last_month)
-        last_month_paid_count = self.get_total_counts(mandir, today.year, last_month, paid=True)
+        month_data, month_range = self.get_month_details(mandir)
         context.update({'form': self.form_class(), 'mandir': mandir, 'payment_form': PaymentForm(),
-                        'last_month_count': last_month_count, 'last_month_paid_count': last_month_paid_count})
+                        'month_data': month_data, 'month_range': month_range})
 
         return context
 
-    def get_total_counts(self, mandir, year, month, paid=False):
+    def get_month_details(self, mandir):
         """
-        Will return total count of records based on year, month and paid flag values.
+        Will return list of grouped by month and count of paid and not paid records..
         """
-        query = self.model.objects.filter(mandir=mandir, boli_date__year=year, boli_date__month=month)
-        if paid:
-            query = query.filter(paid=paid)
+        records = self.model.objects.filter(mandir=mandir).only('boli_date', 'paid').order_by('boli_date')
+        month_data = [[str('Month'), str('Paid'), str('Not Paid')]]
+        first_month = str(Month_dict.get(records[0].boli_date.month))
 
-        return query.count()
+        for k, g in groupby(records, key=lambda i: i.boli_date.month):
+            paid = not_paid = 0
+            month = str(Month_dict.get(k))
+            for x in g:
+                paid += 1 if x.paid else 0
+                not_paid += 1 if not x.paid else 0
+            month_data.append([month, paid, not_paid])
+
+        return month_data, "{}-{}".format(first_month, month)
 
     def get_queryset(self):
         form = self.form_class(self.request.GET)
@@ -227,9 +237,12 @@ def payment_complete(request):
             try:
                 # get record info
                 record = get_object_or_404(Record, id=request.POST.get('record_id'), paid=False)
-                name = record.account.description.split(',')[0]
-                mandir_email = record.mandir.email
+                description = record.account.description
+                if not description:
+                    description = record.description
 
+                name = description.split(',')[0]
+                mandir_email = record.mandir.email
 
                 # Email the profile with the
                 # contact information
@@ -291,7 +304,9 @@ class AboutView(TemplateView):
 
 
 def ajax_single_account(request):
-    '''gets single item'''
+    """
+    gets single item
+    """
     if not request.is_ajax():
         return HttpResponse(json.dumps({'result': False}))
 

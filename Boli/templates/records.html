@@ -80,22 +80,25 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-      google.charts.load("current", {packages:["corechart"]});
+      google.charts.load('current', {'packages':['bar']});
       google.charts.setOnLoadCallback(drawChart);
+
       function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Event', 'Counts'],
-          ['Paid',     {{last_month_paid_count}}],
-          ['Not Paid',      {{last_month_count}} - {{last_month_paid_count}}]
-        ]);
+        var data = google.visualization.arrayToDataTable({{month_data|safe}});
 
         var options = {
-          title: 'Total Boli Count of last month :- {{last_month_count}}',
-          is3D: true,
+          chart: {
+            title: '{{mandir}}',
+            subtitle: 'Records paid and not paid: {{month_range}}',
+          },
+          colors: ['#509B52', '#FF0000'],
+          bars: 'vertical' // Required for Material Bar Charts.
         };
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-        chart.draw(data, options);     }
+        var chart = new google.charts.Bar(document.getElementById('piechart_3d'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      }
       $(window).resize(function(){
         drawChart();
       });
