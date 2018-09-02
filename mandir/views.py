@@ -277,7 +277,7 @@ def payment_complete(request):
 
                 email = EmailMessage(
                     "Thanks for the Payment", content,
-                    "Punya Unday Funds", send_to
+                    record.mandir.name, send_to
                 )
                 email.send()
 
