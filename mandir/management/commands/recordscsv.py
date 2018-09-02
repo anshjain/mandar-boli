@@ -15,7 +15,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         mandirs = Mandir.objects.filter(status=True)
-        import ipdb; ipdb.set_trace()
         for mandir in mandirs:
             self.create_records_csv(mandir)
 
@@ -47,3 +46,4 @@ class Command(BaseCommand):
 
         # delete all records
         # records.delete()
+        print "End cron job"
