@@ -44,7 +44,7 @@ class Command(BaseCommand):
 
             subject_line = "{},{} paid records".format(prev.strftime("%B"), prev.year)
             email_add = [mandir.email]
-            email_add.extends(settings.ADMIN_EMAILS)
+            email_add.extend(settings.ADMIN_EMAILS)
             message = EmailMessage(
                 subject_line, "Your records",
                 mandir.name, email_add,
