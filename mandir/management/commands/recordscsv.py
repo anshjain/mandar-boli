@@ -1,5 +1,9 @@
 import csv
-import StringIO
+
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 from datetime import date, timedelta
 
@@ -27,7 +31,7 @@ class Command(BaseCommand):
         prev = date.today().replace(day=1) - timedelta(days=1)
         records = Record.objects.filter(mandir=mandir, paid=True,
                                         payment_date__month=7, payment_date__year=prev.year)
-        csvfile = StringIO.StringIO()
+        csvfile = StringIO()
         csvwriter = csv.writer(csvfile)
 
         if records:
