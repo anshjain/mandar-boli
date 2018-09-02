@@ -46,4 +46,4 @@ class Command(BaseCommand):
 
         # delete all records
         # records.delete()
-        print "End cron job"
+        print("End cron job")
