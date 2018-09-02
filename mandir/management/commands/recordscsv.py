@@ -43,7 +43,7 @@ class Command(BaseCommand):
                 csvwriter.writerow([record.account.phone_number, name, record.amount, record.boli_date, record.payment_date, record.transaction_id])
 
             subject_line = "{},{} paid records".format(prev.strftime("%B"), prev.year)
-            message = EmailMessage(subject_line, "Your records", mandir.name, [mandir.email, settings.ADMIN_EMAILS])
+            message = EmailMessage(subject_line, "Your records", mandir.name, [(mandir.name, mandir.email), ("admin", settings.ADMIN_EMAILS)])
             file_name = '{}-{}-records.csv'.format(mandir.name, prev.strftime("%B"))
             message.attach(file_name, csvfile.getvalue(), 'text/csv')
             message.send()
