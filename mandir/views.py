@@ -84,7 +84,7 @@ class RecordListView(ListView):
             context.update({'phone_number': phone_number})
 
         mandir = self.get_mandir_info()
-        month_data, month_range = self.get_month_details(mandir)
+        month_data, month_range = self.get_month_details(mandir) if mandir else [], ''
         context.update({'form': self.form_class(), 'mandir': mandir, 'payment_form': PaymentForm(),
                         'month_data': month_data, 'month_range': month_range})
 
