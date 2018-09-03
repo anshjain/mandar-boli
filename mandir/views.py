@@ -74,7 +74,10 @@ class RecordListView(ListView):
         user = self.request.user
         if hasattr(user, 'userprofile'):
             profile = user.userprofile
-            return profile.mandir if hasattr(profile, 'mandir') else None
+            if hasattr(profile, 'mandir'):
+                return profile.mandir
+            else:
+                return Mandir.objects.filter(status=True, id=1).first()
 
     def get_context_data(self, *args, **kwargs):
         context = super(RecordListView, self).get_context_data(*args, **kwargs)
