@@ -19,11 +19,12 @@
                     {{ records.0.get_default_description }}
                 {% endif %}
             </p>
-        {% else %}
-            {% if request.user.is_authenticated %}
-                <div id="piechart_3d" style="width: 100%; min-height: 450px;"></div>
-            {% endif%}
         {% endif %}
+
+        {% if request.user.is_authenticated or mandir %}
+            <div id="piechart_3d" style="width: 100%; min-height: 450px;"></div>
+        {% endif%}
+
 
         <table class="w3-table w3-bordered w3-table-all w3-centered" style="overflow: scroll;">
             <tr>

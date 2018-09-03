@@ -76,8 +76,8 @@ class RecordListView(ListView):
             profile = user.userprofile
             if hasattr(profile, 'mandir'):
                 return profile.mandir
-            else:
-                return Mandir.objects.filter(status=True, id=1).first()
+        else:
+            return Mandir.objects.filter(status=True, id=1).first()
 
     def get_context_data(self, *args, **kwargs):
         context = super(RecordListView, self).get_context_data(*args, **kwargs)
@@ -87,8 +87,8 @@ class RecordListView(ListView):
             context.update({'phone_number': phone_number})
 
         mandir = self.get_mandir_info()
-
         month_data, month_range = [], ''
+
         if mandir:
             month_data, month_range = self.get_month_details(mandir)
 
