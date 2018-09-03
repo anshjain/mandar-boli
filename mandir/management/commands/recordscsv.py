@@ -35,6 +35,7 @@ class Command(BaseCommand):
         csvwriter = csv.writer(csvfile)
 
         if records:
+            csvwriter.writerow(["Phone Number", "Name", "Amount", "Boli Date", "Payment Date", "Transaction Id"])
             for record in records:
                 description = record.account.description
                 if not description:
