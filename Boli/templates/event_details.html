@@ -5,11 +5,26 @@
 {% block title %}{% trans "Event Details" %}{% endblock %}
 
 {% block main %}
+
+    <div id="fb-root"></div>
+    <script>(
+        function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.1&appId=1775753022522826&autoLogAppEvents=1';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
     <!-- The about us Section -->
     <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="event_details">
         <h2 class="w3-wide">{{ event.name |safe }}</h2>
         <p class="w3-opacity"><i>Jai Jinendra</i></p>
         {{ event.description |safe }}
         <p class="w3-justify"><b>{{ event.mandir.committee_name }}</b></p>
+        {% if event.description %}
+            <div class="fb-like" data-href="http://punyaudayfund.herokuapp.com/events/1/#event_details" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+        {% endif%}
     </div>
 {% endblock %}
