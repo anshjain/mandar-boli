@@ -11,6 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import EmailMessage
+from django.db.models import Sum
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.template.loader import get_template
@@ -84,7 +85,9 @@ class RecordListView(ListView):
 
         phone_number = self.request.GET.get('phone_number')
         if phone_number and len(phone_number) == 10:
-            context.update({'phone_number': phone_number})
+            total_amt = self.model.objects.filter(account__phone_number__icontains=phone_number,
+                                                  paid=False).aggregate(Sum('amount'))
+            context.update({'phone_number': phone_number, 'total_amt': total_amt})
 
         mandir = self.get_mandir_info()
         month_data, month_range = [], ''

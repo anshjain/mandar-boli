@@ -62,6 +62,13 @@
                         </td>
                     </tr>
                 {% endfor %}
+                {% if total_amt %}
+                    <tr><td colspan="4">
+                        <div style="float:right;">
+                            Total :- <b>{{ total_amt.amount__sum }}/-</b>
+                        </div>
+                    </td></tr>
+                {% endif %}
             {% else %}
                 <tr><td colspan="5"><center>
                     {% if phone_number %}
