@@ -89,7 +89,9 @@ class RecordListView(ListView):
                                                   paid=False, remaining_amt=0).aggregate(Sum('amount'))
             remaining_amt = self.model.objects.filter(account__phone_number__icontains=phone_number,
                                                       paid=False).aggregate(Sum('remaining_amt'))
-            total_amt = remaining_amt['remaining_amt__sum'] + amt['amount__sum']
+            total_amt = 0 
+            if remaining_amt['remaining_amt__sum'] and amt['amount__sum']:
+                total_amt = remaining_amt['remaining_amt__sum'] + amt['amount__sum']
 
             context.update({'phone_number': phone_number, 'total_amt': total_amt})
 
