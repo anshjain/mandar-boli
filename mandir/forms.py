@@ -12,6 +12,12 @@ PAYMENT_MODES = (
     ('Check', 'Check'),
 )
 
+PERCENT_MODES = (
+    ('25', '25 %'),
+    ('50', '50 %'),
+    ('75', '75 %'),
+)
+
 
 class SearchForm(forms.Form):
     phone_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'SEARCH', 'autocomplete': 'off'}))
@@ -60,6 +66,11 @@ class ContactForm(forms.Form):
 
 
 class PaymentForm(forms.Form):
+
+    partial_payment = forms.ChoiceField(choices=PERCENT_MODES, widget=forms.Select(
+        attrs={'class': 'w3-input w3-border', 'style': "height: 40px;", "onchange": "payment_cal();"}
+    ))
+
     payment_mode = forms.ChoiceField(choices=PAYMENT_MODES, widget=forms.Select(
         attrs={'class': 'w3-input w3-border', 'style': "height: 40px;", "onchange": "payment_md();"}
     ))

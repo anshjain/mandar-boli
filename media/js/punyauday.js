@@ -26,14 +26,27 @@ function myFunction() {
 var modal = document.getElementById('EmailModal');
 window.onclick = function(event) {
   if (event.target == modal) {
-    modal.style.display = "none";
+    close_update();
   }
 }
 
-function display_model(record_id, amount, date){
+function display_model(record_id, amount, date, partial){
     document.getElementById("record_id").value = record_id;
     document.getElementById('EmailModal').style.display='block';
-    document.getElementById("amount_val").innerHTML = amount;
+
+    if (partial=="PP"){
+        document.getElementById("Original_amount").style.display='block';
+        document.getElementById("id_partial_payment").style.display='block';
+        var value = parseInt(document.getElementById("id_partial_payment").value);
+        var original_amount = parseInt(amount);
+        var paid_amount = (original_amount * value) / 100
+        document.getElementById("amount_val").innerHTML = paid_amount;
+    } else {
+        document.getElementById("id_partial_payment").style.display='none';
+        document.getElementById("Original_amount").style.display='none';
+        document.getElementById("amount_val").innerHTML = amount + '.00';
+    }
+    document.getElementById("org_amount_val").innerHTML = amount + '.00';
     document.getElementById("boli_date").innerHTML = date;
     document.getElementById("phone_number").value = document.getElementById("pNumber").value;
 }
@@ -47,6 +60,13 @@ function close_update(){
         }
     }
 };
+
+function payment_cal(){
+    var value = parseInt(document.getElementById("id_partial_payment").value);
+    var original_amount = parseInt(document.getElementById("org_amount_val").innerText);
+    var paid_amount = (original_amount * value) / 100
+    document.getElementById("amount_val").innerHTML = paid_amount;
+}
 
 function payment_md(){
     var mode = document.getElementById("id_payment_mode").value;

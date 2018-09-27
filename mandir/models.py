@@ -95,6 +95,7 @@ class Record(models.Model):
     title = models.ForeignKey(BoliChoice, verbose_name=_('title'), related_name='bolichoices', default='1')
     description = models.TextField(verbose_name=_("description"), blank=True, null=True)
     amount = models.IntegerField(verbose_name=_("amount"))
+    remaining_amt = models.IntegerField(verbose_name=_("Remaining amount"), default=0)
     created = models.DateTimeField(auto_now_add=True, verbose_name=_("created"))
     boli_date = models.DateTimeField(verbose_name=_("boli date"), blank=True, null=True)
     payment_date = models.DateTimeField(verbose_name=_("payment date"), blank=True, null=True)

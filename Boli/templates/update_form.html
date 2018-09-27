@@ -8,12 +8,21 @@
       <form action="{% url 'payment-done' %}" method="post" name="paymentComplete">
           {% csrf_token %}
           <div class="w3-container">
-            <p><label><i class="fa fa-shopping-cart"></i>
-                Amount paid: <span id="amount_val">0</span>.00/- <br>
+            <p><label>
+                <div id="Original_amount">
+                    <i class="fa fa-shopping-cart"></i>
+                    Original Amount: <span id="org_amount_val">0</span> /-
+                </div>
+                <div id="Paid_amount">
+                    <i class="fa fa-shopping-cart"></i>
+                    Amount paid: <span id="amount_val">0</span> /- <br>
+                </div>
                 <i class="fa fa-calendar"></i> Boli Date: <span id="boli_date">0</span>
             </label></p>
             <input type="hidden" id="record_id" name="record_id">
             <input type="hidden" id="phone_number" name="phone_number">
+            {{payment_form.partial_payment}} <br>
+
             {{payment_form.payment_mode}}
             <p>
                 {{payment_form.id_details}}

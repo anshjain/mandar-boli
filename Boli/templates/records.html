@@ -53,12 +53,35 @@
                                 {{ record.mandir.name }}
                             {% endif %}
                         </td>
-                        <td style="vertical-align:middle !important">{{record.boli_date|date}}</td>
+                        <td style="vertical-align:middle !important">
+                            {{record.boli_date|date}}
+                            {% if record.remaining_amt %}
+                                <br>
+                                <b style="color:blue">Original Boli Amount</b> <br><b style="color:red">{{record.amount}}/-</b><br>
+                            {% endif %}
+                        </td>
                         <td style="vertical-align:middle !important" class="w3-small">
-                            <b>{{record.amount}}/-</b><br>
+                            {% if record.remaining_amt %}
+                                {% trans 'Remaining'%}<br>
+                                <b>{{record.remaining_amt}}/-</b><br>
+                            {% else %}
+                                <b>{{record.amount}}/-</b><br>
+                            {% endif %}
                             <input id="checkbox" type="checkbox" class="w3-tooltip" title="Send an email"
-                                    onclick="display_model('{{record.id}}', '{{record.amount}}', '{{record.boli_date|date}}')">
-                            {% trans 'PAID' %}
+                                    onclick="display_model('{{record.id}}',
+                                    '{% if record.remaining_amt %}{{record.remaining_amt}}{% else %}{{record.amount}}{% endif %}',
+                                    '{{record.boli_date|date}}', 'None')">
+                            {% trans 'Paid' %} <br/>
+                            {% if record.amount > 5001 %}
+                                {% if not record.remaining_amt or record.remaining_amt > 5001 %}
+                                    {% trans 'Or'%}<br/>
+                                    <input id="Pcheckbox" type="checkbox" class="w3-tooltip" title="Send an email"
+                                            onclick="display_model('{{record.id}}',
+                                            '{% if record.remaining_amt %}{{record.remaining_amt}}{% else %}{{record.amount}}{% endif %}',
+                                            '{{record.boli_date|date}}', 'PP')">
+                                    {% trans 'Partially Paid' %}
+                                {% endif %}
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

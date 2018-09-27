@@ -87,6 +87,7 @@ class RecordListView(ListView):
         if phone_number and len(phone_number) == 10:
             total_amt = self.model.objects.filter(account__phone_number__icontains=phone_number,
                                                   paid=False).aggregate(Sum('amount'))
+
             context.update({'phone_number': phone_number, 'total_amt': total_amt})
 
         mandir = self.get_mandir_info()
@@ -243,6 +244,7 @@ def payment_complete(request):
             mod_pay = form.cleaned_data.get('payment_mode', '')
             send_to = [form.cleaned_data.get('send_to', '')]
             id_details = form.cleaned_data.get('id_details', '')
+            partial_payment = form.cleaned_data.get('partial_payment', 1)
 
             try:
                 # get record info
@@ -264,11 +266,16 @@ def payment_complete(request):
                 elif mod_pay == 'Check':
                     payment_detail = 'Check Number: {}'.format(id_details)
 
+                # calculate based on partial payment percentage:
+                paid_amount = record.amount
+                if partial_payment:
+                    paid_amount = (record.amount * int(partial_payment)) / 100
+
                 context = {
                     'name': name,
                     'mod_pay': mod_pay,
                     'payment_detail': payment_detail,
-                    'amount': record.amount,
+                    'amount': paid_amount,
                     'mandir': record.mandir,
                     'remark': form.cleaned_data.get('remark'),
                 }
@@ -280,7 +287,11 @@ def payment_complete(request):
 
                 # update record mark it as paid and store email content as copy in description.
                 record.description = content
-                record.paid = True
+                record.remaining_amt = record.amount - paid_amount
+                if not partial_payment:
+                    record.paid = True
+
+
                 record.transaction_id = id_details if id_details else 'Cash'
                 record.payment_date = datetime.now()
                 record.save()
