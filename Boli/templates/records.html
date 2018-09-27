@@ -21,7 +21,7 @@
             </p>
         {% endif %}
 
-        {% if request.user.is_authenticated or mandir %}
+        {% if request.user.is_authenticated %}
             <div id="piechart_3d" style="width: 100%; min-height: 450px;"></div>
         {% endif%}
 
