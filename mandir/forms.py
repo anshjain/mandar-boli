@@ -13,6 +13,7 @@ PAYMENT_MODES = (
 )
 
 PERCENT_MODES = (
+    ('', ''),
     ('25', '25 %'),
     ('50', '50 %'),
     ('75', '75 %'),
@@ -67,7 +68,7 @@ class ContactForm(forms.Form):
 
 class PaymentForm(forms.Form):
 
-    partial_payment = forms.ChoiceField(choices=PERCENT_MODES, widget=forms.Select(
+    partial_payment = forms.ChoiceField(choices=PERCENT_MODES, required=False, widget=forms.Select(
         attrs={'class': 'w3-input w3-border', 'style': "height: 40px;", "onchange": "payment_cal();"}
     ))
 

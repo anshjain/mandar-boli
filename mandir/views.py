@@ -249,7 +249,7 @@ def payment_complete(request):
             mod_pay = form.cleaned_data.get('payment_mode', '')
             send_to = [form.cleaned_data.get('send_to', '')]
             id_details = form.cleaned_data.get('id_details', '')
-            partial_payment = form.cleaned_data.get('partial_payment', 1)
+            partial_payment = form.cleaned_data.get('partial_payment', 0)
 
             try:
                 # get record info
