@@ -268,13 +268,15 @@ def payment_complete(request):
                 payment_detail = ''
                 if mod_pay == 'Online':
                     payment_detail = 'Transaction Id: {}'.format(id_details)
-                elif mod_pay == 'Check':
-                    payment_detail = 'Check Number: {}'.format(id_details)
+                elif mod_pay == 'Cheque':
+                    payment_detail = 'Cheque Number: {}'.format(id_details)
 
                 # calculate based on partial payment percentage:
                 paid_amount = record.amount
                 if partial_payment:
-                    paid_amount = (record.amount * int(partial_payment)) / 100
+                    paid_amount = int(partial_payment)
+                elif record.remaining_amt:
+                    paid_amount = record.remaining_amt
 
                 context = {
                     'name': name,
@@ -292,7 +294,11 @@ def payment_complete(request):
 
                 # update record mark it as paid and store email content as copy in description.
                 record.description = content
-                record.remaining_amt = record.amount - paid_amount
+                if not record.remaining_amt:
+                    record.remaining_amt = record.amount - paid_amount
+                else:
+                    record.remaining_amt -= paid_amount
+
                 if not partial_payment:
                     record.paid = True
 

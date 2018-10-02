@@ -9,14 +9,7 @@ from mandir.models import BoliChoice
 PAYMENT_MODES = (
     ('Cash', 'Cash'),
     ('Online', 'Online'),
-    ('Cheque', 'cheque'),
-)
-
-PERCENT_MODES = (
-    ('', ''),
-    ('25', '25 %'),
-    ('50', '50 %'),
-    ('75', '75 %'),
+    ('Cheque', 'Cheque'),
 )
 
 
@@ -68,16 +61,17 @@ class ContactForm(forms.Form):
 
 class PaymentForm(forms.Form):
 
-    partial_payment = forms.ChoiceField(choices=PERCENT_MODES, required=False, widget=forms.Select(
-        attrs={'class': 'w3-input w3-border', 'style': "height: 40px;", "onchange": "payment_cal();"}
-    ))
-
     payment_mode = forms.ChoiceField(choices=PAYMENT_MODES, widget=forms.Select(
         attrs={'class': 'w3-input w3-border', 'style': "height: 40px;", "onchange": "payment_md();"}
     ))
 
+    partial_payment = forms.CharField(required=False, widget=forms.NumberInput(
+        attrs={'placeholder': 'Paid Amount', 'autocomplete': 'off', 'class': 'w3-input w3-border',
+               'style': 'display:none', "onkeyup": "payment_cal();"}
+    ))
+
     id_details = forms.CharField(required=False, widget=forms.TextInput(
-        attrs={'placeholder': 'Transaction Id / Check Number', 'autocomplete': 'off', 'class': 'w3-input w3-border',
+        attrs={'placeholder': 'Transaction Id / Cheque Number', 'autocomplete': 'off', 'class': 'w3-input w3-border',
                'style': 'display:none'}
     ))
 

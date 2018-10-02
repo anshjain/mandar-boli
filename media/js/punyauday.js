@@ -37,13 +37,12 @@ function display_model(record_id, amount, date, partial){
     if (partial=="PP"){
         document.getElementById("Original_amount").style.display='block';
         document.getElementById("id_partial_payment").style.display='block';
-        var value = parseInt(document.getElementById("id_partial_payment").value);
-        var original_amount = parseInt(amount);
-        var paid_amount = (original_amount * value) / 100
-        document.getElementById("amount_val").innerHTML = paid_amount;
+        document.getElementById("id_partial_payment").required = true;
+        document.getElementById("amount_val").innerHTML = "0.00";
     } else {
         document.getElementById("id_partial_payment").style.display='none';
         document.getElementById("Original_amount").style.display='none';
+        document.getElementById("id_partial_payment").required = false;
         document.getElementById("amount_val").innerHTML = amount + '.00';
     }
     document.getElementById("org_amount_val").innerHTML = amount + '.00';
@@ -62,10 +61,16 @@ function close_update(){
 };
 
 function payment_cal(){
-    var value = parseInt(document.getElementById("id_partial_payment").value);
+    var paid_amount = parseInt(document.getElementById("id_partial_payment").value);
     var original_amount = parseInt(document.getElementById("org_amount_val").innerText);
-    var paid_amount = (original_amount * value) / 100
-    document.getElementById("amount_val").innerHTML = paid_amount;
+    if (original_amount < paid_amount){
+        document.getElementById("amount_val").innerHTML = "Amount greater than Original amount not allowed!";
+        document.getElementById("amount_val").style.color = "red";
+        document.getElementById("id_partial_payment").value = ''
+    } else {
+        document.getElementById("amount_val").style.color = "black";
+        document.getElementById("amount_val").innerHTML = paid_amount + '.00';
+    }
 }
 
 function payment_md(){
