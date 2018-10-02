@@ -9,7 +9,7 @@ from mandir.models import BoliChoice
 PAYMENT_MODES = (
     ('Cash', 'Cash'),
     ('Online', 'Online'),
-    ('Check', 'Check'),
+    ('Cheque', 'cheque'),
 )
 
 PERCENT_MODES = (
