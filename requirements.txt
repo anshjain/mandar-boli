@@ -25,3 +25,4 @@ django-import-export==1.0.1
 simplejson==3.16.0
 django-flat-responsive
 apscheduler
+urllib2
