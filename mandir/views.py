@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 from itertools import groupby
 
 import simplejson as json
-import urllib
-import urllib2
+import urllib.request
+import urllib.parse
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -208,7 +208,7 @@ class EntryCreateView(LoginRequiredMixin, FormView):
 
 def send_normal_sms(numbers, message=GENERIC_MSG, sender='TXTLCL'):
     """Will send an sms to end user. """
-    data = urllib.urlencode({
+    data = urllib.parse.urlencode({
         'apikey': SMS_API_KEY,
         'numbers': "91{}".format(numbers),
         'message': message,
@@ -216,10 +216,10 @@ def send_normal_sms(numbers, message=GENERIC_MSG, sender='TXTLCL'):
         'unicode': "true",
     })
     data = data.encode('utf-8')
-    req = urllib2.Request(SMS_URL, data)
-    f = urllib2.urlopen(req)
-    fr = f.read()
-    return fr
+    req = urllib.request.Request(SMS_URL, data)
+    respone = urllib.request.urlopen(req)
+    respone_data = respone.read()
+    return respone_data
 
 
 def contact(request):
