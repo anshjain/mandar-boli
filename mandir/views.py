@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 from itertools import groupby
 
 import simplejson as json
+import urllib
+import urllib2
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -22,6 +24,7 @@ from django.views.generic.edit import FormView
 
 from account.models import Account
 
+from mandir.constants import SMS_API_KEY, GENERIC_MSG, SMS_URL, DAILE_MSG
 from mandir.models import Record, Mandir
 from mandir.forms import SearchForm, EntryForm, ContactForm, PaymentForm
 # from punyaUday.run import PunyaUdayStack
@@ -177,8 +180,14 @@ class EntryCreateView(LoginRequiredMixin, FormView):
             boli_date=boil_date
         )
         if record_created:
-            #send_sms(account.phone_number, amount)
-            messages.success(self.request, "Record added successfully !!")
+            success_message = "Record saved successfully"
+            if account.phone_number != '9999988888':
+                message = DAILE_MSG.format(amount, boil_date)
+                re = send_normal_sms(account.phone_number, message, sender='PUFSJM')
+                if re.get('status') != 'success':
+                    success_message += ", but message not sent"
+
+            messages.success(self.request, "{} !!".format(success_message))
 
         return super(EntryCreateView, self).form_valid(form)
 
@@ -188,12 +197,29 @@ class EntryCreateView(LoginRequiredMixin, FormView):
 #         Will send an sms to end user.
 #     """
 #     try:
-#         sms_mgs = """ Thats a dummy message !!\nThanks to donate {}/- \n Mandir Committee is very thankful to you.""".format(amount)
+#         sms_mgs = """ Thats a dummy message !!\nThanks to donate {}/- \n Mandir Committee is very thankful to you.
+# """.format(amount)
 #         messages = [("91"+phone_number, sms_mgs)]
 #         stack = PunyaUdayStack(messages)
 #         stack.start()
 #     except Exception:
 #         pass
+
+
+def send_normal_sms(numbers, message=GENERIC_MSG, sender='TXTLCL'):
+    """Will send an sms to end user. """
+    data = urllib.urlencode({
+        'apikey': SMS_API_KEY,
+        'numbers': "91{}".format(numbers),
+        'message': message,
+        'sender': sender,
+        'unicode': "true",
+    })
+    data = data.encode('utf-8')
+    req = urllib2.Request(SMS_URL, data)
+    f = urllib2.urlopen(req)
+    fr = f.read()
+    return fr
 
 
 def contact(request):

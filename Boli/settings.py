@@ -95,7 +95,7 @@ else:
             'NAME': 'd807732vvlh6me',
             'USER': 'cpogntjwdysumf',
             'PASSWORD': '43d13010c364f24327846391ff72e32a0edb1df80dd2336d6e0a91c3ed84c6a2',
-            'PORT':5432,
+            'PORT': 5432,
             'HOST': 'ec2-23-21-238-28.compute-1.amazonaws.com',
         }
     }
@@ -163,7 +163,6 @@ EMAIL_PORT = 587
 
 EMAIL_HOST_USER = 'ansh92jaincs@gmail.com'
 EMAIL_HOST_PASSWORD = 'aN!$&&92qoar'
-
 
 ACCOUNT_SID = ''
 AUTH_TOKEN = ''
