@@ -184,7 +184,8 @@ class EntryCreateView(LoginRequiredMixin, FormView):
             if account.phone_number != '9999988888':
                 message = DAILE_MSG.format(amount, boil_date)
                 re = send_normal_sms(account.phone_number, message, sender='PUFSJM')
-                if re.get('status') != 'success':
+                response = json.loads(re)
+                if response.get('status') != 'success':
                     success_message += ", but message not sent"
 
             messages.success(self.request, "{} !!".format(success_message))
