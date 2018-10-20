@@ -5,8 +5,7 @@ from datetime import datetime, timedelta
 from itertools import groupby
 
 import simplejson as json
-import urllib.request
-import urllib.parse
+import urllib
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
