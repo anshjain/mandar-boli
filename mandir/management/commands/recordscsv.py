@@ -10,6 +10,7 @@ from datetime import date, timedelta
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMessage
+from django.template.loader import get_template
 
 from mandir.models import Record, Mandir
 
@@ -42,15 +43,16 @@ class Command(BaseCommand):
                     description = record.description
                 name = description.split('\n')[0]
                 csvwriter.writerow([record.account.phone_number, name, record.amount, record.boli_date, record.payment_date, record.transaction_id])
-
-            subject_line = "{},{} paid records".format(prev.strftime("%B"), prev.year)
+            month = 'July' #prev.strftime("%B")
+            subject_line = "{},{} paid records".format(month, prev.year)
             email_add = [mandir.email]
             email_add.extend(settings.ADMIN_EMAILS)
+            template = get_template('report_template.txt')
+            content = template.render({'month': month})
             message = EmailMessage(
-                subject_line, "Your records",
-                mandir.name, email_add,
+                subject_line, content, mandir.name, email_add,
             )
-            file_name = '{}-{}-records.csv'.format(mandir.name, prev.strftime("%B"))
+            file_name = '{}-{}-records.csv'.format(mandir.name, month)
             message.attach(file_name, csvfile.getvalue(), 'text/csv')
             message.send()
 
