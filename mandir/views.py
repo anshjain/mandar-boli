@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from itertools import groupby
 
 import simplejson as json
-import urllib
+
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -23,9 +23,10 @@ from django.views.generic.edit import FormView
 
 from account.models import Account
 
-from mandir.constants import SMS_API_KEY, GENERIC_MSG, SMS_URL, DAILE_MSG
+from mandir.constants import DAILE_MSG
 from mandir.models import Record, Mandir
 from mandir.forms import SearchForm, EntryForm, ContactForm, PaymentForm
+from mandir.utils import send_normal_sms
 # from punyaUday.run import PunyaUdayStack
 
 Month_dict = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: "Jun",
@@ -182,9 +183,8 @@ class EntryCreateView(LoginRequiredMixin, FormView):
             success_message = "Record saved successfully"
             if account.phone_number != '9999988888' and settings.SEND_SMS:
                 message = DAILE_MSG.format(amount, boil_date)
-                re = send_normal_sms(account.phone_number, message, sender='PUFSJM')
-                response = json.loads(re)
-                if response.get('status') != 'success':
+                response = send_normal_sms(account.phone_number, message, sender='PUFSJM')
+                if not response:
                     success_message += ", but message not sent"
 
             messages.success(self.request, "{} !!".format(success_message))
@@ -204,23 +204,6 @@ class EntryCreateView(LoginRequiredMixin, FormView):
 #         stack.start()
 #     except Exception:
 #         pass
-
-
-def send_normal_sms(numbers, message=GENERIC_MSG, sender='TXTLCL'):
-    """Will send an sms to end user. """
-    data = urllib.parse.urlencode({
-        'apikey': SMS_API_KEY,
-        'numbers': "91{}".format(numbers),
-        'message': message,
-        'sender': sender,
-        'unicode': "true",
-    })
-    data = data.encode('utf-8')
-    req = urllib.request.Request(SMS_URL, data)
-    respone = urllib.request.urlopen(req)
-    respone_data = respone.read()
-    return respone_data
-
 
 def contact(request):
     form_class = ContactForm

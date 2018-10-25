@@ -10,6 +10,7 @@ from import_export.fields import Field
 from django.contrib import admin
 
 from mandir.models import Mandir, Record, MandirImage, BoliChoice
+from mandir.utils import send_normal_sms
 
 
 class MandirAdmin(admin.ModelAdmin):
@@ -63,7 +64,7 @@ class RecordAdmin(ImportExportModelAdmin):
     search_fields = ('account__description', 'account__phone_number',)
     resource_class = RecordResource
     list_per_page = 15
-    actions = ['make_paid', 'make_as_unpaid']
+    actions = ['make_paid', 'make_as_unpaid', 'Send_sms']
 
     def make_paid(self, request, queryset):
         rows_updated = queryset.update(paid=True, payment_date=datetime.now(),
@@ -84,6 +85,17 @@ class RecordAdmin(ImportExportModelAdmin):
             message_bit = "%s records were" % rows_updated
         self.message_user(request, "%s successfully marked as unpaid." % message_bit)
     make_as_unpaid.short_description = "Mark selected records as unpaid"
+
+    def Send_sms(self, request, queryset):
+        """
+        Send sms to selected records
+        """
+        records = queryset.all()
+        for record in records:
+            send_normal_sms(record.account.phone_number, sender='PUFSJM')
+        self.message_user(request, "Send reminder SMS successfully.")
+
+    Send_sms.short_description = "Send reminder SMS to selected records"
 
     def get_names(self, obj):
         if obj.account.description:
