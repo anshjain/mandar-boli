@@ -1,18 +1,19 @@
-Hi {{name}},
+जय जिनेन्द्र {{name}},
+आप के द्वारा दिए गए दान की बहुत बहुत अनुमोदना !
 
-Thanks for the payment.
+आप के द्वारा प्राप्त दान :-
 
-Payment Details are :-
+दान राशि :- {{amount}}.00/-
+भुगतान करने का तरीका :- {{mod_pay}}
 
-Amount paid :- {{ amount }}.00/-
-Payment Mode :- {{mod_pay}}
 {{ payment_detail }}
 {{ remark }}
-Note:-
-In case of any issue please contact us on below mentioned details.
 
-Regards,
-Punya Uday Fund,
+नोट :-
+कोई समस्या आने पर कृपया नीचे उल्लिखित विवरण  पर हमसे संपर्क करें।
+
+शुभकामनाओं सहित,
+पुण्यौदय फ़ंड ,
 
 {{ mandir.name }}
 Ph: {{mandir.contract_number}}
