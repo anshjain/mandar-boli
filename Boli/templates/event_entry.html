@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% load staticfiles i18n %}
+{% block title %}{% trans "Event Registration" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box}
+
+/* Full-width input fields */
+input[type=text], input[type=password]{
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+
+select {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+
+}
+
+#borders {
+       position:relative;
+       padding:30px;
+       background:#fff;
+       border:2px solid #390;
+    }
+
+#borders:before {
+    content:"";
+    display:block;
+    position:absolute;
+    top:2px;
+    left:2px;
+    right:2px;
+    bottom:2px;
+    border:2px solid #36F
+    }
+
+input[type=text]:focus, input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+
+/* Set a style for all buttons */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+button:hover {
+  opacity:1;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+  padding: 14px 20px;
+  background-color: #f44336;
+}
+
+.yesNo {
+	margin : 15px 0px 15px 0px;
+}
+
+/* Float cancel and signup buttons and add an equal width */
+.cancelbtn, .signupbtn {
+  float: left;
+  width: 50%;
+}
+
+/* Add padding to container elements */
+.container {
+  padding: 16px;
+  width: 50%;
+  margin-left: 23%;
+
+}
+
+/* Clear floats */
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* Change styles for cancel button and signup button on extra small screens */
+@media screen and (max-width: 300px) {
+  .cancelbtn, .signupbtn {
+     width: 100%;
+  }
+}
+</style>
+{% endblock %}
+
+{% block main %}
+<body>
+
+<form action="/action_page.php" style="border:1px solid #ccc">
+  <div class="container" id="borders">
+    <h1>Registration</h1>
+    <p>Please fill in this form.</p>
+    <hr>
+
+    <label for="name"><b>Name</b></label>
+    <input type="text" placeholder="Enter Name" name="name" required>
+
+    <label for="mobile"><b>Mobile Number</b></label>
+    <input type="text" placeholder="Enter Mobile Number" name="psw" required>
+
+    <label for="nominate"><b>Nominate as :</b></label>
+    <select required>
+      <option value="volvo">--</option>
+      <option value="volvo">Indra-Indrani</option>
+      <option value="saab">Indra</option>
+      <option value="mercedes">Indrani</option>
+      <option value="audi">Normal</option>
+    </select>
+  
+	<!-- if above question ans is normal then below disply -->
+    <label for="food"><b>How many memebers take food :</b></label>
+    <input type="text" placeholder="Please provide the count" name="food-mem" required>
+  
+    <label for="stay-fac"><b>Stay Facility :- </b></label>
+    <div class="yesNo">
+      <input type="radio" name="stay" value="Yes"> Yes
+      <input type="radio" name="stay" value="No"> No
+    </div>
+
+	<!-- if above question ans is yes then below disply -->
+    <label for="memmbers"><b>How many memebers will stay:</b></label>
+    <input type="text" placeholder="Please provide the count" name="memeber" required>
+
+    <label for="travel-fac"><b>Travel Facility :-</b></label>
+    <div class="yesNo">
+      <input type="radio" name="travel" value="Yes"> Yes
+      <input type="radio" name="travel" value="No"> No
+    </div>
+
+	<!-- if above question ans is yes then below disply -->
+    <label for="pick-loc"><b>Select your Pick Location :</b></label>
+    <select>
+      <option value="1">1</option>
+      <option value="saa2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select>
+
+      <p>Registraction open till 20th march <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+
+    <div class="clearfix">
+      <button type="button" class="cancelbtn">Cancel</button>
+      <button type="submit" class="signupbtn">Sign Up</button>
+    </div>
+  </div>
+</form>
+
+</body>
+{% endblock %}

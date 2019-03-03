@@ -2,9 +2,10 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
+from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 
-from events.models import Events
+from events.models import Events, EventMember
 
 
 class EventListView(ListView):
@@ -19,3 +20,9 @@ class EventListView(ListView):
         # import ipdb; ipdb.set_trace()
         event_id = self.kwargs['event_id']
         return self.model.objects.filter(id=event_id, status=True).first()
+
+
+class EventCreateView(CreateView):
+    model = EventMember
+    template_name = 'event_entry.html'
+    fields = ['name']
