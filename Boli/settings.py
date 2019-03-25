@@ -83,7 +83,7 @@ if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'mandir_boli',
+            'NAME': 'boli_mandir',
             'USER': 'mandir_user',
             'PASSWORD': '$ankuL090517',
             'HOST': 'localhost',

@@ -4,11 +4,25 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from account.models import Account, UserProfile
 
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
 
-class AccountAdmin(admin.ModelAdmin):
+
+class AccountResource(resources.ModelResource):
+
+    class Meta:
+        model = Account
+        export_order = ('id', 'phone_number', 'description')
+        exclude = ('created',)
+        skip_unchanged = True
+        report_skipped = True
+
+
+class AccountAdmin(ImportExportModelAdmin):
     list_display = ('phone_number', 'description')
-    search_fields = ('description',)
+    search_fields = ('description', 'phone_number')
     list_per_page = 15
+    resource_class = AccountResource
 
 
 class UserProfileAdmin(admin.ModelAdmin):

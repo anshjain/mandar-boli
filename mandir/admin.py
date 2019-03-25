@@ -3,12 +3,15 @@ from __future__ import unicode_literals
 
 from datetime import datetime
 
-from import_export import resources
+from import_export import resources, fields
 from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
+from import_export.widgets import ForeignKeyWidget
 
 from django.contrib import admin
 
+from account.models import Account
+from mandir.constants import SPECIAL_MSG, VIDHAN_CON
 from mandir.models import Mandir, Record, MandirImage, BoliChoice
 from mandir.utils import send_normal_sms
 
@@ -32,31 +35,19 @@ class MandirAdmin(admin.ModelAdmin):
 
 class RecordResource(resources.ModelResource):
 
-    mandir = Field()
-    account = Field()
-    title = Field()
+    mandir = fields.Field(column_name='mandir', attribute='mandir', widget=ForeignKeyWidget(Mandir, 'name'))
+    title = fields.Field(column_name='title', attribute='title', widget=ForeignKeyWidget(BoliChoice, 'name'))
+    names = fields.Field(column_name='names', attribute='account', widget=ForeignKeyWidget(Account, 'description'))
+    account = fields.Field(column_name='account', attribute='account', widget=ForeignKeyWidget(Account, 'phone_number'))
     paid = Field()
-    names = Field()
-
-    def dehydrate_mandir(self, record):
-        return record.mandir.name
-
-    def dehydrate_names(self, record):
-        return record.account.description
-
-    def dehydrate_account(self, record):
-        return record.account.phone_number
-
-    def dehydrate_title(self, record):
-        return record.title.name
 
     def dehydrate_paid(self, record):
         return 'Paid' if record.paid else 'Not Paid'
 
     class Meta:
         model = Record
-        export_order = ('mandir', 'names', 'account', 'title', 'amount', 'boli_date', 'paid', 'description')
-        exclude = ('created', 'transaction_id', 'payment_date', 'id')
+        export_order = ('id', 'mandir', 'names', 'account', 'title', 'amount', 'boli_date', 'paid', 'description')
+        exclude = ('created', 'transaction_id', 'payment_date')
 
 
 class RecordAdmin(ImportExportModelAdmin):
@@ -92,7 +83,11 @@ class RecordAdmin(ImportExportModelAdmin):
         """
         records = queryset.all()
         for record in records:
-            send_normal_sms(record.account.phone_number, sender='PUFSJM')
+            if record.title in ('indra', 'indrani', 'indra - indrani'):
+                val = VIDHAN_CON.get(record.title)
+                send_normal_sms(record.account.phone_number, message=SPECIAL_MSG.format(val), sender='PUFSJM')
+            else:
+                send_normal_sms(record.account.phone_number, sender='PUFSJM')
         self.message_user(request, "Send reminder SMS successfully.")
 
     Send_sms.short_description = "Send reminder SMS to selected records"
