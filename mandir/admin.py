@@ -84,8 +84,7 @@ class RecordAdmin(ImportExportModelAdmin):
         records = queryset.all()
         for record in records:
             if record.title in ('indra', 'indrani', 'indra - indrani'):
-                val = VIDHAN_CON.get(record.title)
-                send_normal_sms(record.account.phone_number, message=SPECIAL_MSG.format(val), sender='PUFSJM')
+                send_normal_sms(record.account.phone_number, message=SPECIAL_MSG, sender='PUFSJM')
             else:
                 send_normal_sms(record.account.phone_number, sender='PUFSJM')
         self.message_user(request, "Send reminder SMS successfully.")
