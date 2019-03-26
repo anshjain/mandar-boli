@@ -83,7 +83,7 @@ class RecordAdmin(ImportExportModelAdmin):
         """
         records = queryset.all()
         for record in records:
-            if record.title in ('indra', 'indrani', 'indra - indrani'):
+            if record.title.name in ('indra', 'indrani', 'indra - indrani'):
                 send_normal_sms(record.account.phone_number, message=SPECIAL_MSG, sender='PUFSJM')
             else:
                 send_normal_sms(record.account.phone_number, sender='PUFSJM')
