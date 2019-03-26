@@ -37,7 +37,7 @@ class RecordResource(resources.ModelResource):
 
     mandir = fields.Field(column_name='mandir', attribute='mandir', widget=ForeignKeyWidget(Mandir, 'name'))
     title = fields.Field(column_name='title', attribute='title', widget=ForeignKeyWidget(BoliChoice, 'name'))
-    names = fields.Field(column_name='names', attribute='account', widget=ForeignKeyWidget(Account, 'description'))
+    # names = fields.Field(column_name='names', attribute='account', widget=ForeignKeyWidget(Account, 'description'))
     account = fields.Field(column_name='account', attribute='account', widget=ForeignKeyWidget(Account, 'phone_number'))
     paid = Field()
 
@@ -46,7 +46,7 @@ class RecordResource(resources.ModelResource):
 
     class Meta:
         model = Record
-        export_order = ('id', 'mandir', 'names', 'account', 'title', 'amount', 'boli_date', 'paid', 'description')
+        export_order = ('id', 'mandir', 'description', 'account', 'title', 'amount', 'boli_date', 'paid')
         exclude = ('created', 'transaction_id', 'payment_date')
 
 
@@ -122,9 +122,9 @@ class RecordAdmin(ImportExportModelAdmin):
         Update list filter and display list based on logged in admin users.
         """
         if request.user.is_superuser:
-            return 'paid', 'boli_date', 'mandir'
+            return 'paid', 'boli_date', 'mandir', 'title'
         else:
-            return 'paid', 'boli_date'
+            return 'paid', 'boli_date', 'title'
 
     def get_list_display(self, request):
         """
