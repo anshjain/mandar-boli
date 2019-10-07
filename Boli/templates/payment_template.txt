@@ -16,6 +16,7 @@
 पुण्यौदय फ़ंड ,
 
 {{ mandir.name }}
-Ph: {{mandir.contract_number}}
-Email: {{mandir.email}}
+फ़ोन: {{mandir.contract_number}}
+ईमेल: {{mandir.email}}
+पता: https://maps.google.com/?cid=13704265554706532894
 {{mandir.committee_name}}
