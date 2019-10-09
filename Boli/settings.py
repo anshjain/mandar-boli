@@ -163,7 +163,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
 EMAIL_HOST_USER = 'ansh92jaincs@gmail.com'
-EMAIL_HOST_PASSWORD = 'aN!$&&92qoar'
+EMAIL_HOST_PASSWORD = '$hreey@nsH0905'
 
 ACCOUNT_SID = ''
 AUTH_TOKEN = ''
