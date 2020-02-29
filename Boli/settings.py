@@ -26,7 +26,7 @@ SECRET_KEY = 's-cl_(s$*lcg7$8sv$ivfg1$%mcnbexouu+gqt15wt-bj(v_)v'
 DEBUG = False
 SEND_SMS = True
 
-ALLOWED_HOSTS = ["punyaudayfund.herokuapp.com", '127.0.0.1']
+ALLOWED_HOSTS = ["punyaudayfund.herokuapp.com", '127.0.0.1', 'www.susjainmandir.com', 'susjainmandir.com']
 
 
 # Application definition
