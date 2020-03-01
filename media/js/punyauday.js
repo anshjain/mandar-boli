@@ -86,7 +86,7 @@ function payment_md(){
 
 
 var pNumber = document.getElementById("pNumber");
-pNumber.addEventListener("keyup", function(event) {
+pNumber.addEventListener("focusout", function(event) {
   event.preventDefault();
   if (event.keyCode === 13) {
     var url = '/search/?phone_number='+pNumber.value+'#record'
