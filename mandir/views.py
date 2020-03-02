@@ -246,6 +246,48 @@ def contact(request):
     return render(request, 'contact.html', {'form': form_class, 'mandir': mandir})
 
 
+def get_all_records(phone_number, record_ids=None):
+    """
+    This method will take phone and record_ids to allow user to mark one or more then one record as paid
+    Args:
+        phone_number (string): Phone number.
+        records_id (list): in case user want to mark more then one as paid.
+
+    Return:
+        name (string): user name
+        amount (int): Amount paid
+        mandir(object): Mandir object
+        records (object): list of all records
+    """
+    # get record info
+    records = []
+    if not record_ids:
+        records = Record.objects.filter(account__phone_number=phone_number, paid=False)
+    else:
+        for id in record_ids:
+            record = get_object_or_404(Record, id=id, paid=False)
+            records.append(record)
+
+    description = records[0].account.description
+    if not description:
+        description = records[0].description
+
+    name = description.split(',')[0]
+    mandir = records[0].mandir
+
+    # calculate total amount
+    amounts = []
+    for record in records:
+        if record.remaining_amt:
+            amt = record.amount - record.remaining_amt
+            amounts.append(amt)
+        else:
+            amounts.append(record.amount)
+    amount = sum(amounts)
+
+    return name, mandir, amount, records
+
+
 def payment_complete(request):
     form_class = PaymentForm
 
@@ -259,16 +301,17 @@ def payment_complete(request):
             send_to = [form.cleaned_data.get('send_to', '')]
             id_details = form.cleaned_data.get('id_details', '')
             partial_payment = form.cleaned_data.get('partial_payment', 0)
+            record_id = request.POST.get('record_id')
+            flag = record_id != '01'
 
             try:
-                # get record info
-                record = get_object_or_404(Record, id=request.POST.get('record_id'), paid=False)
-                description = record.account.description
-                if not description:
-                    description = record.description
+                if record_id == '01':
+                    name, mandir, paid_amount, records = get_all_records(phone_number)
+                else:
+                    name, mandir, paid_amount, records = get_all_records(phone_number, [record_id])
 
-                name = description.split(',')[0]
-                mandir_email = record.mandir.email
+                # get record info
+                mandir_email = mandir.email
 
                 # Email the profile with the
                 # contact information
@@ -280,19 +323,20 @@ def payment_complete(request):
                 elif mod_pay == 'Cheque':
                     payment_detail = 'Cheque Number: {}'.format(id_details)
 
-                # calculate based on partial payment percentage:
-                paid_amount = record.amount
-                if partial_payment:
-                    paid_amount = int(partial_payment)
-                elif record.remaining_amt:
-                    paid_amount = record.remaining_amt
+                if flag:
+                    # calculate based on partial payment percentage:
+                    if partial_payment:
+                        paid_amount = int(partial_payment)
+                    elif records[0].remaining_amt:
+                        paid_amount = records[0].remaining_amt
 
                 context = {
                     'name': name,
                     'mod_pay': mod_pay,
                     'payment_detail': payment_detail,
                     'amount': paid_amount,
-                    'mandir': record.mandir,
+                    'mandir': mandir,
+                    'records': records,
                     'remark': form.cleaned_data.get('remark'),
                 }
 
@@ -301,25 +345,27 @@ def payment_complete(request):
                 send_to.append(mandir_email)
                 send_to.extend(settings.ADMIN_EMAILS)
 
-                # update record mark it as paid and store email content as copy in description.
-                record.description = content
-                if not record.remaining_amt:
-                    record.remaining_amt = record.amount - paid_amount
-                else:
-                    record.remaining_amt -= paid_amount
+                for record in records:
+                    # update record mark it as paid and store email content as copy in description.
+                    record.description = content
+                    if partial_payment:
+                        if not record.remaining_amt:
+                            record.remaining_amt = record.amount - paid_amount
+                        else:
+                            record.remaining_amt -= paid_amount
 
-                if not partial_payment:
-                    record.paid = True
+                    if not partial_payment:
+                        record.paid = True
 
-
-                record.transaction_id = id_details if id_details else 'Cash'
-                record.payment_date = datetime.now()
-                record.save()
+                    record.transaction_id = id_details if id_details else 'Cash'
+                    record.payment_date = datetime.now()
+                    record.save()
 
                 email = EmailMessage(
                     "Thanks for the Payment", content,
-                    record.mandir.name, send_to
+                    mandir.name, send_to
                 )
+                email.content_subtype = "html"
                 email.send()
 
             except Exception:

@@ -1,22 +1,63 @@
-जय जिनेन्द्र {{name}},
-आप के द्वारा दिए गए दान की बहुत बहुत अनुमोदना !
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 50%;
+        }
 
-आप के द्वारा प्राप्त दान :-
+        td, th {
+          border: 1px solid #000;
+          text-align: left;
+          padding: 8px;
+        }
 
-दान राशि :- {{amount}}.00/-
-भुगतान करने का तरीका :- {{mod_pay}}
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
+        </style>
+    </head>
+    <body>
+        जय जिनेन्द्र {{name}},<br />
+        आप के द्वारा दिए गए दान की बहुत बहुत अनुमोदना !<br><br>
 
-{{ payment_detail }}
-{{ remark }}
+        आप के द्वारा प्राप्त दान :-<br><br>
 
-नोट :-
-कोई समस्या आने पर कृपया नीचे उल्लिखित विवरण  पर हमसे संपर्क करें।
+        दान राशि :- {{amount}}.00/-<br>
+        भुगतान करने का तरीका :- {{mod_pay}}<br><br>
 
-शुभकामनाओं सहित,
-पुण्यौदय फ़ंड ,
+        {{ payment_detail }}<br><br>
 
-{{ mandir.name }}
-फ़ोन: {{mandir.contract_number}}
-ईमेल: {{mandir.email}}
-पता: https://maps.google.com/?cid=13704265554706532894
-{{mandir.committee_name}}
+        <table>
+          <tr>
+            <th>बोली दिनांकः</th>
+            <th>दान राशि</th>
+          </tr>
+          {% for record in records %}
+          <tr>
+            <td>{{ record.boli_date|date }}</td>
+            <td>
+                {% if record.remaining_amt %} {{record.remaining_amt}} {% endif %}
+                {% if not record.remaining_amt %} {{ record.amount }} {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </table><br><br>
+
+        {{ remark }}<br><br>
+
+        नोट :-<br>
+        कोई समस्या आने पर कृपया नीचे उल्लिखित विवरण  पर हमसे संपर्क करें।<br><br>
+
+        शुभकामनाओं सहित,<br>
+        पुण्यौदय फ़ंड ,<br><br>
+
+        {{ mandir.name }}<br>
+        फ़ोन: {{mandir.contract_number}}<br>
+        ईमेल: {{mandir.email}}<br>
+        पता: https://maps.google.com/?cid=13704265554706532894<br>
+        {{mandir.committee_name}}<br>
+    </body>
+</html>

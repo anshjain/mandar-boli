@@ -88,7 +88,10 @@
                 {% if total_amt %}
                     <tr><td colspan="4">
                         <div style="float:right;">
-                            Total :- <b>{{ total_amt }}/-</b>
+                            Total :- <b>{{ total_amt }}/-</b> <br/>
+                            <input id="checkbox" type="checkbox" class="w3-tooltip" title="Send an email"
+                                    onclick="display_model('01', '{{total_amt}}', '{{record.boli_date|date}}', 'None')">
+                            {% trans 'Paid' %} <br/>
                         </div>
                         <div class='pm-button'>
                             <a target="_blank" href='https://www.payumoney.com/paybypayumoney/#/9055CFF2373C0B104DAEC8987CAF770E'>
