@@ -22,7 +22,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 from events.views import EventListView, EventCreateView
 from mandir.views import (RecordListView, EntryCreateView, ajax_single_account, contact,
-                          AboutView, payment_complete, HomeView)
+                          AboutView, payment_complete, HomeView, ReturnView)
 
 
 admin.site.site_header = 'PunyaUday Fund'
@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^add/$', EntryCreateView.as_view(), name='add-record'),
     url(r'^get/description/$', ajax_single_account, name='des-search'),
     url(r'^about-us/$', AboutView.as_view(), name='about'),
+    url(r'^return/$', ReturnView.as_view(), name='return'),
     url(r'^contact-us/$', contact, name='contact-us'),
     url(r'^payment/done/$', payment_complete, name='payment-done'),
     url(r'^events/(?P<event_id>\d+)/$', EventListView.as_view(), name='event'),

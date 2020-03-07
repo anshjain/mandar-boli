@@ -390,6 +390,10 @@ class AboutView(TemplateView):
         return context
 
 
+class ReturnView(TemplateView):
+    template_name = 'return_policy.html'
+
+
 def ajax_single_account(request):
     """
     gets single item
