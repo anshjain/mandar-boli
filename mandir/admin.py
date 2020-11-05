@@ -86,7 +86,7 @@ class RecordAdmin(ImportExportModelAdmin):
             if record.title.name in ('indra', 'indrani', 'indra - indrani'):
                 send_normal_sms(record.account.phone_number, message=SPECIAL_MSG, sender='SHRSJM')
             else:
-                send_normal_sms(record.account.phone_number, sender='PUFSJM')
+                send_normal_sms(record.account.phone_number, sender='SHRSJM')
         self.message_user(request, "Send reminder SMS successfully.")
 
     Send_sms.short_description = "Send reminder SMS to selected records"
