@@ -183,7 +183,7 @@ class EntryCreateView(LoginRequiredMixin, FormView):
             success_message = "Record saved successfully"
             if account.phone_number != '9999988888' and settings.SEND_SMS:
                 message = DAILE_MSG.format(amount, boil_date)
-                response = send_normal_sms(account.phone_number, message, sender='PUFSJM')
+                response = send_normal_sms(account.phone_number, message, sender='SHRSJM')
                 if not response:
                     success_message += ", but message not sent"
 
