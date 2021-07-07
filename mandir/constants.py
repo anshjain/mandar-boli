@@ -11,8 +11,7 @@ VIDHAN_CON = {
 GENERIC_MSG = """जय जिनेन्द्र,
 आप से निवेदन है कि आप अपनी बोली चेक करके स्टेटस अपडेट कर दे।
 http://susjainmandir.com
-
-आप के दान की बहुत बहुत अनुमोदना !
+आप के दान की बहुत बहुत अनुमोदना ! - susjainmandir
 """
 
 DAILE_MSG = """जय जिनेन्द्र,
@@ -20,7 +19,7 @@ DAILE_MSG = """जय जिनेन्द्र,
 दान राशि : {}.00
 दिनांक : {}
 अधिक जानकारी के लिए देखें
-http://susjainmandir.com
+http://susjainmandir.com - susjainmandir
 """
 
 SPECIAL_MSG = """जय जिनेन्द्र,
