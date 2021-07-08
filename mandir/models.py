@@ -69,7 +69,7 @@ class MandirImage(models.Model):
     """
     Mandir Images
     """
-    mandir = models.ForeignKey(Mandir, verbose_name=_('mandir'), related_name='mandir_image')
+    mandir = models.ForeignKey(Mandir, verbose_name=_('mandir'), related_name='mandir_image', on_delete=models.CASCADE)
     image = models.ImageField(verbose_name=_('image'), upload_to='images/')
     title = models.TextField(verbose_name=_("title"), blank=True, null=True)
     description = models.TextField(verbose_name=_("description"), blank=True, null=True)
@@ -90,9 +90,9 @@ class Record(models.Model):
     """
     Boil records entry model.
     """
-    mandir = models.ForeignKey(Mandir, verbose_name=_('mandir'), related_name='mandirs')
-    account = models.ForeignKey(Account, verbose_name=_('account'), related_name='accounts')
-    title = models.ForeignKey(BoliChoice, verbose_name=_('title'), related_name='bolichoices', default='1')
+    mandir = models.ForeignKey(Mandir, verbose_name=_('mandir'), related_name='mandirs', on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, verbose_name=_('account'), related_name='accounts', on_delete=models.CASCADE)
+    title = models.ForeignKey(BoliChoice, verbose_name=_('title'), related_name='bolichoices', default='1', on_delete=models.CASCADE)
     description = models.TextField(verbose_name=_("description"), blank=True, null=True)
     amount = models.IntegerField(verbose_name=_("amount"))
     remaining_amt = models.IntegerField(verbose_name=_("Remaining amount"), default=0)

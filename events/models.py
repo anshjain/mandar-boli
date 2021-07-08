@@ -13,7 +13,7 @@ class Events(models.Model):
     """
     name = models.CharField(max_length=255, verbose_name=_("Event Name"))
     description = models.TextField(max_length=25000, verbose_name=_("Event Description"))
-    mandir = models.ForeignKey(Mandir, verbose_name=_('mandir'), related_name='mandir_event')
+    mandir = models.ForeignKey(Mandir, verbose_name=_('mandir'), related_name='mandir_event', on_delete=models.CASCADE)
     start_date = models.DateTimeField(verbose_name=_("start date"))
     end_date = models.DateTimeField(verbose_name=_("end date"), blank=True, null=True, unique=True)
     status = models.BooleanField(default=True)
@@ -34,7 +34,7 @@ class EventMember(models.Model):
     """
     Event member list
     """
-    event = models.ForeignKey(Events, verbose_name=_('event'))
+    event = models.ForeignKey(Events, verbose_name=_('event'), on_delete=models.CASCADE)
     create = models.DateTimeField(auto_now_add=True, verbose_name=_("created"))
     phone_number = models.CharField(max_length=10, verbose_name=_("phone number"))
     name = models.CharField(max_length=255, verbose_name=_("Event Name"))
