@@ -42,7 +42,7 @@ class HomeView(ListView):
         context = super(HomeView, self).get_context_data(**kwargs)
 
         # Mandir object into the context
-        if self.request.user.is_authenticated() and not self.request.user.is_superuser:
+        if self.request.user.is_authenticated and not self.request.user.is_superuser:
             context['mandir'] = self.request.user.userprofile.mandir
 
         return context
@@ -59,7 +59,7 @@ class HomeView(ListView):
         """
         if self.request.user.is_superuser:
             return redirect('admin:index')
-        elif self.request.user.is_authenticated():
+        elif self.request.user.is_authenticated:
             return redirect('record-list')
 
         return super(HomeView, self).render_to_response(context)
@@ -242,7 +242,7 @@ def contact(request):
             form_class = form
             messages.error(request, "Please provide correct email address !!")
 
-    mandir = request.user.userprofile.mandir if request.user.is_authenticated() else None
+    mandir = request.user.userprofile.mandir if request.user.is_authenticated else None
     return render(request, 'contact.html', {'form': form_class, 'mandir': mandir})
 
 
@@ -384,7 +384,7 @@ class AboutView(TemplateView):
         context = super(AboutView, self).get_context_data(**kwargs)
 
         # Mandir object into the context
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             context['mandir'] = self.request.user.userprofile.mandir
 
         return context
