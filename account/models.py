@@ -26,7 +26,7 @@ class UserProfile(models.Model):
     """
     User profile which will associate with temple (Mandir)
     """
-    user = models.OneToOneField(User, blank=True, null=True)
+    user = models.OneToOneField(User, blank=True, null=True, on_delete=models.CASCADE)
     mandir = models.ForeignKey('mandir.Mandir', verbose_name=_('mandir'), related_name='user_mandir', on_delete=models.CASCADE)
 
     def __unicode__(self):
