@@ -30,7 +30,7 @@ window.onclick = function(event) {
   }
 }
 
-function display_model(record_id, amount, date, partial){
+function display_model(record_id, amount, date, partial, pan_card){
     document.getElementById("record_id").value = record_id;
     document.getElementById('EmailModal').style.display='block';
 
@@ -48,6 +48,11 @@ function display_model(record_id, amount, date, partial){
     document.getElementById("org_amount_val").innerHTML = amount + '.00';
     document.getElementById("boli_date").innerHTML = date;
     document.getElementById("phone_number").value = document.getElementById("pNumber").value;
+
+    if (pan_card !== "None"){
+        document.getElementById("id_pan_card").value = pan_card;
+        document.getElementById("id_pan_card").readOnly = true;
+    }
 }
 
 function close_update(){
