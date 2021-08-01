@@ -25,7 +25,7 @@ from account.models import Account
 
 from mandir.constants import DAILE_MSG
 from mandir.models import Record, Mandir
-from mandir.forms import SearchForm, EntryForm, ContactForm, PaymentForm
+from mandir.forms import SearchForm, EntryForm, ContactForm, PaymentForm, BoliRequestForm
 from mandir.utils import send_normal_sms
 # from punyaUday.run import PunyaUdayStack
 
@@ -192,6 +192,21 @@ class EntryCreateView(LoginRequiredMixin, FormView):
         return super(EntryCreateView, self).form_valid(form)
 
 
+class RaiseBoliCreateView(FormView):
+
+    form_class = BoliRequestForm
+    model = Record
+    template_name = 'raise_boli_request.html'
+    success_url = '/raise-request/#entry'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(RaiseBoliCreateView, self).get_context_data(*args, **kwargs)
+
+        # Mandir object into the context
+        mandir = Mandir.objects.filter(status=True, id=1).first()
+        context['mandir'] = mandir
+        return context
+
 # def send_sms(phone_number, amount):
 #     """
 #         Will send an sms to end user.
@@ -300,9 +315,11 @@ def payment_complete(request):
             mod_pay = form.cleaned_data.get('payment_mode', '')
             send_to = [form.cleaned_data.get('send_to', '')]
             id_details = form.cleaned_data.get('id_details', '')
+            pan_card = form.cleaned_data.get('pan_card', '')
             partial_payment = form.cleaned_data.get('partial_payment', 0)
             record_id = request.POST.get('record_id')
             flag = record_id != '01'
+
 
             try:
                 if record_id == '01':
@@ -360,6 +377,11 @@ def payment_complete(request):
                     record.transaction_id = id_details if id_details else 'Cash'
                     record.payment_date = datetime.now()
                     record.save()
+
+                # update pan card into the account table
+                if pan_card:
+                    record.account.pan_card = pan_card
+                    record.account.save()
 
                 email = EmailMessage(
                     "Thanks for the Payment", content,
