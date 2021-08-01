@@ -13,14 +13,14 @@ class AccountResource(resources.ModelResource):
     class Meta:
         model = Account
         export_order = ('id', 'phone_number', 'description')
-        exclude = ('created',)
+        exclude = ('created', 'pan_card')
         skip_unchanged = True
         report_skipped = True
 
 
 class AccountAdmin(ImportExportModelAdmin):
-    list_display = ('phone_number', 'description')
-    search_fields = ('description', 'phone_number')
+    list_display = ('phone_number', 'description', 'pan_card')
+    search_fields = ('description', 'phone_number', 'pan_card')
     list_per_page = 15
     resource_class = AccountResource
 
