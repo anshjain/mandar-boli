@@ -70,7 +70,7 @@
                             <input id="checkbox" type="checkbox" class="w3-tooltip" title="Send an email"
                                     onclick="display_model('{{record.id}}',
                                     '{% if record.remaining_amt %}{{record.remaining_amt}}{% else %}{{record.amount}}{% endif %}',
-                                    '{{record.boli_date|date}}', 'None')">
+                                    '{{record.boli_date|date}}', 'None', '{{record.account.pan_card}}')">
                             {% trans 'Paid' %} <br/>
                             {% if record.amount > 5001 %}
                                 {% if not record.remaining_amt or record.remaining_amt > 5001 %}
@@ -78,7 +78,7 @@
                                     <input id="Pcheckbox" type="checkbox" class="w3-tooltip" title="Send an email"
                                             onclick="display_model('{{record.id}}',
                                             '{% if record.remaining_amt %}{{record.remaining_amt}}{% else %}{{record.amount}}{% endif %}',
-                                            '{{record.boli_date|date}}', 'PP')">
+                                            '{{record.boli_date|date}}', 'PP', '{{record.account.pan_card}}')">
                                     {% trans 'Partially Paid' %}
                                 {% endif %}
                             {% endif %}
@@ -90,7 +90,7 @@
                         <div style="float:right;">
                             Total :- <b>{{ total_amt }}/-</b> <br/>
                             <input id="checkbox" type="checkbox" class="w3-tooltip" title="Send an email"
-                                    onclick="display_model('01', '{{total_amt}}', '{{record.boli_date|date}}', 'None')">
+                                    onclick="display_model('01', '{{total_amt}}', '{{records.0.boli_date|date}}', 'None', '{{records.0.account.pan_card}}')">
                             {% trans 'Paid' %} <br/>
                         </div>
                         <div class='pm-button' style="float: left; width: 30%;">
