@@ -37,7 +37,7 @@ class RecordResource(resources.ModelResource):
 
     mandir = fields.Field(column_name='mandir', attribute='mandir', widget=ForeignKeyWidget(Mandir, 'name'))
     title = fields.Field(column_name='title', attribute='title', widget=ForeignKeyWidget(BoliChoice, 'name'))
-    # names = fields.Field(column_name='names', attribute='account', widget=ForeignKeyWidget(Account, 'description'))
+    pan_card = fields.Field(column_name='pan_card', attribute='account', widget=ForeignKeyWidget(Account, 'pan_card'))
     account = fields.Field(column_name='account', attribute='account', widget=ForeignKeyWidget(Account, 'phone_number'))
     paid = Field()
 
@@ -46,7 +46,7 @@ class RecordResource(resources.ModelResource):
 
     class Meta:
         model = Record
-        export_order = ('id', 'mandir', 'description', 'account', 'title', 'amount', 'boli_date', 'paid')
+        export_order = ('id', 'mandir', 'description', 'account', 'pan_card', 'title', 'amount', 'boli_date', 'paid')
         exclude = ('created', 'transaction_id', 'payment_date')
 
 
@@ -116,6 +116,10 @@ class RecordAdmin(ImportExportModelAdmin):
             return ('account', 'mandir')
         return []
 
+    def get_pan_card(self, obj):
+        return obj.account.pan_card
+    get_pan_card.short_description = 'PAN Card'
+
     def get_list_filter(self, request):
         """
         Update list filter and display list based on logged in admin users.
@@ -130,7 +134,7 @@ class RecordAdmin(ImportExportModelAdmin):
         Update list filter and display list based on logged in admin users.
         """
         list_display = ['paid', 'get_title', 'get_names', 'get_account_no', 'amount', 'boli_date',
-                        'payment_date', 'transaction_id']
+                        'payment_date', 'transaction_id', 'get_pan_card']
         if request.user.is_superuser:
             return ['mandir'] + list_display
         else:
