@@ -2,7 +2,8 @@
 from __future__ import unicode_literals
 
 from django import forms
-from datetime import datetime
+from django.core.exceptions import ValidationError
+import datetime
 from mandir.models import BoliChoice
 
 
@@ -21,7 +22,7 @@ class EntryForm(forms.Form):
     title = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'w3-input w3-border',
                                                               'style': 'height: 45px; margin-left:6px; width:98%'}),
                                    queryset=BoliChoice.objects.all(), required=True)
-    phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', max_length=10,
+    phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', max_length=10, min_length=10,
                                     widget=forms.NumberInput(
                                         attrs={'placeholder': 'Phone Number',
                                                'autocomplete': 'off', 'class': 'w3-input w3-border',
@@ -35,7 +36,7 @@ class EntryForm(forms.Form):
     amount = forms.CharField(widget=forms.NumberInput(attrs={'placeholder': 'Amount', 'autocomplete': 'off',
                                                              'class': 'w3-input w3-border',
                                                              'style': 'margin: 27px 8px 0px 7px; width:98%'}))
-    boli_date = forms.DateField(initial=datetime.today().date(),
+    boli_date = forms.DateField(initial=datetime.datetime.today().date(),
                                 widget=forms.DateInput(attrs={'autocomplete': 'off',
                                                               'class': 'w3-input w3-border datepicker'})
     )
@@ -44,8 +45,8 @@ class EntryForm(forms.Form):
 class BoliRequestForm(forms.Form):
     title = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'w3-input w3-border',
                                                               'style': 'height: 45px; margin-left:6px; width:98%'}),
-                                   queryset=BoliChoice.objects.all(), required=True)
-    phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', max_length=10,
+                                   queryset=BoliChoice.objects.filter(request_choice=True), required=True)
+    phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', max_length=10, min_length=10,
                                     widget=forms.NumberInput(
                                         attrs={'placeholder': 'Phone Number',
                                                'autocomplete': 'off', 'class': 'w3-input w3-border',
@@ -54,16 +55,27 @@ class BoliRequestForm(forms.Form):
                                         'required': "Phone number must be entered in the format: '9999999999'"
                                     })
 
-    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Description', 'autocomplete': 'off',
-                                                               'class': 'w3-input w3-border', 'rows': '3'}))
-    amount = forms.CharField(widget=forms.NumberInput(attrs={'placeholder': 'Amount', 'autocomplete': 'off',
-                                                             'class': 'w3-input w3-border',
-                                                             'style': 'margin: 27px 8px 0px 7px; width:98%'}))
-    boli_date = forms.DateField(initial=datetime.today().date(),
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Enter the Names \n such as Risheesh Jain',
+                                                               'autocomplete': 'off', 'class': 'w3-input w3-border',
+                                                               'rows': '3'}))
+    amount = forms.CharField(widget=forms.NumberInput(attrs={
+        'placeholder': 'Minimum Amount 500', 'autocomplete': 'off',
+        'class': 'w3-input w3-border', 'style': 'margin: 27px 8px 0px 7px; width:98%'}))
+    date = datetime.datetime.today().date() + datetime.timedelta(days=1)
+    boli_date = forms.DateField(initial=date,
                                 widget=forms.DateInput(attrs={'autocomplete': 'off',
                                                               'class': 'w3-input w3-border datepicker'})
     )
 
+    def clean(self):
+        """
+        Just add validation some fields
+        """
+        cleaned_data = super().clean()
+        if int(cleaned_data.get("amount")) < 499:
+            self.add_error('amount', "Please entry amount greater then 500")
+        if len(cleaned_data.get("description")) < 7:
+            self.add_error('description', "Please entry names such as Risheesh or Risheesh Jain")
 
 class ContactForm(forms.Form):
     contact_name = forms.CharField(required=True, widget=forms.TextInput(

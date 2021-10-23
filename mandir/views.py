@@ -6,7 +6,6 @@ from itertools import groupby
 
 import simplejson as json
 
-
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -24,10 +23,10 @@ from django.views.generic.edit import FormView
 from account.models import Account
 
 from mandir.constants import DAILE_MSG
-from mandir.models import Record, Mandir
+from mandir.models import Mandir, Record
 from mandir.forms import SearchForm, EntryForm, ContactForm, PaymentForm, BoliRequestForm
 from mandir.utils import send_normal_sms
-# from punyaUday.run import PunyaUdayStack
+
 
 Month_dict = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: "Jun",
               7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
@@ -197,7 +196,7 @@ class RaiseBoliCreateView(FormView):
     form_class = BoliRequestForm
     model = Record
     template_name = 'raise_boli_request.html'
-    success_url = '/raise-request/#entry'
+    error_url = '/raise-request/#entry'
 
     def get_context_data(self, *args, **kwargs):
         context = super(RaiseBoliCreateView, self).get_context_data(*args, **kwargs)
@@ -207,18 +206,37 @@ class RaiseBoliCreateView(FormView):
         context['mandir'] = mandir
         return context
 
-# def send_sms(phone_number, amount):
-#     """
-#         Will send an sms to end user.
-#     """
-#     try:
-#         sms_mgs = """ Thats a dummy message !!\nThanks to donate {}/- \n Mandir Committee is very thankful to you.
-# """.format(amount)
-#         messages = [("91"+phone_number, sms_mgs)]
-#         stack = PunyaUdayStack(messages)
-#         stack.start()
-#     except Exception:
-#         pass
+    def form_valid(self, form):
+        phone_number = form.cleaned_data['phone_number']
+
+        # check account present with phone number or not.
+        account, _ = Account.objects.get_or_create(
+            phone_number=phone_number,
+            defaults={
+                "description": form.cleaned_data['description']
+            },
+        )
+
+        # hard code as of now
+        mandir = Mandir.objects.filter(status=True, id=1).first()
+        amount = form.cleaned_data['amount']
+        boil_date = form.cleaned_data['boli_date']
+
+        _, record_created = self.model.objects.get_or_create(
+            mandir=mandir,
+            account=account,
+            title=form.cleaned_data['title'],
+            description=form.cleaned_data['description'],
+            amount=amount,
+            boli_date=boil_date,
+            request_by_user=True
+        )
+        if record_created:
+            url = reverse('record-list') + "?phone_number={}#record".format(phone_number)
+            return HttpResponseRedirect(url)
+
+        return super(RaiseBoliCreateView, self).form_valid(form)
+
 
 def contact(request):
     form_class = ContactForm

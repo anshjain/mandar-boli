@@ -38,15 +38,18 @@ class RecordResource(resources.ModelResource):
     mandir = fields.Field(column_name='mandir', attribute='mandir', widget=ForeignKeyWidget(Mandir, 'name'))
     title = fields.Field(column_name='title', attribute='title', widget=ForeignKeyWidget(BoliChoice, 'name'))
     pan_card = fields.Field(column_name='pan_card', attribute='account', widget=ForeignKeyWidget(Account, 'pan_card'))
-    account = fields.Field(column_name='account', attribute='account', widget=ForeignKeyWidget(Account, 'phone_number'))
+    account = fields.Field(column_name='phone_number', attribute='account', widget=ForeignKeyWidget(Account, 'phone_number'))
     paid = Field()
 
     def dehydrate_paid(self, record):
         return 'Paid' if record.paid else 'Not Paid'
 
+    def dehydrate_description(self, record):
+        return record.account.description
+
     class Meta:
         model = Record
-        export_order = ('id', 'mandir', 'description', 'account', 'pan_card', 'title', 'amount', 'boli_date', 'paid')
+        export_order = ('id', 'mandir', 'account', 'description', 'pan_card', 'title', 'amount', 'boli_date', 'paid')
         exclude = ('created', 'transaction_id', 'payment_date')
 
 
@@ -134,7 +137,7 @@ class RecordAdmin(ImportExportModelAdmin):
         Update list filter and display list based on logged in admin users.
         """
         list_display = ['paid', 'get_title', 'get_names', 'get_account_no', 'amount', 'boli_date',
-                        'payment_date', 'transaction_id', 'get_pan_card']
+                        'payment_date', 'transaction_id', 'get_pan_card', 'request_by_user']
         if request.user.is_superuser:
             return ['mandir'] + list_display
         else:
@@ -174,7 +177,7 @@ class MandirImageAdmin(admin.ModelAdmin):
 
 
 class BoliChoiceAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'request_choice')
 
 
 admin.site.register(Mandir, MandirAdmin)
