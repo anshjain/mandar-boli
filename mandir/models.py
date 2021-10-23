@@ -12,6 +12,7 @@ class BoliChoice(models.Model):
     Boli choices so we can add and remove
     """
     name = models.CharField(max_length=50, verbose_name=_("name"))
+    request_choice = models.BooleanField(default=False, verbose_name=_("Request Choices"))
 
     class Meta:
         verbose_name = _("Boli Choice")
@@ -101,6 +102,7 @@ class Record(models.Model):
     payment_date = models.DateTimeField(verbose_name=_("payment date"), blank=True, null=True)
     transaction_id = models.CharField(max_length=255, verbose_name=_("transaction id"), blank=True, null=True)
     paid = models.BooleanField(default=False)
+    request_by_user = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = _("Record")
