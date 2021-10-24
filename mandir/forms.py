@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django import forms
-from django.core.exceptions import ValidationError
 import datetime
+
+from django import forms
+from captcha.fields import CaptchaField, CaptchaTextInput
+
 from mandir.models import BoliChoice
 
 
@@ -12,6 +14,10 @@ PAYMENT_MODES = (
     ('Online', 'Online'),
     ('Cheque', 'Cheque'),
 )
+
+
+class CustomCaptchaTextInput(CaptchaTextInput):
+    template_name = 'custom_field.html'
 
 
 class SearchForm(forms.Form):
@@ -66,6 +72,8 @@ class BoliRequestForm(forms.Form):
                                 widget=forms.DateInput(attrs={'autocomplete': 'off',
                                                               'class': 'w3-input w3-border datepicker'})
     )
+    captcha = CaptchaField(widget=CustomCaptchaTextInput(attrs={'class': 'w3-input w3-border',
+                                                                'style': 'margin: 18px 8px 0px 7px; width:98%'}))
 
     def clean(self):
         """
@@ -76,6 +84,7 @@ class BoliRequestForm(forms.Form):
             self.add_error('amount', "Please entry amount greater then 500")
         if len(cleaned_data.get("description")) < 7:
             self.add_error('description', "Please entry names such as Risheesh or Risheesh Jain")
+
 
 class ContactForm(forms.Form):
     contact_name = forms.CharField(required=True, widget=forms.TextInput(

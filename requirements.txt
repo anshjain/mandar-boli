@@ -24,4 +24,5 @@ django-import-export==2.0.2
 #twilio==6.14.6
 simplejson==3.16.0
 django-flat-responsive
+django-simple-captcha
 apscheduler

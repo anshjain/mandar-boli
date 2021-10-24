@@ -6,6 +6,14 @@
 
 {% block extra_css %}
     <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+    <style>
+        .js-captcha-refresh {
+            box-sizing: inherit;
+            border: blue solid;
+            border-radius: 5px;
+            padding: 5px;
+        }
+    </style>
 {% endblock %}
 
 {% block main %}
@@ -44,6 +52,8 @@
                     {{ form.title }}
                     {{ form.amount }}
                     <span style="color:red;">{{ form.amount.errors.as_text }}</span>
+                    {{ form.captcha }}
+                    <span style="color:red;">{{ form.captcha.errors.as_text }}</span>
                     <button class="w3-button w3-black w3-section w3-right" type="submit">SAVE</button>
                 </div>
             </div>
@@ -60,6 +70,13 @@
             var now = new Date()
             now.setDate(now.getDate() + 1);
             $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd', minDate: now, minTime:'07:00' });
+        });
+
+        $('.js-captcha-refresh').click(function () {
+            $.getJSON("/captcha/refresh/", function (result) {
+                $('.captcha').attr('src', result['image_url']);
+                $('#id_captcha_0').val(result['key'])
+            });
         });
     </script>
 {% endblock %}

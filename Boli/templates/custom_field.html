@@ -1,0 +1,16 @@
+{% load i18n %}
+{% spaceless %}
+<div class="form-group">
+  <label class="control-label">{{ label }}</label>
+  <div class="form-group">
+    <div class="input-group mb-3">
+
+      <div class="input-group-prepend" style="margin-top: 10px;">
+        <img src="{{ image }}" alt="captcha" class="captcha" style="margin-right: 10px;" />
+        <span class='js-captcha-refresh'>Refresh</span>
+      </div>
+      {% include "django/forms/widgets/multiwidget.html" %}
+    </div>
+  </div>
+</div>
+{% endspaceless %}

@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.forms',
     'import_export',
+    'captcha',
     'mandir',
     'account',
     'events'
@@ -87,6 +89,7 @@ if DEBUG:
             'USER': 'mandir_user',
             'PASSWORD': '$ankuL090517',
             'HOST': 'localhost',
+            'PORT': 5432
         }
     }
 else:
@@ -120,6 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 # Internationalization
