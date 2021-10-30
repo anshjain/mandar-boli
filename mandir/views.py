@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from datetime import datetime, timedelta
 from itertools import groupby
 
 import simplejson as json
@@ -137,9 +136,7 @@ class RecordListView(ListView):
 
         # Default data will be displayed for two hours only after creation.
         mandir = self.get_mandir_info()
-        time_threshold = datetime.now() - timedelta(hours=2)
-        return self.model.objects.filter(boli_date__date=datetime.today(), created__gt=time_threshold,
-                                         mandir=mandir, paid=False).order_by('-boli_date')
+        return self.model.objects.filter(boli_date__date=datetime.today(), mandir=mandir).order_by('-boli_date')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -232,6 +229,9 @@ class RaiseBoliCreateView(FormView):
             request_by_user=True
         )
         if record_created:
+            if settings.SEND_SMS:
+                message = DAILE_MSG.format(amount, boil_date)
+                send_normal_sms(phone_number, message, sender='SHRSJM')
             url = reverse('record-list') + "?phone_number={}#record".format(phone_number)
             return HttpResponseRedirect(url)
 
@@ -443,6 +443,7 @@ def ajax_single_account(request):
 
     # get slug from data
     phone_number = request.GET.get('phone_number', None)
+    # check for truecaller api in the code
 
     # get item from slug
     account = get_object_or_404(Account, phone_number=phone_number)

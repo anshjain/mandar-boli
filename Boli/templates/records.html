@@ -9,80 +9,74 @@
         <h2 class="w3-wide w3-center">RECORDS</h2>
         <p class="w3-opacity"><i>Jai Jinendra</i></p>
 
-
-
-        {% if records and not request.user.is_authenticated %}
-            <p>{% if records.0.account.description %}
-                    {{ records.0.account.description }}
-                {% else %}
-                    <p class="w3-opacity" style="color:blue;"><i>Entry corresponding to default number</i></p>
-                    {{ records.0.get_default_description }}
-                {% endif %}
-            </p>
+        {% if not phone_number and records %}
+            <p> {{ records.0.mandir.name }} </p>
         {% endif %}
 
         {% if request.user.is_authenticated %}
             <div id="piechart_3d" style="width: 100%; min-height: 450px;"></div>
-        {% endif%}
+        {% endif %}
 
 
         <table class="w3-table w3-bordered w3-table-all w3-centered" style="overflow: scroll;">
             <tr>
-                <th>{% trans 'TITLE' %}</th>
-                {% if request.user.is_authenticated %}
-                    <th>{% trans 'NAMES' %}</th>
-                {% else %}
+                {% if phone_number %}
                     <th>{% trans 'MANDIR NAME' %}</th>
                 {% endif %}
+                <th>{% trans 'TITLE' %}</th>
+                <th>{% trans 'NAMES' %}</th>
                 <th>{% trans 'BOLI DATE' %}</th>
-                <th>{% trans 'AMOUNT' %}</th>
+                {% if phone_number or request.user.is_authenticated %}
+                    <th>{% trans 'AMOUNT' %}</th>
+                {% endif %}
             </tr>
             {% if records %}
                 {% for record in records %}
                     <tr>
+                        {% if phone_number %}
+                            <td style="vertical-align:middle !important">{{ record.mandir.name }}</td>
+                        {% endif %}
                         <td style="vertical-align:middle !important">{{record.get_title}}</td>
                         <td style="vertical-align:middle !important">
-                            {% if request.user.is_authenticated %}
-                                {% if record.account.description%}
-                                    {{record.account.description}}
-                                {% else %}
-                                    <i style="color:blue;">Entry corresponding to default number</i><br>
-                                    {{ record.get_default_description }}
-                                {% endif %}
+                            {% if record.account.description %}
+                                {{ record.description }}
                             {% else %}
-                                {{ record.mandir.name }}
+                                <i style="color:blue;">Entry corresponding to default number</i><br>
+                                {{ record.get_default_description }}
                             {% endif %}
                         </td>
                         <td style="vertical-align:middle !important">
                             {{record.boli_date|date}}
-                            {% if record.remaining_amt %}
+                            {% if record.remaining_amt and phone_number %}
                                 <br>
                                 <b style="color:blue">Original Boli Amount</b> <br><b style="color:red">{{record.amount}}/-</b><br>
                             {% endif %}
                         </td>
-                        <td style="vertical-align:middle !important" class="w3-small">
-                            {% if record.remaining_amt %}
-                                {% trans 'Remaining'%}<br>
-                                <b>{{record.remaining_amt}}/-</b><br>
-                            {% else %}
-                                <b>{{record.amount}}/-</b><br>
-                            {% endif %}
-                            <input id="checkbox" type="checkbox" class="w3-tooltip" title="Send an email"
-                                    onclick="display_model('{{record.id}}',
-                                    '{% if record.remaining_amt %}{{record.remaining_amt}}{% else %}{{record.amount}}{% endif %}',
-                                    '{{record.boli_date|date}}', 'None', '{{record.account.pan_card}}')">
-                            {% trans 'Paid' %} <br/>
-                            {% if record.amount > 5001 %}
-                                {% if not record.remaining_amt or record.remaining_amt > 5001 %}
-                                    {% trans 'Or'%}<br/>
-                                    <input id="Pcheckbox" type="checkbox" class="w3-tooltip" title="Send an email"
-                                            onclick="display_model('{{record.id}}',
-                                            '{% if record.remaining_amt %}{{record.remaining_amt}}{% else %}{{record.amount}}{% endif %}',
-                                            '{{record.boli_date|date}}', 'PP', '{{record.account.pan_card}}')">
-                                    {% trans 'Partially Paid' %}
+                        {% if phone_number or request.user.is_authenticated %}
+                            <td style="vertical-align:middle !important" class="w3-small">
+                                {% if record.remaining_amt %}
+                                    {% trans 'Remaining'%}<br>
+                                    <b>{{record.remaining_amt}}/-</b><br>
+                                {% else %}
+                                    <b>{{record.amount}}/-</b><br>
                                 {% endif %}
-                            {% endif %}
-                        </td>
+                                <input id="checkbox" type="checkbox" class="w3-tooltip" title="Send an email"
+                                        onclick="display_model('{{record.id}}',
+                                        '{% if record.remaining_amt %}{{record.remaining_amt}}{% else %}{{record.amount}}{% endif %}',
+                                        '{{record.boli_date|date}}', 'None', '{{record.account.pan_card}}')">
+                                {% trans 'Paid' %} <br/>
+                                {% if record.amount > 5001 %}
+                                    {% if not record.remaining_amt or record.remaining_amt > 5001 %}
+                                        {% trans 'Or'%}<br/>
+                                        <input id="Pcheckbox" type="checkbox" class="w3-tooltip" title="Send an email"
+                                                onclick="display_model('{{record.id}}',
+                                                '{% if record.remaining_amt %}{{record.remaining_amt}}{% else %}{{record.amount}}{% endif %}',
+                                                '{{record.boli_date|date}}', 'PP', '{{record.account.pan_card}}')">
+                                        {% trans 'Partially Paid' %}
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 {% if total_amt %}
