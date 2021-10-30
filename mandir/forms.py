@@ -61,7 +61,7 @@ class BoliRequestForm(forms.Form):
                                         'required': "Phone number must be entered in the format: '9999999999'"
                                     })
 
-    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Enter the Names \n such as Risheesh Jain',
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Enter comma separated names.',
                                                                'autocomplete': 'off', 'class': 'w3-input w3-border',
                                                                'rows': '3'}))
     amount = forms.CharField(widget=forms.NumberInput(attrs={
@@ -83,7 +83,7 @@ class BoliRequestForm(forms.Form):
         if int(cleaned_data.get("amount")) < 499:
             self.add_error('amount', "Please entry amount greater then 500")
         if len(cleaned_data.get("description")) < 7:
-            self.add_error('description', "Please entry names such as Risheesh or Risheesh Jain")
+            self.add_error('description', "Enter comma separated names such as Risheesh or Risheesh Jain")
 
 
 class ContactForm(forms.Form):
