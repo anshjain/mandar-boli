@@ -1,0 +1,29 @@
+{% load staticfiles i18n %}
+​
+<div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-card-3" style="border-radius:15px !important; max-width:400px">
+          <div class="w3-center" style="background-color:#013220; border-radius:15px 15px 0px 0px">
+                <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-xlarge w3-transparent w3-display-topright w3-circle" style="color:white;"title="Close Modal">×</span>
+                <img src="{% static '/images/author/mandirji.jpeg' %}" alt="Mandir ji" style="width:20%; padding:5px;" class="w3-circle">
+                <span class="w3-text-white"> {{mandir.name}} </span>
+          </div>
+          <div id="whatsapp" class="w3-container w3-border-top w3-padding-16 w3-light-grey" style="height:350px">
+                 <div class="speech-bubble w3-white w3-round-medium w3-card-2 speech-bubble" style="width:80%; padding:10px;">
+                      <div class="bubble">
+                            <div class="txt">
+                                  <p class="w3-text-gray">{{mandir.name}}</p>
+                                  <p class="w3-text-black"> जय जिनेन्द्र </p>
+                                  <p class="w3-text-black"> {{mandir.whatsapp_message | safe}}</p>
+                            </div>
+                            <div class="bubble-arrow"></div>
+                      </div>
+                 </div>
+          </div>
+          <div class="w3-container w3-section">
+             <button class="w3-button w3-block w3-green w3-section w3-padding w3-round-xxlarge"
+                     onclick="Openwhatsapp('+91{{mandir.whatsapp_number}}')">
+                 <i class="fa fa-whatsapp" style="font-size:24px; font-weight:bold;"> Start chat </i>
+             </button>
+          </div>
+    </div>
+</div>
