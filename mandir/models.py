@@ -42,6 +42,10 @@ class Mandir(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name=_("created"))
     status = models.BooleanField(default=True)
 
+    #whats app details
+    whatsapp_number = models.CharField(max_length=10, verbose_name=_("Whatsapp number"), blank=True, null=True)
+    whatsapp_message = models.TextField(max_length=1000, verbose_name=_("Whatsapp Message"), blank=True, null=True)
+
     # bank details
     account_name = models.CharField(max_length=255, verbose_name=_("Account Name"), blank=True, null=True, unique=True)
     bank_name = models.CharField(max_length=255, verbose_name=_("Bank Name"), blank=True, null=True, unique=True)

@@ -130,3 +130,8 @@ function get_description() {
         }, 'json');
     }
 }
+
+function Openwhatsapp(phone_number) {
+   var url = "https://api.whatsapp.com/send?phone=" + phone_number
+    window.open(url,"","toolbar=no,status=no,menubar=no,location=center,scrollbars=no,resizable=no,height=500,width=657");
+}
