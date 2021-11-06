@@ -145,7 +145,7 @@
         <footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
             {% include 'footer.html' %}
         </footer>
-        {% if request.path == '/' or  request.path == '/raise-request/'%}
+        {% if request.path == '/' or  request.path == '/raise-request/' or request.path == '/search/' %}
             <div class="w3-container">
                 <i class="fixedButton" onclick="document.getElementById('id01').style.display='block'" >
                  <div class="roundedFixedBtn"><i style="color:green; font-size:60px;" class="fa fa-whatsapp"></i></div>
