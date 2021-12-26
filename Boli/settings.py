@@ -82,29 +82,29 @@ WSGI_APPLICATION = 'Boli.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'boli_mandir',
-        'USER': 'mandir_user',
-        'PASSWORD': '$ankuL090517',
-        'HOST': 'localhost',
-        'PORT': 5432
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'boli_mandir',
+            'USER': 'mandir_user',
+            'PASSWORD': '$ankuL090517',
+            'HOST': 'localhost',
+            'PORT': 5432
+        }
     }
-}
-if not DEBUG:
-    #DATABASES = {
-    #    'default': {
-    #        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #        'NAME': 'd807732vvlh6me',
-    #        'USER': 'cpogntjwdysumf',
-    #        'PASSWORD': '43d13010c364f24327846391ff72e32a0edb1df80dd2336d6e0a91c3ed84c6a2',
-    #        'PORT': 5432,
-    #        'HOST': 'ec2-23-21-238-28.compute-1.amazonaws.com',
-    #    }
-    #}
-    DATABASES['default'] = dj_database_url.config()
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'd4jkamo2tgvbvi',
+            'USER': 'bfuidbpbamjzdx',
+            'PASSWORD': 'e2b4710d3a904e2f4d78f94335c3780f1bcbed6f1c7039b0b86d10fd9514049c',
+            'PORT': 5432,
+            'HOST': 'ec2-34-192-82-135.compute-1.amazonaws.com',
+        }
+    }
+    #DATABASES['default'] = dj_database_url.config()
 
 
 # Password validation
