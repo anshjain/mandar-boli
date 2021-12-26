@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 's-cl_(s$*lcg7$8sv$ivfg1$%mcnbexouu+gqt15wt-bj(v_)v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 SEND_SMS = True
 
 ALLOWED_HOSTS = ["punyaudayfund.herokuapp.com", '127.0.0.1', 'www.susjainmandir.com', 'susjainmandir.com']
@@ -82,29 +82,29 @@ WSGI_APPLICATION = 'Boli.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'boli_mandir',
+        'USER': 'mandir_user',
+        'PASSWORD': '$ankuL090517',
+        'HOST': 'localhost',
+        'PORT': 5432
+    }
+}
 if not DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'boli_mandir',
-            'USER': 'mandir_user',
-            'PASSWORD': '$ankuL090517',
-            'HOST': 'localhost',
-            'PORT': 5432
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'd4jkamo2tgvbvi',
-            'USER': 'bfuidbpbamjzdx',
-            'PASSWORD': 'e2b4710d3a904e2f4d78f94335c3780f1bcbed6f1c7039b0b86d10fd9514049c',
-            'PORT': 5432,
-            'HOST': 'ec2-34-192-82-135.compute-1.amazonaws.com',
-        }
-    }
-    #DATABASES['default'] = dj_database_url.config()
+    #DATABASES = {
+    #    'default': {
+    #        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #        'NAME': 'd4jkamo2tgvbvi',
+    #        'USER': 'bfuidbpbamjzdx',
+    #        'PASSWORD': 'e2b4710d3a904e2f4d78f94335c3780f1bcbed6f1c7039b0b86d10fd9514049c',
+    #        'PORT': 5432,
+    #        'HOST': 'ec2-34-192-82-135.compute-1.amazonaws.com',
+    #    }
+    #}
+    DATABASES['default'] = dj_database_url.config()
 
 
 # Password validation
