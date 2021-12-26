@@ -82,18 +82,18 @@ WSGI_APPLICATION = 'Boli.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'boli_mandir',
-            'USER': 'mandir_user',
-            'PASSWORD': '$ankuL090517',
-            'HOST': 'localhost',
-            'PORT': 5432
-        }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'boli_mandir',
+        'USER': 'mandir_user',
+        'PASSWORD': '$ankuL090517',
+        'HOST': 'localhost',
+        'PORT': 5432
     }
-else:
+}
+if not DEBUG:
     #DATABASES = {
     #    'default': {
     #        'ENGINE': 'django.db.backends.postgresql_psycopg2',
