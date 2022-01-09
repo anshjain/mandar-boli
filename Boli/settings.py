@@ -82,29 +82,16 @@ WSGI_APPLICATION = 'Boli.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'boli_mandir',
-            'USER': 'mandir_user',
-            'PASSWORD': '$ankuL090517',
-            'HOST': 'localhost',
-            'PORT': 5432
-        }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'd4jkamo2tgvbvi',
-            'USER': 'bfuidbpbamjzdx',
-            'PASSWORD': 'e2b4710d3a904e2f4d78f94335c3780f1bcbed6f1c7039b0b86d10fd9514049c',
-            'PORT': 5432,
-            'HOST': 'ec2-34-192-82-135.compute-1.amazonaws.com',
-        }
-    }
-    #DATABASES['default'] = dj_database_url.config()
+}
+
+if not DEBUG:
+    DATABASES['default'] = dj_database_url.config()
 
 
 # Password validation
