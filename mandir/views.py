@@ -20,7 +20,7 @@ from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
 
-from account.models import Account
+from account.models import Account, CommunicationData
 
 from mandir.constants import DAILE_MSG
 from mandir.models import Mandir, Record
@@ -46,11 +46,11 @@ class HomeView(ListView):
 
         return context
 
-    def get_queryset(self):
-        """
-        Return 1 random mandir records registered.
-        """
-        return self.model.objects.filter(status=True).order_by('?')[:1]
+    # def get_queryset(self):
+    #     """
+    #     Return 1 random mandir records registered.
+    #     """
+    #     return self.model.objects.filter(status=True).order_by('?')[:1]
 
     def render_to_response(self, context):
         """
@@ -80,7 +80,7 @@ class RecordListView(ListView):
             if hasattr(profile, 'mandir'):
                 return profile.mandir
         else:
-            return Mandir.objects.filter(status=True, id=1).first()
+            return self.request.mandir
 
     def get_context_data(self, *args, **kwargs):
         context = super(RecordListView, self).get_context_data(*args, **kwargs)
@@ -100,19 +100,19 @@ class RecordListView(ListView):
         mandir = self.get_mandir_info()
         month_data, month_range = [], ''
 
-        if mandir:
-            month_data, month_range = self.get_month_details(mandir)
+        records = self.model.objects.filter(mandir=mandir).only('boli_date', 'paid').order_by('boli_date')
+        if records:
+            month_data, month_range = self.get_month_details(records)
 
         context.update({'form': self.form_class(), 'mandir': mandir, 'payment_form': PaymentForm(),
                         'month_data': month_data, 'month_range': month_range})
 
         return context
 
-    def get_month_details(self, mandir):
+    def get_month_details(self, records):
         """
         Will return list of grouped by month and count of paid and not paid records..
         """
-        records = self.model.objects.filter(mandir=mandir).only('boli_date', 'paid').order_by('boli_date')
         month_data = [[str('Month'), str('Paid'), str('Not Paid')]]
         first_month = str(Month_dict.get(records[0].boli_date.month))
 
@@ -129,14 +129,14 @@ class RecordListView(ListView):
     def get_queryset(self):
         form = self.form_class(self.request.GET)
 
+        # Default data will be displayed for two hours only after creation.
+        mandir = self.get_mandir_info()
         if form.is_valid():
             phone_number = form.cleaned_data['phone_number']
             if len(phone_number) == 10:
                 return self.model.objects.filter(account__phone_number__icontains=phone_number,
-                                                 paid=False).order_by('-boli_date')
+                                                 mandir=mandir, paid=False).order_by('-boli_date')
 
-        # Default data will be displayed for two hours only after creation.
-        mandir = self.get_mandir_info()
         return self.model.objects.filter(boli_date__date=datetime.today(), mandir=mandir).order_by('-boli_date')
 
 
@@ -200,8 +200,7 @@ class RaiseBoliCreateView(FormView):
         context = super(RaiseBoliCreateView, self).get_context_data(*args, **kwargs)
 
         # Mandir object into the context
-        mandir = Mandir.objects.filter(status=True, id=1).first()
-        context['mandir'] = mandir
+        context['mandir'] = self.request.mandir
         return context
 
     def form_valid(self, form):
@@ -215,13 +214,11 @@ class RaiseBoliCreateView(FormView):
             },
         )
 
-        # hard code as of now
-        mandir = Mandir.objects.filter(status=True, id=1).first()
         amount = form.cleaned_data['amount']
         boil_date = form.cleaned_data['boli_date']
 
         _, record_created = self.model.objects.get_or_create(
-            mandir=mandir,
+            mandir=self.request.mandir,
             account=account,
             title=form.cleaned_data['title'],
             description=form.cleaned_data['description'],
@@ -276,8 +273,7 @@ def contact(request):
             form_class = form
             messages.error(request, "Please provide correct email address !!")
 
-    mandir = request.user.userprofile.mandir if request.user.is_authenticated else None
-    return render(request, 'contact.html', {'form': form_class, 'mandir': mandir})
+    return render(request, 'contact.html', {'form': form_class})
 
 
 def get_all_records(phone_number, record_ids=None):
@@ -329,6 +325,7 @@ def payment_complete(request):
     if request.method == 'POST':
         form = form_class(data=request.POST)
         phone_number = request.POST.get('phone_number')
+        data = CommunicationData.objects.get(id=1)
 
         if form.is_valid():
             mod_pay = form.cleaned_data.get('payment_mode', '')
@@ -338,7 +335,6 @@ def payment_complete(request):
             partial_payment = form.cleaned_data.get('partial_payment', 0)
             record_id = request.POST.get('record_id')
             flag = record_id != '01'
-
 
             try:
                 if record_id == '01':
@@ -401,6 +397,9 @@ def payment_complete(request):
                 if pan_card:
                     record.account.pan_card = pan_card
                     record.account.save()
+                if data:
+                    settings.EMAIL_HOST_USER = data.email
+                    settings.EMAIL_HOST_PASSWORD = data.password
 
                 email = EmailMessage(
                     "Thanks for the Payment", content,

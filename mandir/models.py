@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from functools import lru_cache
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -46,6 +47,9 @@ class Mandir(models.Model):
     whatsapp_number = models.CharField(max_length=10, verbose_name=_("Whatsapp number"), blank=True, null=True)
     whatsapp_message = models.TextField(max_length=1000, verbose_name=_("Whatsapp Message"), blank=True, null=True)
 
+    # Facebook Page name
+    facebook_page = models.TextField(max_length=100, verbose_name=_("Facebook PageName"), blank=True, null=True)
+
     # bank details
     account_name = models.CharField(max_length=255, verbose_name=_("Account Name"), blank=True, null=True, unique=True)
     bank_name = models.CharField(max_length=255, verbose_name=_("Bank Name"), blank=True, null=True, unique=True)
@@ -68,6 +72,37 @@ class Mandir(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class MandirDomain(models.Model):
+    """
+    Mandir Domain
+    """
+    domain = models.CharField(max_length=255, verbose_name=_("mandir Domain"))
+    mandir = models.ForeignKey(Mandir, verbose_name=_('mandir'), related_name='mandir_domain', on_delete=models.CASCADE)
+    status = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = _("Mandir Domain")
+        verbose_name_plural = _("Domains")
+
+    def __unicode__(self):
+        return self.domain
+
+    def __str__(self):
+        return self.domain
+
+    @classmethod
+    # @lru_cache(None)
+    def getMandirByDomain(cls, domain):
+        """
+        This Method will return mandir object based on the domain name read from the url
+        """
+        try:
+            data = cls.objects.get(domain=domain, status=True)
+        except Exception:
+            data = cls.objects.get(domain="susjainmandir")
+        return data
 
 
 class MandirImage(models.Model):

@@ -72,7 +72,7 @@
 
             <!-- Automatic Slideshow Images -->
             <div>
-                {% if mandir.get_images %}
+                {% if request.mandir.get_images %}
                     {% for img_obj in mandir.get_images %}
                         <div class="mySlides w3-display-container w3-center">
                             <img src="{{ img_obj.image.url }}" style="width:100%;">
@@ -101,18 +101,16 @@
         carousel();
         function initialize() {
 
-            {% if mandir.lat %}
-                var myCenter=new google.maps.LatLng({{mandir.lat}}, {{mandir.long}});
+            {% if request.mandir.lat %}
+                var myCenter=new google.maps.LatLng({{request.mandir.lat}}, {{request.mandir.long}});
             {% else %}
                 var myCenter=new google.maps.LatLng(18.557024, 73.75092)
             {% endif %}
             plot_map(myCenter, "googleMap");
 
             /* Create dynamic grap for all temples */
-            {% for mdir in mandirs %}
-                var loc = new google.maps.LatLng({{mdir.lat}}, {{mdir.long}});
-                plot_map(loc, "map_{{mdir.id}}");
-            {% endfor %}
+            var loc = new google.maps.LatLng({{request.mandir.lat}}, {{request.mandir.long}});
+            plot_map(loc, "map_{{request.mandir.id}}");
         }
 
         function plot_map(location, div_id) {
