@@ -73,7 +73,7 @@
             <!-- Automatic Slideshow Images -->
             <div>
                 {% if request.mandir.get_images %}
-                    {% for img_obj in mandir.get_images %}
+                    {% for img_obj in request.mandir.get_images %}
                         <div class="mySlides w3-display-container w3-center">
                             <img src="{{ img_obj.image.url }}" style="width:100%;">
                             <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
@@ -148,11 +148,7 @@
                 <i class="fixedButton" onclick="document.getElementById('id01').style.display='block'" >
                  <div class="roundedFixedBtn"><i style="color:green; font-size:60px;" class="fa fa-whatsapp"></i></div>
                 </i>
-               {%if mandir %}
-                    {% include 'chat_template.html' with mandir=mandir %}
-                {% else %}
-                    {% include 'chat_template.html' with mandir=mandirs.0 %}
-                {% endif %}
+                {% include 'chat_template.html' with mandir=request.mandir %}
             </div>
         {% endif %}
     {% block extra_js %}

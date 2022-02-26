@@ -101,7 +101,7 @@ class MandirDomain(models.Model):
         try:
             data = cls.objects.get(domain=domain, status=True)
         except Exception:
-            data = cls.objects.get(domain="susjainmandir")
+            data = cls.objects.get(domain="www.susjainmandir.com")
         return data
 
 
