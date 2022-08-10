@@ -66,10 +66,24 @@
       <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
       <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <script>
+        var unavailableDates = ["31-8-2022", "3-9-2022", "4-9-2022", "9-9-2022", "11-9-2022"]
+        function unavailable(date){
+            dmy = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
+            if ($.inArray(dmy, unavailableDates) == -1){
+                return [true, ""]
+            } else {
+                return [false, "", "No slot available"]
+            }
+        }
         $(document).ready(function() {
             var now = new Date()
             now.setDate(now.getDate() + 1);
-            $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd', minDate: now, minTime:'07:00' });
+            $('.datepicker').datepicker({
+                dateFormat: 'yy-mm-dd',
+                minDate: now,
+                minTime:'06:30',
+                beforeShowDay: unavailable
+            });
         });
 
         $('.js-captcha-refresh').click(function () {
