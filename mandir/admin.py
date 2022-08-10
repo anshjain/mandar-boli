@@ -11,8 +11,8 @@ from import_export.widgets import ForeignKeyWidget
 from django.contrib import admin
 
 from account.models import Account
-from mandir.constants import SPECIAL_MSG, VIDHAN_CON
-from mandir.models import Mandir, Record, MandirImage, BoliChoice
+from mandir.constants import SPECIAL_MSG
+from mandir.models import Mandir, Record, MandirImage, BoliChoice, MandirDomain
 from mandir.utils import send_normal_sms
 
 
@@ -157,7 +157,7 @@ class RecordAdmin(ImportExportModelAdmin):
 
 
 class MandirImageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'get_mandir_name', 'event_url', )
+    list_display = ('get_mandir_name', 'event_url', )
 
     def get_mandir_name(self, obj):
         return obj.mandir.name
@@ -180,7 +180,23 @@ class BoliChoiceAdmin(admin.ModelAdmin):
     list_display = ('name', 'request_choice')
 
 
+class MandirDomainAdmin(admin.ModelAdmin):
+    list_display = ('domain', 'mandir', 'status')
+
+    def get_queryset(self, request):
+        """Limit records to those that belong to the user temple."""
+
+        qs = super(MandirDomainAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            # It is mine, all mine. Just return everything.
+            return qs
+        # Now we just add an extra filter on the queryset and
+        # we're done. Assumption: Page.owner is a foreignkey
+        # to a User.
+        return qs.filter(id=request.user.userprofile.mandir.id)
+
 admin.site.register(Mandir, MandirAdmin)
 admin.site.register(Record, RecordAdmin)
 admin.site.register(MandirImage, MandirImageAdmin)
+admin.site.register(MandirDomain, MandirDomainAdmin)
 admin.site.register(BoliChoice, BoliChoiceAdmin)

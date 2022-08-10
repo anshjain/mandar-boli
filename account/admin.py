@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from account.models import Account, UserProfile
+from account.models import Account, UserProfile, CommunicationData
 
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
@@ -33,5 +33,10 @@ class UserProfileAdmin(admin.ModelAdmin):
     get_mandir_name.short_description = 'Mandir Name'
 
 
+class CommunicationDataAdmin(admin.ModelAdmin):
+    list_display = ('email', 'password')
+
+
 admin.site.register(Account, AccountAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(CommunicationData, CommunicationDataAdmin)

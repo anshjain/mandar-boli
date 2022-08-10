@@ -56,6 +56,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'Boli.middleware.filter_domain_middleware.FilterDomainMiddleware',
 ]
 
 ROOT_URLCONF = 'Boli.urls'

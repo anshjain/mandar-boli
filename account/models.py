@@ -35,3 +35,17 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class CommunicationData(models.Model):
+    """
+    User profile which will associate with temple (Mandir)
+    """
+    email = models.EmailField(max_length=70, blank=True, null=True, unique=True)
+    password = models.CharField(_('password'), max_length=128)
+
+    def __unicode__(self):
+        return self.email
+
+    def __str__(self):
+        return self.email
