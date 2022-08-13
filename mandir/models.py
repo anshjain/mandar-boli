@@ -132,3 +132,23 @@ class Record(models.Model):
         Will return paid or not paid
         """
         return _('Not Paid') if not self.paid else _('Paid')
+
+
+class VratDetail(models.Model):
+    """
+    Vrat details
+    """
+    name = models.CharField(max_length=255, verbose_name=_("vrat name"))
+    enabled = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True, verbose_name=_("created"))
+    vrat_date = models.DateTimeField(verbose_name=_("vrat date"), blank=True, null=True)
+
+    class Meta:
+        verbose_name = _("Vrat Detail")
+        verbose_name_plural = _("Vrat Details")
+
+    def __unicode__(self):
+        return "{} {}".format(self.name, self.vrat_date.strftime("%m/%d/%Y"))
+
+    def __str__(self):
+        return "{} {}".format(self.name, self.vrat_date.strftime("%m/%d/%Y"))

@@ -6,7 +6,7 @@ import datetime
 from django import forms
 from captcha.fields import CaptchaField, CaptchaTextInput
 
-from mandir.models import BoliChoice
+from mandir.models import BoliChoice, VratDetail
 
 
 PAYMENT_MODES = (
@@ -49,6 +49,10 @@ class EntryForm(forms.Form):
 
 
 class BoliRequestForm(forms.Form):
+
+    vrat_name = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'w3-input w3-border',
+                                                                  'style': 'height: 45px; margin-left:6px; width:98%'}),
+                                       queryset=VratDetail.objects.filter(enabled=True), required=True)
     title = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'w3-input w3-border',
                                                               'style': 'height: 45px; margin-left:6px; width:98%'}),
                                    queryset=BoliChoice.objects.filter(request_choice=True), required=True)
@@ -67,11 +71,11 @@ class BoliRequestForm(forms.Form):
     amount = forms.CharField(widget=forms.NumberInput(attrs={
         'placeholder': 'Minimum Amount 500', 'autocomplete': 'off',
         'class': 'w3-input w3-border', 'style': 'margin: 27px 8px 0px 7px; width:98%'}))
-    date = datetime.datetime.today().date() + datetime.timedelta(days=1)
-    boli_date = forms.DateField(initial=date,
-                                widget=forms.DateInput(attrs={'autocomplete': 'off',
-                                                              'class': 'w3-input w3-border datepicker'})
-    )
+    # date = datetime.datetime.today().date() + datetime.timedelta(days=1)
+    # boli_date = forms.DateField(initial=date,
+    #                             widget=forms.DateInput(attrs={'autocomplete': 'off',
+    #                                                           'class': 'w3-input w3-border datepicker'})
+    # )
     captcha = CaptchaField(widget=CustomCaptchaTextInput(attrs={'class': 'w3-input w3-border',
                                                                 'style': 'margin: 18px 8px 0px 7px; width:98%'}))
 
@@ -80,8 +84,8 @@ class BoliRequestForm(forms.Form):
         Just add validation some fields
         """
         cleaned_data = super().clean()
-        if int(cleaned_data.get("amount")) < 499:
-            self.add_error('amount', "Please entry amount greater then 500")
+        # if int(cleaned_data.get("amount")) < 499:
+        #     self.add_error('amount', "Please entry amount greater then 500")
         if len(cleaned_data.get("description")) < 7:
             self.add_error('description', "Enter comma separated names such as Risheesh or Risheesh Jain")
 

@@ -12,7 +12,7 @@ from django.contrib import admin
 
 from account.models import Account
 from mandir.constants import SPECIAL_MSG, VIDHAN_CON
-from mandir.models import Mandir, Record, MandirImage, BoliChoice
+from mandir.models import Mandir, Record, MandirImage, BoliChoice, VratDetail
 from mandir.utils import send_normal_sms
 
 
@@ -179,8 +179,12 @@ class MandirImageAdmin(admin.ModelAdmin):
 class BoliChoiceAdmin(admin.ModelAdmin):
     list_display = ('name', 'request_choice')
 
+class VratDetailAdmin(admin.ModelAdmin):
+    list_display = ('name', 'enabled', 'vrat_date')
+
 
 admin.site.register(Mandir, MandirAdmin)
 admin.site.register(Record, RecordAdmin)
 admin.site.register(MandirImage, MandirImageAdmin)
 admin.site.register(BoliChoice, BoliChoiceAdmin)
+admin.site.register(VratDetail, VratDetailAdmin)
