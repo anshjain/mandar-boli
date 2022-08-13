@@ -25,14 +25,14 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Vrat Details',
             },
         ),
-        migrations.AddField(
-            model_name='mandir',
-            name='whatsapp_message',
-            field=models.TextField(blank=True, max_length=1000, null=True, verbose_name='Whatsapp Message'),
-        ),
-        migrations.AddField(
-            model_name='mandir',
-            name='whatsapp_number',
-            field=models.CharField(blank=True, max_length=10, null=True, verbose_name='Whatsapp number'),
-        ),
+        # migrations.AddField(
+        #     model_name='mandir',
+        #     name='whatsapp_message',
+        #     field=models.TextField(blank=True, max_length=1000, null=True, verbose_name='Whatsapp Message'),
+        # ),
+        # migrations.AddField(
+        #     model_name='mandir',
+        #     name='whatsapp_number',
+        #     field=models.CharField(blank=True, max_length=10, null=True, verbose_name='Whatsapp number'),
+        # ),
     ]
