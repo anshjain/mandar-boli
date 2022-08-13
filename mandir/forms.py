@@ -52,7 +52,8 @@ class BoliRequestForm(forms.Form):
 
     vrat_name = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'w3-input w3-border',
                                                                   'style': 'height: 45px; margin-left:6px; width:98%'}),
-                                       queryset=VratDetail.objects.filter(enabled=True), required=True)
+                                       queryset=VratDetail.objects.filter(enabled=True).order_by('vrat_date'),
+                                       required=True)
     title = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'w3-input w3-border',
                                                               'style': 'height: 45px; margin-left:6px; width:98%'}),
                                    queryset=BoliChoice.objects.filter(request_choice=True), required=True)
@@ -84,8 +85,8 @@ class BoliRequestForm(forms.Form):
         Just add validation some fields
         """
         cleaned_data = super().clean()
-        # if int(cleaned_data.get("amount")) < 499:
-        #     self.add_error('amount', "Please entry amount greater then 500")
+        if int(cleaned_data.get("amount")) < 499:
+            self.add_error('amount', "Please entry amount greater then 500")
         if len(cleaned_data.get("description")) < 7:
             self.add_error('description', "Enter comma separated names such as Risheesh or Risheesh Jain")
 
