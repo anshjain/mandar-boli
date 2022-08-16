@@ -218,8 +218,12 @@ class RaiseBoliCreateView(FormView):
         # hard code as of now
         mandir = Mandir.objects.filter(status=True, id=1).first()
         amount = form.cleaned_data['amount']
+
         vrat_name = form.cleaned_data['vrat_name']
-        #boil_date = form.cleaned_data['boli_date']
+        if vrat_name:
+            boil_date = vrat_name.vrat_date
+        else:
+            boil_date = form.cleaned_data['boli_date']
 
         _, record_created = self.model.objects.get_or_create(
             mandir=mandir,
@@ -227,7 +231,7 @@ class RaiseBoliCreateView(FormView):
             title=form.cleaned_data['title'],
             description=form.cleaned_data['description'],
             amount=amount,
-            boli_date=vrat_name.vrat_date,
+            boli_date=boil_date,
             request_by_user=True
         )
         if record_created:
