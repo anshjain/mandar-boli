@@ -16,9 +16,17 @@ from mandir.models import Mandir, Record, MandirImage, BoliChoice, VratDetail
 from mandir.utils import send_normal_sms
 
 
-class MandirAdmin(admin.ModelAdmin):
+class MandirResource(resources.ModelResource):
+
+    class Meta:
+        model = Mandir
+        exclude = ('created',)
+
+
+class MandirAdmin(ImportExportModelAdmin):
     list_display = ('name', 'contract_number', 'bank_name', 'account_number',
                     'account_name', 'ifsc_code', 'branch')
+    resource_class = MandirResource
 
     def get_queryset(self, request):
         """Limit records to those that belong to the user temple."""
@@ -176,11 +184,28 @@ class MandirImageAdmin(admin.ModelAdmin):
         return qs.filter(mandir=request.user.userprofile.mandir)
 
 
-class BoliChoiceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'request_choice')
+class BoliChoiceResource(resources.ModelResource):
 
-class VratDetailAdmin(admin.ModelAdmin):
+    class Meta:
+        model = BoliChoice
+        exclude = ('created',)
+
+
+class BoliChoiceAdmin(ImportExportModelAdmin):
+    list_display = ('name', 'request_choice')
+    resource_class = BoliChoiceResource
+
+
+class VratDetailResource(resources.ModelResource):
+
+    class Meta:
+        model = VratDetail
+        exclude = ('created',)
+
+
+class VratDetailAdmin(ImportExportModelAdmin):
     list_display = ('name', 'enabled', 'vrat_date')
+    resource_class = VratDetailResource
 
 
 admin.site.register(Mandir, MandirAdmin)

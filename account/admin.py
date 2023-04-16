@@ -25,7 +25,14 @@ class AccountAdmin(ImportExportModelAdmin):
     resource_class = AccountResource
 
 
-class UserProfileAdmin(admin.ModelAdmin):
+class UserProfileResource(resources.ModelResource):
+
+    class Meta:
+        model = UserProfile
+        exclude = ('created',)
+
+
+class UserProfileAdmin(ImportExportModelAdmin):
     list_display = ('user', 'get_mandir_name')
 
     def get_mandir_name(self, obj):
