@@ -57,7 +57,7 @@ class RecordResource(resources.ModelResource):
 
     class Meta:
         model = Record
-        export_order = ('id', 'mandir', 'account', 'description', 'pan_card', 'title', 'amount', 'boli_date', 'paid')
+        #export_order = ('id', 'mandir', 'account', 'description', 'pan_card', 'title', 'amount', 'boli_date', 'paid')
         exclude = ('created', 'transaction_id', 'payment_date')
 
 
