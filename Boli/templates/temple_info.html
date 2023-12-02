@@ -4,6 +4,37 @@
 
 {% block title %}{% trans "Home" %}{% endblock %}
 
+{% block FBTag %}
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous"
+            src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v17.0&appId=1775753022522826&autoLogAppEvents=1"
+            nonce="0JWDtsDn">
+    </script>
+{% endblock %}
+
+{% block extra_css %}
+    <style>
+      p#video-title {
+          font-weight: bold;
+          background: #ffc107;
+          padding: 5px 4px;
+          font-family: serif;
+          text-align: center;
+          display: block;
+          width: 70%;
+          margin: 0 auto;
+          margin-bottom: 20px;
+          margin-top: 20px;
+        }
+
+      .latestVideoEmbed {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+
+{% endblock %}
+
 {% block main %}
 
 <!-- Container (Contact Section) -->
@@ -42,20 +73,58 @@
                 <i class="fa fa-envelope fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Email: {{mandir.email}}<br>
             </div>
         </div>
-        <span id="video-sd">
-            <h3 class="w3-center">आज की शांतिधारा</h3>
-            <iframe
-                src="https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/susjainmandirji/live"
-                frameborder="0"
-                scrolling="no"
-                allowfullscreen="true"
-                height="500px"
-                width="100%">
-            </iframe>
-        </span>
         <p>{% if mandir.committee_name %}{{mandir.committee_name}}{% else %}{{mandir.name}}{% endif %}</p>
         <p>{{ mandir.description }}</p>
+        <div>
+            <center>
+                <p id="video-title">Lorem ipsum</p>
+                <iframe class="latestVideoEmbed" vnum='0' cid="UCpwk-tdv5C1Y-AniYZFJPlA"
+                        frameborder="0" allowfullscreen></iframe>
+            </center>
+        </div>
+        <div>
+            <center>
+                <p id="video-title">Lorem ipsum</p>
+                <iframe class="latestVideoEmbed" vnum='1' cid="UCpwk-tdv5C1Y-AniYZFJPlA"
+                        frameborder="0" allowfullscreen></iframe>
+            </center>
+        </div>
+        <center>
+            <div class="fb-page" data-href="https://www.facebook.com/susjainmandirji/"
+                 data-tabs="timeline" data-width="" data-height="" data-small-header="true"
+                 data-adapt-container-width="true" data-hide-cover="true" data-show-facepile="false">
+                    <blockquote cite="https://www.facebook.com/susjainmandirji/" class="fb-xfbml-parse-ignore">
+                        <a href="https://www.facebook.com/susjainmandirji/">सुस दिगम्बर जैन मंदिर जी</a>
+                    </blockquote>
+            </div>
+        </center>
     {% endfor %}
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script>
+            var reqURL = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent("https://www.youtube.com/feeds/videos.xml?channel_id=");
+
+            function loadVideo(iframe) {
+              $.getJSON(reqURL + iframe.getAttribute('cid'),
+                function(data) {
+                  var videoNumber = (iframe.getAttribute('vnum') ? Number(iframe.getAttribute('vnum')) : 0);
+                  console.log(videoNumber);
+                  var link = data.items[videoNumber].link;
+                  var title=data.items[videoNumber].title;
+                  id = link.substr(link.indexOf("=") + 1);
+                  iframe.setAttribute("src", "https://youtube.com/embed/" + id + "?controls=0&autoplay=1");
+                  iframe.parentElement.querySelector("#video-title").innerText = title;
+                }
+              );
+            }
+
+            var iframes = document.getElementsByClassName('latestVideoEmbed');
+            for (var i = 0, len = iframes.length; i < len; i++) {
+              loadVideo(iframes[i]);
+            }
+        </script>
 {% endblock %}

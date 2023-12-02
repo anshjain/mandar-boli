@@ -1,29 +1,41 @@
 {% load staticfiles i18n static %}
 
-<div class="mySlides w3-display-container w3-center">
-     <img src="{% static 'images/Gomateshva.jpg' %}" style="width:100%;">
-     <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32">
-        <h3><a href="{% url 'event' '1' %}#event_details">
-            {{mandirs.0.mandir_event.first}}
-        </a>
-        </h3>
-     </div>
- </div>
-<div class="mySlides w3-display-container w3-center">
-     <img src="{% static 'images/Screen_Shot_2018-06-24_at_00.11.25.png' %}" style="width:100%;">
-     <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
-        <h3><a href="{% url 'event' '1' %}#event_details">
-            {{mandirs.0.mandir_event.first}}
-        </a>
-        </h3>
-     </div>
- </div>
-<div class="mySlides w3-display-container w3-center">
-    <img src="{% static 'images/Gomateshva-2.jpg' %}" style="width:100%;">
-    <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
-        <h3><a href="{% url 'event' '1' %}#event_details">
-            {{mandirs.0.mandir_event.first}}
-        </a>
-        </h3>
-    </div>
-</div>
+    {% if mandir.get_images %}
+        {% for img_obj in mandir.get_images %}
+            <div class="mySlides w3-display-container w3-center">
+                <img src="{{ img_obj.image.url }}" style="width:100%;">
+                <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
+                  <h3><a href="{{img_obj.event_url}}">{{img_obj.title | safe }}</a></h3>
+                  <p><b>{{img_obj.description}}</b></p>
+                </div>
+            </div>
+        {%endfor%}
+    {%endif%}
+
+<!--<div class="mySlides w3-display-container w3-center">-->
+<!--     <img src="{% static 'images/Gomateshva.jpg' %}" style="width:100%;">-->
+<!--     <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32">-->
+<!--        <h3><a href="{% url 'event' '1' %}#event_details">-->
+<!--            {{mandirs.0.mandir_event.first}}-->
+<!--        </a>-->
+<!--        </h3>-->
+<!--     </div>-->
+<!-- </div>-->
+<!--<div class="mySlides w3-display-container w3-center">-->
+<!--     <img src="{% static 'images/Screen_Shot_2018-06-24_at_00.11.25.png' %}" style="width:100%;">-->
+<!--     <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">-->
+<!--        <h3><a href="{% url 'event' '1' %}#event_details">-->
+<!--            {{mandirs.0.mandir_event.first}}-->
+<!--        </a>-->
+<!--        </h3>-->
+<!--     </div>-->
+<!-- </div>-->
+<!--<div class="mySlides w3-display-container w3-center">-->
+<!--    <img src="{% static 'images/Gomateshva-2.jpg' %}" style="width:100%;">-->
+<!--    <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">-->
+<!--        <h3><a href="{% url 'event' '1' %}#event_details">-->
+<!--            {{mandirs.0.mandir_event.first}}-->
+<!--        </a>-->
+<!--        </h3>-->
+<!--    </div>-->
+<!--</div>-->
