@@ -43,22 +43,22 @@ class MandirAdmin(ImportExportModelAdmin):
 
 class RecordResource(resources.ModelResource):
 
-    # mandir = fields.Field(column_name='mandir', attribute='mandir', widget=ForeignKeyWidget(Mandir, 'name'))
-    # title = fields.Field(column_name='title', attribute='title', widget=ForeignKeyWidget(BoliChoice, 'name'))
-    # pan_card = fields.Field(column_name='pan_card', attribute='account', widget=ForeignKeyWidget(Account, 'pan_card'))
-    # account = fields.Field(column_name='phone_number', attribute='account', widget=ForeignKeyWidget(Account, 'phone_number'))
-    # paid = Field()
+    mandir = fields.Field(column_name='mandir', attribute='mandir', widget=ForeignKeyWidget(Mandir, 'name'))
+    title = fields.Field(column_name='title', attribute='title', widget=ForeignKeyWidget(BoliChoice, 'name'))
+    pan_card = fields.Field(column_name='pan_card', attribute='account', widget=ForeignKeyWidget(Account, 'pan_card'))
+    account = fields.Field(column_name='phone_number', attribute='account', widget=ForeignKeyWidget(Account, 'phone_number'))
+    paid = Field()
 
-    # def dehydrate_paid(self, record):
-    #     return 'Paid' if record.paid else 'Not Paid'
-    #
-    # def dehydrate_description(self, record):
-    #     return record.account.description
+    def dehydrate_paid(self, record):
+        return 'Paid' if record.paid else 'Not Paid'
+
+    def dehydrate_description(self, record):
+        return record.account.description
 
     class Meta:
         model = Record
-        #export_order = ('id', 'mandir', 'account', 'description', 'pan_card', 'title', 'amount', 'boli_date', 'paid')
-        exclude = ('created',)  # 'transaction_id', 'payment_date'
+        export_order = ('id', 'mandir', 'account', 'description', 'pan_card', 'title', 'amount', 'boli_date', 'paid')
+        exclude = ('created', 'transaction_id', 'payment_date')
 
 
 class RecordAdmin(ImportExportModelAdmin):

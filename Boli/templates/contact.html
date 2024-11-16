@@ -4,12 +4,24 @@
 
 {% block title %}{% trans "About Us" %}{% endblock %}
 
+{% block extra_css %}
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+    <style>
+        .js-captcha-refresh {
+            box-sizing: inherit;
+            border: blue solid;
+            border-radius: 5px;
+            padding: 5px;
+        }
+    </style>
+{% endblock %}
+
 {% block main %}
 
 <!-- The about us Section -->
   <div class="w3-container w3-content w3-padding-64" style="max-width:800px" id="contact">
     <h2 class="w3-wide w3-center">CONTACT</h2>
-    <p class="w3-opacity w3-center"><i>Fan? Drop a note!</i></p>
+    <p class="w3-opacity w3-center"><i>Please share the feedback with us!</i></p>
     <center>
         {% for message in messages %}
             <span style="color: {% if form.errors %} red; {% else %} green; {% endif %}">
@@ -35,10 +47,28 @@
             </div>
           </div>
           {{ form.message }}
+          <div>
+              {{ form.captcha }}
+              <span style="color:red;">{{ form.captcha.errors.as_text }}</span>
+          </div>
             <button class="w3-button w3-black w3-section w3-right" type="submit">SEND</button>
             <button class="w3-button w3-black w3-section w3-right" type="reset" style="margin-right:10px;">RESET</button>
         </form>
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+      <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+      <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script>
+        $('.js-captcha-refresh').click(function () {
+            $.getJSON("/captcha/refresh/", function (result) {
+                $('.captcha').attr('src', result['image_url']);
+                $('#id_captcha_0').val(result['key'])
+            });
+        });
+    </script>
 {% endblock %}
