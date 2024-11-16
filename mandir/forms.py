@@ -107,6 +107,8 @@ class ContactForm(forms.Form):
             'class': 'w3-input w3-border', 'rows': '2'
         })
     )
+    captcha = CaptchaField(widget=CustomCaptchaTextInput(attrs={'class': 'w3-input w3-border',
+                                                                'style': 'margin: 18px 8px 0px 7px; width:98%'}))
 
 
 class PaymentForm(forms.Form):
