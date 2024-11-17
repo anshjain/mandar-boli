@@ -385,21 +385,26 @@ def payment_complete(request):
 
                 send_to.append(mandir_email)
                 send_to.extend(settings.ADMIN_EMAILS)
+                payment_date = datetime.now()
 
                 for record in records:
-                    # update record mark it as paid and store email content as copy in description.
-                    record.description = content
                     if partial_payment:
+                        partial_string = "Date: {} Amount: {}<br />".format(payment_date.date(), paid_amount)
                         if not record.remaining_amt:
                             record.remaining_amt = record.amount - paid_amount
+                            record.description = "Payment breakdown<br/> {}".format(partial_string)
                         else:
                             record.remaining_amt -= paid_amount
+                            record.description += partial_string
+                    else:
+                        # update record mark it as paid and store email content as copy in description.
+                        record.description = content
 
                     if not partial_payment:
                         record.paid = True
 
                     record.transaction_id = id_details if id_details else 'Cash'
-                    record.payment_date = datetime.now()
+                    record.payment_date = payment_date
                     record.save()
 
                 # update pan card into the account table
