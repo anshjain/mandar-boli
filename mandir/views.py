@@ -449,12 +449,11 @@ def ajax_single_account(request):
     """
     gets single item
     """
-    if not request.is_ajax():
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return HttpResponse(json.dumps({'result': False}))
 
     # get slug from data
     phone_number = request.GET.get('phone_number', None)
-    # check for truecaller api in the code
 
     # get item from slug
     account = get_object_or_404(Account, phone_number=phone_number)
