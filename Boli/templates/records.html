@@ -39,7 +39,7 @@
                         <td style="vertical-align:middle !important">{{record.get_title}}</td>
                         <td style="vertical-align:middle !important">
                             {% if record.account.description %}
-                                {{ record.description }}
+                                {{ record.description|safe }}
                             {% else %}
                                 <i style="color:blue;">Entry corresponding to default number</i><br>
                                 {{ record.get_default_description }}
