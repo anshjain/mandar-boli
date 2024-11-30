@@ -1,5 +1,8 @@
 // Automatic Slideshow - change image every 4 seconds
 var myIndex = 0;
+var running_total = 0;
+var paid_ids = [];
+
 function carousel() {
     var i;
     var x = document.getElementsByClassName("mySlides");
@@ -58,10 +61,14 @@ function display_model(record_id, amount, date, partial, pan_card){
 function close_update(){
     document.getElementById('EmailModal').style.display='none';
     var checkboxes = document.getElementsByTagName('input');
+    paid_ids = [];
+    running_total = 0;
     for (var i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].type == 'checkbox') {
             checkboxes[i].checked = false;
         }
+    document.getElementById('chk_total').textContent = running_total;
+    document.getElementById("chb_amt").disabled = true;
     }
 };
 
@@ -134,4 +141,27 @@ function get_description() {
 function Openwhatsapp(phone_number) {
    var url = "https://api.whatsapp.com/send?phone=" + phone_number
     window.open(url,"","toolbar=no,status=no,menubar=no,location=center,scrollbars=no,resizable=no,height=500,width=657");
+}
+
+function update(mandir) {
+    document.getElementById("chb_amt").disabled = false;
+    // Check
+    if(mandir.checked == true){
+        // Add value to running_total
+        running_total += parseInt(mandir.value);
+        document.getElementById('chk_total').textContent = running_total;
+        paid_ids.push(mandir.id);
+        document.getElementById('smtArrId').value = paid_ids;
+    }
+    // Uncheck
+    if(mandir.checked == false){
+        // Subtract value from running_total
+        running_total -= parseInt(mandir.value);
+        document.getElementById('chk_total').textContent = running_total;
+        paid_ids.removeByValue(mandir.id)
+        document.getElementById('smtArrId').value = paid_ids;
+        if (running_total == 0){
+            document.getElementById("chb_amt").disabled = true;
+        }
+    }
 }

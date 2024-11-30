@@ -343,13 +343,13 @@ def payment_complete(request):
             partial_payment = form.cleaned_data.get('partial_payment', 0)
             record_id = request.POST.get('record_id')
             flag = record_id != '01'
-
+            record_ids = record_id.split(",") if ',' in record_id else [record_id]
 
             try:
                 if record_id == '01':
                     name, mandir, paid_amount, records = get_all_records(phone_number)
                 else:
-                    name, mandir, paid_amount, records = get_all_records(phone_number, [record_id])
+                    name, mandir, paid_amount, records = get_all_records(phone_number, record_ids)
 
                 # get record info
                 mandir_email = mandir.email
