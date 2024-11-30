@@ -21,6 +21,7 @@
         <table class="w3-table w3-bordered w3-table-all w3-centered" style="overflow: scroll;">
             <tr>
                 {% if phone_number %}
+                    <th>{% trans 'Sr. No.' %}</th>
                     <th>{% trans 'MANDIR NAME' %}</th>
                 {% endif %}
                 <th>{% trans 'TITLE' %}</th>
@@ -34,6 +35,10 @@
                 {% for record in records %}
                     <tr>
                         {% if phone_number %}
+                            <td style="vertical-align:middle !important">
+                                <input type="checkbox" id="{{record.id}}" name="mandir"
+                                       value="{{record.amount}}" onchange="update(this);">
+                            </td>
                             <td style="vertical-align:middle !important">{{ record.mandir.name }}</td>
                         {% endif %}
                         <td style="vertical-align:middle !important">{{record.get_title}}</td>
@@ -80,18 +85,23 @@
                     </tr>
                 {% endfor %}
                 {% if total_amt %}
-                    <tr><td colspan="5">
+                    <tr><td colspan="6">
+                        <div class='pm-button' style="float: left; width: 30%;">
+                            Selected Amount :- <span id='chk_total'>0</span><br/>
+                            <input type="hidden" id="smtArrId" value="">
+                            <input id="chb_amt" type="checkbox" disabled class="w3-tooltip" title="Send an email"
+                                    onclick="display_model(document.getElementById('smtArrId').value,
+                                            document.getElementById('chk_total').textContent,
+                                            '{{records.0.boli_date|date}}', 'None', '{{records.0.account.pan_card}}')">
+                            {% trans 'Paid selected amount' %} <br/>
+                        </div>
                         <div style="float:right;">
                             Total :- <b>{{ total_amt }}/-</b> <br/>
                             <input id="checkbox" type="checkbox" class="w3-tooltip" title="Send an email"
-                                    onclick="display_model('01', '{{total_amt}}', '{{records.0.boli_date|date}}', 'None', '{{records.0.account.pan_card}}')">
+                                    onclick="display_model('01', '{{total_amt}}', '{{records.0.boli_date|date}}',
+                                                'None', '{{records.0.account.pan_card}}')">
                             {% trans 'Paid' %} <br/>
                         </div>
-                        <!-- <div class='pm-button' style="float: left; width: 30%;">
-                            <a target="_blank" href='https://www.payumoney.com/paybypayumoney/#/9055CFF2373C0B104DAEC8987CAF770E'>
-                                <img src='https://www.payumoney.com/media/images/payby_payumoney/new_buttons/21.png' />
-                            </a>
-                        </div> -->
                     </td></tr>
                 {% endif %}
             {% else %}
