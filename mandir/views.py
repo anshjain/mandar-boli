@@ -22,7 +22,7 @@ from django.views.generic.edit import FormView
 
 from account.models import Account
 
-from mandir.constants import DAILE_MSG
+from mandir.constants import DAILE_MSG, WHATSAPP_MSG
 from mandir.models import Mandir, Record
 from mandir.forms import SearchForm, EntryForm, ContactForm, PaymentForm, BoliRequestForm
 from mandir.utils import send_normal_sms
@@ -104,7 +104,7 @@ class RecordListView(ListView):
             month_data, month_range = self.get_month_details(mandir)
 
         context.update({'form': self.form_class(), 'mandir': mandir, 'payment_form': PaymentForm(),
-                        'month_data': month_data, 'month_range': month_range})
+                        'month_data': month_data, 'month_range': month_range, "sms_message": WHATSAPP_MSG})
 
         return context
 
@@ -152,6 +152,12 @@ class EntryCreateView(LoginRequiredMixin, FormView):
 
         # Mandir object into the context
         context['mandir'] = self.request.user.userprofile.mandir
+
+        if 'phone_number' not in context:
+            context['phone_number'] = ''
+        if 'message' not in context:
+            context['message'] = ''
+
         return context
 
     def form_valid(self, form):
@@ -167,26 +173,36 @@ class EntryCreateView(LoginRequiredMixin, FormView):
         mandir = self.request.user.userprofile.mandir
         amount = form.cleaned_data['amount']
         boil_date = form.cleaned_data['boli_date']
+        title = form.cleaned_data['title']
 
         _, record_created = self.model.objects.get_or_create(
             mandir=mandir,
             account=account,
-            title=form.cleaned_data['title'],
+            title=title,
             description=form.cleaned_data['description'],
             amount=amount,
             boli_date=boil_date
         )
+        context = self.get_context_data(form=EntryForm())
+
         if record_created:
             success_message = "Record saved successfully"
+            sms_message = WHATSAPP_MSG.format(title, amount, boil_date, account.phone_number)
+            context['phone_number'] = account.phone_number
+            context['sms_message'] = sms_message
+
             if account.phone_number != '9999988888' and settings.SEND_SMS:
                 message = DAILE_MSG.format(amount, boil_date)
                 response = send_normal_sms(account.phone_number, message, sender='SHRSJM')
                 if not response:
                     success_message += ", but message not sent"
-
             messages.success(self.request, "{} !!".format(success_message))
 
-        return super(EntryCreateView, self).form_valid(form)
+        return self.render_to_response(context)
+
+    def form_invalid(self, form):
+        # If the form is invalid, just render the form with errors
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class RaiseBoliCreateView(FormView):
