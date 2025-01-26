@@ -27,9 +27,13 @@ function myFunction() {
 
 // When the user clicks anywhere outside of the modal, close it
 var modal = document.getElementById('EmailModal');
+var confirm_modal = document.getElementById('customConfirmation');
 window.onclick = function(event) {
   if (event.target == modal) {
     close_update();
+  }
+  if (event.target == confirm_modal){
+    closeConfirmationModel();
   }
 }
 
@@ -165,3 +169,29 @@ function update(mandir) {
         }
     }
 }
+
+function openGooglePay(amount) {
+    const googlePayDeepLink = "upi://pay?pa=8799928255@mahb&pn=susdigamberjainmadir&am=amount&cu=INR";
+    const fallbackUrl = "https://play.google.com/store/apps/details?id=com.google.android.apps.nbu.paisa.user";
+
+    window.open(googlePayDeepLink, '_blank');
+
+    setTimeout(() => {
+    window.open(fallbackUrl, '_blank');
+    }, 2000); // Redirect to Play Store after 2 seconds if the app is not installed
+}
+
+function confirmationUserAction(amount){
+    document.getElementById("confirm_val").innerHTML = amount + '.00';
+    document.getElementById('customConfirmation').style.display='block';
+}
+
+function openModelBox(record_id, amount, date, partial, pan_card) {
+        document.getElementById('customConfirmation').style.display='None';
+        display_model(record_id, amount, date, partial, pan_card)
+}
+
+function closeConfirmationModel(){
+    document.getElementById('customConfirmation').style.display='none';
+    document.getElementById("paid_chk").checked = false;
+};
