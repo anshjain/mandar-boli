@@ -171,7 +171,7 @@ function update(mandir) {
 }
 
 function openGooglePay(amount) {
-    const googlePayDeepLink = "upi://pay?pa=8799928255@mahb&pn=susdigamberjainmadir&am=amount&cu=INR";
+    const googlePayDeepLink = "upi://pay?pa=8799928255@mahb&pn=susdigamberjainmadir&am="+amount+"&cu=INR";
     const fallbackUrl = "https://play.google.com/store/apps/details?id=com.google.android.apps.nbu.paisa.user";
 
     window.open(googlePayDeepLink, '_blank');
