@@ -88,9 +88,12 @@
                         {% if request.user.is_authenticated %}
                         <td style="vertical-align:middle !important" class="w3-small">
                             {% create_message sms_message record.get_title record.amount record.boli_date|date as app_message %}
-                            <a href="https://wa.me/{{record.account.phone_number}}?text={{app_message|urlencode|safe}}" target="_blank">WhatsApp</a>
+                            <a href="https://wa.me/+91{{record.account.phone_number}}?text={{app_message|urlencode|safe}}" target="_blank">WhatsApp</a>
                             <br/>OR <br/>
                             <a href="sms:+91{{record.account.phone_number}}?body={{app_message|safe}}" target="_blank">Regular SMS</a>
+                            <button onclick="openGooglePay({{record.amount}})">
+                                <img src="{% static 'images/gpay.svg' %}" width="20px" alt="Google Pay" class="gpay-icon">
+                            </button>
                         </td>
                         {% endif %}
                     </tr>
@@ -108,9 +111,8 @@
                         </div>
                         <div style="float:right;">
                             Total :- <b>{{ total_amt }}/-</b> <br/>
-                            <input id="checkbox" type="checkbox" class="w3-tooltip" title="Send an email"
-                                    onclick="display_model('01', '{{total_amt}}', '{{records.0.boli_date|date}}',
-                                                'None', '{{records.0.account.pan_card}}')">
+                            <input id="paid_chk" type="checkbox" class="w3-tooltip" title="Send an email"
+                                    onclick="confirmationUserAction('{{total_amt}}')">
                             {% trans 'Paid' %} <br/>
                         </div>
                     </td></tr>
@@ -128,6 +130,7 @@
         </table>
     </div>
     {% include 'update_form.html' %}
+    {% include 'confirmation_check.html'%}
 {% endblock %}
 
 {% block extra_js %}

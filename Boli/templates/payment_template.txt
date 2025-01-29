@@ -52,12 +52,9 @@
         कोई समस्या आने पर कृपया नीचे उल्लिखित विवरण  पर हमसे संपर्क करें।<br><br>
 
         शुभकामनाओं सहित,<br>
-        पुण्यौदय फ़ंड ,<br><br>
-
-        {{ mandir.name }}<br>
+        {{mandir.committee_name}}<br>
         फ़ोन: {{mandir.contract_number}}<br>
         ईमेल: {{mandir.email}}<br>
         पता: https://maps.google.com/?cid=13704265554706532894<br>
-        {{mandir.committee_name}}<br>
     </body>
 </html>
