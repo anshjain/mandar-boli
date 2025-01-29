@@ -91,7 +91,9 @@
                             <a href="https://wa.me/+91{{record.account.phone_number}}?text={{app_message|urlencode|safe}}" target="_blank">WhatsApp</a>
                             <br/>OR <br/>
                             <a href="sms:+91{{record.account.phone_number}}?body={{app_message|safe}}" target="_blank">Regular SMS</a>
-                            <button onclick="openGooglePay({{record.amount}})">Open Google Pay</button>
+                            <button onclick="openGooglePay({{record.amount}})">
+                                <img src="{% static 'images/gpay.svg' %}" width="20px" alt="Google Pay" class="gpay-icon">
+                            </button>
                         </td>
                         {% endif %}
                     </tr>
