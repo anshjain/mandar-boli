@@ -451,6 +451,7 @@ class AboutView(TemplateView):
         context = super(AboutView, self).get_context_data(**kwargs)
 
         # Mandir object into the context
+        context['mandir'] = Mandir.objects.filter(status=True, id=1).first()
         if self.request.user.is_authenticated:
             context['mandir'] = self.request.user.userprofile.mandir
 
