@@ -32,6 +32,8 @@
                 {% endif %}
                 {% if request.user.is_authenticated %}
                     <th>{% trans 'SMS' %}</th>
+                {% else %}
+                    <th>{% trans 'Pay Option' %}</th>
                 {% endif %}
             </tr>
             {% if records %}
@@ -85,21 +87,22 @@
                                 {% endif %}
                             </td>
                         {% endif %}
-                        {% if request.user.is_authenticated %}
                         <td style="vertical-align:middle !important" class="w3-small">
-                            {% create_message sms_message record.get_title record.amount record.boli_date|date as app_message %}
-                            <a href="https://wa.me/+91{{record.account.phone_number}}?text={{app_message|urlencode|safe}}" target="_blank">WhatsApp</a>
-                            <br/>OR <br/>
-                            <a href="sms:+91{{record.account.phone_number}}?body={{app_message|safe}}" target="_blank">Regular SMS</a>
-                            <button onclick="openGooglePay({{record.amount}})">
-                                <img src="{% static 'images/gpay.svg' %}" width="20px" alt="Google Pay" class="gpay-icon">
-                            </button>
+                            {% if request.user.is_authenticated %}
+                                {% create_message sms_message record.get_title record.amount record.boli_date|date as app_message %}
+                                <a href="https://wa.me/+91{{record.account.phone_number}}?text={{app_message|urlencode|safe}}" target="_blank">WhatsApp</a>
+                                <br/>OR <br/>
+                                <a href="sms:+91{{record.account.phone_number}}?body={{app_message|safe}}" target="_blank">Regular SMS</a>
+                            {% else %}
+                                <button onclick="openGooglePay({{record.amount}})">
+                                    <img src="{% static 'images/gpay.svg' %}" width="20px" alt="Google Pay" class="gpay-icon">
+                                </button>
+                            {% endif %}
                         </td>
-                        {% endif %}
                     </tr>
                 {% endfor %}
                 {% if total_amt %}
-                    <tr><td colspan="6">
+                    <tr><td colspan="7">
                         <div class='pm-button' style="float: left; width: 30%;">
                             Selected Amount :- <span id='chk_total'>0</span><br/>
                             <input type="hidden" id="smtArrId" value="">
@@ -108,12 +111,18 @@
                                             document.getElementById('chk_total').textContent,
                                             '{{records.0.boli_date|date}}', 'None', '{{records.0.account.pan_card}}')">
                             {% trans 'Paid selected amount' %} <br/>
+<!--                            <button onclick="openGooglePay(document.getElementById('chk_total').textContent)">-->
+<!--                                <img src="{% static 'images/gpay.svg' %}" width="20px" alt="Google Pay" class="gpay-icon">-->
+<!--                            </button>-->
                         </div>
                         <div style="float:right;">
                             Total :- <b>{{ total_amt }}/-</b> <br/>
                             <input id="paid_chk" type="checkbox" class="w3-tooltip" title="Send an email"
                                     onclick="confirmationUserAction('{{total_amt}}')">
-                            {% trans 'Paid' %} <br/>
+                            {% trans 'Paid' %}
+                            <button onclick="openGooglePay({{total_amt}})">
+                                <img src="{% static 'images/gpay.svg' %}" width="20px" alt="Google Pay" class="gpay-icon">
+                            </button>
                         </div>
                     </td></tr>
                 {% endif %}
