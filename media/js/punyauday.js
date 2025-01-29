@@ -172,13 +172,7 @@ function update(mandir) {
 
 function openGooglePay(amount) {
     const googlePayDeepLink = "upi://pay?pa=8799928255@mahb&pn=susdigamberjainmadir&am="+amount+"&cu=INR";
-    const fallbackUrl = "https://play.google.com/store/apps/details?id=com.google.android.apps.nbu.paisa.user";
-
     window.open(googlePayDeepLink, '_blank');
-
-    setTimeout(() => {
-    window.open(fallbackUrl, '_blank');
-    }, 2000); // Redirect to Play Store after 2 seconds if the app is not installed
 }
 
 function confirmationUserAction(amount){
