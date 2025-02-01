@@ -171,8 +171,12 @@ function update(mandir) {
 }
 
 function openGooglePay(amount) {
-    const googlePayDeepLink = "upi://pay?pa=8799928255@mahb&pn=susdigamberjainmadir&am="+amount+"&cu=INR";
-    window.open(googlePayDeepLink, '_blank');
+    if (amount != "0"){
+        const googlePayDeepLink = "upi://pay?pa=8799928255@mahb&pn=susdigamberjainmadir&am="+amount+"&cu=INR";
+        window.open(googlePayDeepLink, '_blank');
+    } else {
+        alert("Please select at least one record.")
+    }
 }
 
 function confirmationUserAction(amount){

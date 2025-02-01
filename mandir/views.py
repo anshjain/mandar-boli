@@ -406,6 +406,7 @@ def payment_complete(request):
                 for record in records:
                     if partial_payment:
                         partial_string = "Date: {} Amount: {}<br />".format(payment_date.date(), paid_amount)
+                        partial_flag = record.remaining_amt == paid_amount
                         if not record.remaining_amt:
                             record.remaining_amt = record.amount - paid_amount
                             record.description = "Payment breakdown<br/> {}".format(partial_string)
@@ -416,7 +417,7 @@ def payment_complete(request):
                         # update record mark it as paid and store email content as copy in description.
                         record.description = content
 
-                    if not partial_payment:
+                    if not partial_payment or partial_flag:
                         record.paid = True
 
                     record.transaction_id = id_details if id_details else 'Cash'
