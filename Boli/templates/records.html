@@ -42,7 +42,7 @@
                         {% if phone_number %}
                             <td style="vertical-align:middle !important">
                                 <input type="checkbox" id="{{record.id}}" name="mandir"
-                                       value="{{record.amount}}" onchange="update(this);">
+                                       value="{% if record.remaining_amt %}{{record.remaining_amt}}{% else %}{{record.amount}}{% endif %}" onchange="update(this);">
                             </td>
                             <td style="vertical-align:middle !important">{{ record.mandir.name }}</td>
                         {% endif %}
@@ -111,9 +111,9 @@
                                             document.getElementById('chk_total').textContent,
                                             '{{records.0.boli_date|date}}', 'None', '{{records.0.account.pan_card}}')">
                             {% trans 'Paid selected amount' %} <br/>
-<!--                            <button onclick="openGooglePay(document.getElementById('chk_total').textContent)">-->
-<!--                                <img src="{% static 'images/gpay.svg' %}" width="20px" alt="Google Pay" class="gpay-icon">-->
-<!--                            </button>-->
+                            <button onclick="openGooglePay(document.getElementById('chk_total').textContent)">
+                                <img src="{% static 'images/gpay.svg' %}" width="20px" alt="Google Pay" class="gpay-icon">
+                            </button>
                         </div>
                         <div style="float:right;">
                             Total :- <b>{{ total_amt }}/-</b> <br/>
