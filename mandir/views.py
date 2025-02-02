@@ -103,7 +103,7 @@ class RecordListView(ListView):
         if mandir:
             month_data, month_range = self.get_month_details(mandir)
 
-        context.update({'form': self.form_class(), 'mandir': mandir, 'payment_form': PaymentForm(),
+        context.update({'form': self.form_class(), 'mandir': mandir, 'mandirs': [mandir], 'payment_form': PaymentForm(),
                         'month_data': month_data, 'month_range': month_range, "sms_message": WHATSAPP_MSG})
 
         return context
@@ -151,7 +151,8 @@ class EntryCreateView(LoginRequiredMixin, FormView):
         context = super(EntryCreateView, self).get_context_data(*args, **kwargs)
 
         # Mandir object into the context
-        context['mandir'] = self.request.user.userprofile.mandir
+        mandir = self.request.user.userprofile.mandir
+        context.update({'mandir': mandir, 'mandirs': [mandir]})
 
         if 'phone_number' not in context:
             context['phone_number'] = ''
@@ -217,7 +218,7 @@ class RaiseBoliCreateView(FormView):
 
         # Mandir object into the context
         mandir = Mandir.objects.filter(status=True, id=1).first()
-        context['mandir'] = mandir
+        context.update({'mandir': mandir, 'mandirs': [mandir]})
         return context
 
     def form_valid(self, form):
@@ -452,15 +453,25 @@ class AboutView(TemplateView):
         context = super(AboutView, self).get_context_data(**kwargs)
 
         # Mandir object into the context
-        context['mandir'] = Mandir.objects.filter(status=True, id=1).first()
+        mandir = Mandir.objects.filter(status=True, id=1).first()
         if self.request.user.is_authenticated:
-            context['mandir'] = self.request.user.userprofile.mandir
-
+            mandir = self.request.user.userprofile.mandir
+        context.update({'mandir': mandir, 'mandirs': [mandir]})
         return context
 
 
 class ReturnView(TemplateView):
     template_name = 'return_policy.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ReturnView, self).get_context_data(**kwargs)
+
+        # Mandir object into the context
+        mandir = Mandir.objects.filter(status=True, id=1).first()
+        if self.request.user.is_authenticated:
+            mandir = self.request.user.userprofile.mandir
+        context.update({'mandir': mandir, 'mandirs': [mandir]})
+        return context
 
 
 def ajax_single_account(request):
